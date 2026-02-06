@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dəmir Yolu Maqnatı | Baki-Sumqayit.site</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="game-style.css">
+
+    <!-- Monetag Vignette Ad -->
+    <script>(function (s) { s.dataset.zone = '10394826', s.src = 'https://gizokraijaw.net/vignette.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --text-dark: #fff;
+            --bg-glass: rgba(255, 255, 255, 0.15);
+            --border-glass: rgba(255, 255, 255, 0.2);
+            --green: #10b981;
+            --red: #ef4444;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            /* Allow body to grow */
+            overflow: auto;
+            /* Enable scrolling if needed */
+        }
+
+        /* HEADER - Using game-style.css .sticky-header structure but adapted */
+        .header-stats {
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            color: white;
+            animation: fadeInDown 0.5s ease;
+            flex-shrink: 0;
+            /* Prevent shrinking */
+        }
+
+        .balance-box {
+            display: inline-block;
+        }
+
+        .balance {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .currency {
+            color: var(--green);
+            font-size: 24px;
+        }
+
+        .mps {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            margin-top: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* OYUN SAHƏSİ */
+        .game-area-tycoon {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 300px;
+            padding: 20px;
+        }
+
+        .train-btn {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 0 50px rgba(37, 99, 235, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            border: 8px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.3s;
+            position: relative;
+            z-index: 5;
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+            /* Ensure image stays inside circle */
+        }
+
+        .train-btn img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            pointer-events: none;
+            /* Prevent image dragging */
+        }
+
+        .train-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.8);
+        }
+
+        /* SHOP */
+        .shop-panel {
+            flex: 1;
+            /* Allow to grow */
+            min-height: 300px;
+            /* Minimum height for better mobile view */
+            background: rgba(30, 60, 114, 0.95);
+            backdrop-filter: blur(12px);
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            border-top: 1px solid var(--border-glass);
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            padding-bottom: 40px;
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.5s ease-out;
+            color: white;
+            margin-bottom: -1px;
+            /* Fix small gap */
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .shop-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            /* Prevent title shrinking */
+        }
+
+        .reset-btn {
+            font-size: 11px;
+            color: #ffadad;
+            background: rgba(239, 68, 68, 0.2);
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+        }
+
+        .shop-list {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 5px;
+            /* Ensure space for scrollbar */
+            min-height: 0;
+            /* Crucial for flex child scrolling */
+        }
+
+        /* Scrollbar styling */
+        .shop-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .shop-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .shop-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s;
+        }
+
+        .shop-item:active {
+            transform: scale(0.98);
+        }
+
+        .shop-item.disabled {
+            opacity: 0.5;
+            filter: grayscale(0.8);
+        }
+
+        .item-icon {
+            font-size: 28px;
+            width: 40px;
+            text-align: center;
+            margin-right: 12px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .item-desc {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        .buy-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+            min-width: 85px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .buy-btn:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+
+        .shop-item.disabled .buy-btn {
+            background: #4b5563;
+            color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .item-count {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            background: #eff6ff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        /* Floating Text/Logo Animation */
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+            z-index: 100;
+        }
+
+        .floating-text {
+            font-weight: 800;
+            font-size: 24px;
+            color: #10b981;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .floating-logo {
+            width: 40px;
+            height: 40px;
+            opacity: 0.9;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="sticky-header">
+        <a href="games.html" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Geri
+        </a>
+        <div class="site-logo">Dəmir Yolu Maqnatı</div>
+        <div style="width: 70px;"></div> <!-- Spacer for centering -->
+    </header>
+
+    <div class="main-container"
+        style="display: flex; flex-direction: column; min-height: calc(100vh - 70px); padding-bottom: 0;">
+
+        <div class="header-stats">
+            <div class="balance-box">
+                <span class="balance" id="balanceDisplay">0</span> <span class="currency">₼</span>
+            </div>
+            <br>
+            <div class="mps">
+                +<span id="mpsDisplay">0</span> ₼ / saniyə
+            </div>
+        </div>
+
+        <div class="game-area-tycoon">
+            <div class="train-btn" id="clickBtn">
+                <img src="android-chrome-512x512.png" alt="Logo">
+            </div>
+        </div>
+
+        <div class="shop-panel">
+            <div class="shop-title">
+                MAĞAZA
+                <button class="reset-btn" onclick="resetGame()">SIFIRLA</button>
+            </div>
+            <div class="shop-list" id="shopContainer">
+                <!-- Items injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- OYUN MƏLUMATLARI ---
+        const initialItems = [
+            { id: 1, name: "Bakı Kart", desc: "+0.5 ₼ / san", icon: "💳", basePrice: 15, income: 0.5, type: 'auto', count: 0 },
+            { id: 2, name: "Bilet Kassiri", desc: "+3 ₼ / san", icon: "👨‍💼", basePrice: 100, income: 3, type: 'auto', count: 0 },
+            { id: 3, name: "Köhnə Elektriçka", desc: "+10 ₼ / san", icon: "🚃", basePrice: 500, income: 10, type: 'auto', count: 0 },
+            { id: 4, name: "Yeni Relslər", desc: "+2 Klik Gücü", icon: "🛤️", basePrice: 1000, income: 0, type: 'click', count: 0 },
+            { id: 5, name: "Stadler Qatarı", desc: "+45 ₼ / san", icon: "🚄", basePrice: 3000, income: 45, type: 'auto', count: 0 },
+            { id: 6, name: "Biznes Vaqon", desc: "+120 ₼ / san", icon: "🍸", basePrice: 10000, income: 120, type: 'auto', count: 0 },
+            { id: 7, name: "Hava Limanı Xətti", desc: "+500 ₼ / san", icon: "✈️", basePrice: 50000, income: 500, type: 'auto', count: 0 }
+        ];
+
+        let gameState = {
+            balance: 0,
+            clickPower: 1,
+            items: JSON.parse(JSON.stringify(initialItems)) // Dərin kopya
+        };
+
+        // --- DOM ELEMENTLƏRİ ---
+        const balanceEl = document.getElementById('balanceDisplay');
+        const mpsEl = document.getElementById('mpsDisplay');
+        const shopContainer = document.getElementById('shopContainer');
+        const clickBtn = document.getElementById('clickBtn');
+
+        // --- FUNKSİYALAR ---
+
+        function init() {
+            loadGame();
+            renderShop();
+            updateUI();
+
+            // Avtomatik gəlir dövrü (1 saniyə)
+            setInterval(() => {
+                const income = calculateMPS();
+                if (income > 0) {
+                    addMoney(income);
+                }
+            }, 1000);
+
+            // Avtomatik yaddaş dövrü (10 saniyə)
+            setInterval(saveGame, 10000);
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('tycoonSave');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                gameState.balance = parsed.balance || 0;
+                // Items birləşdirilməsi
+                gameState.items.forEach((item, index) => {
+                    if (parsed.items && parsed.items[index]) {
+                        item.count = parsed.items[index].count;
+                    }
+                });
+            }
+            recalcClickPower();
+        }
+
+        function saveGame() {
+            localStorage.setItem('tycoonSave', JSON.stringify(gameState));
+        }
+
+        function resetGame() {
+            if (confirm("Bütün irəliləyişi silmək istədiyinizə əminsiniz?")) {
+                localStorage.removeItem('tycoonSave');
+                location.reload();
+            }
+        }
+
+        function getPrice(item) {
+            return Math.floor(item.basePrice * Math.pow(1.15, item.count));
+        }
+
+        function calculateMPS() {
+            var total = gameState.items.reduce((total, item) => {
+                return item.type === 'auto' ? total + (item.count * item.income) : total;
+            }, 0);
+            return total;
+        }
+
+        function recalcClickPower() {
+            let power = 1;
+            const railItem = gameState.items.find(i => i.id === 4); // Yeni Relslər
+            if (railItem) {
+                power += (railItem.count * 2);
+            }
+            gameState.clickPower = power;
+        }
+
+        function addMoney(amount) {
+            gameState.balance += amount;
+            updateUI();
+        }
+
+        // --- UI YENİLƏMƏ ---
+
+        function updateUI() {
+            // Balansı yenilə
+            balanceEl.innerText = Math.floor(gameState.balance).toLocaleString();
+            mpsEl.innerText = calculateMPS().toFixed(1);
+
+            // Mağaza düymələrini yoxla
+            gameState.items.forEach(item => {
+                const price = getPrice(item);
+                const btn = document.getElementById(`btn-${item.id}`);
+                const row = document.getElementById(`item-${item.id}`);
+
+                if (btn && row) {
+                    btn.innerText = `${price.toLocaleString()} ₼`;
+                    if (gameState.balance >= price) {
+                        row.classList.remove('disabled');
+                    } else {
+                        row.classList.add('disabled');
+                    }
+                }
+
+                // Sayı yenilə
+                const countEl = document.getElementById(`count-${item.id}`);
+                if (countEl) countEl.innerText = item.count > 0 ? `x${item.count}` : '';
+            });
+        }
+
+        function renderShop() {
+            shopContainer.innerHTML = '';
+            gameState.items.forEach(item => {
+                const price = getPrice(item);
+                const div = document.createElement('div');
+                div.className = 'shop-item disabled'; // Default disabled
+                div.id = `item-${item.id}`;
+
+                // Bütün sətirə klikləyəndə
+                div.onclick = (e) => {
+                    // Əgər düyməyə basılmayıbsa alışı işə sal (optional UX)
+                    if (e.target.tagName !== 'BUTTON') buyItem(item.id);
+                };
+
+                div.innerHTML = `
+                    <div style="display:flex; align-items:center; flex:1;">
+                        <div class="item-icon">${item.icon}</div>
+                        <div class="item-details">
+                            <div class="item-name">
+                                ${item.name} 
+                                <span class="item-count" id="count-${item.id}">${item.count > 0 ? 'x' + item.count : ''}</span>
+                            </div>
+                            <div class="item-desc">${item.desc}</div>
+                        </div>
+                    </div>
+                    <button class="buy-btn" id="btn-${item.id}" onclick="event.stopPropagation(); buyItem(${item.id})">${price.toLocaleString()} ₼</button>
+                `;
+                shopContainer.appendChild(div);
+            });
+        }
+
+        // --- OYUN AKSİYALARI ---
+
+        function buyItem(id) {
+            const item = gameState.items.find(i => i.id === id);
+            const price = getPrice(item);
+
+            if (gameState.balance >= price) {
+                gameState.balance -= price;
+                item.count++;
+
+                if (item.type === 'click') {
+                    recalcClickPower();
+                }
+
+                updateUI();
+                saveGame();
+
+                if (navigator.vibrate) navigator.vibrate(50);
+            }
+        }
+
+        // Tıklama Handleri
+        clickBtn.addEventListener('touchstart', handleTap, { passive: false });
+        clickBtn.addEventListener('mousedown', handleTap);
+
+        function handleTap(e) {
+            if (e.type === 'touchstart') e.preventDefault();
+
+            addMoney(gameState.clickPower);
+
+            let x, y;
+            if (e.type === 'touchstart') {
+                x = e.touches[0].clientX;
+                y = e.touches[0].clientY;
+            } else {
+                x = e.clientX;
+                y = e.clientY;
+            }
+
+            // Show both text and Logo
+            createFloatingText(x, y, `+${gameState.clickPower}`);
+            createFloatingLogo(x, y);
+
+            // Düymə animasiyası
+            clickBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => clickBtn.style.transform = 'scale(1)', 50);
+        }
+
+        function createFloatingText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'floating-element floating-text';
+            el.innerText = text;
+            const randomX = (Math.random() - 0.5) * 40;
+            el.style.left = `${x + randomX}px`;
+            el.style.top = `${y - 40}px`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 800);
+        }
+
+        function createFloatingLogo(x, y) {
+            const img = document.createElement('img');
+            img.src = 'android-chrome-512x512.png';
+            img.className = 'floating-element floating-logo';
+            const randomX = (Math.random() - 0.5) * 60;
+
+            // Logonu barmağın üstündə göstər
+            img.style.left = `${x + randomX - 20}px`;
+            img.style.top = `${y - 60}px`;
+
+            document.body.appendChild(img);
+            setTimeout(() => img.remove(), 800);
+        }
+
+        // Başlat
+        init();
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>15 Puzzle Oyunu | Baki-Sumqayit.site</title>
+    <meta name="description" content="Klassik 15 tapmaca oyunu. Rəqəmləri sıraya düzün və beyninizi məşq etdirin.">
+    <link rel="canonical" href="https://www.baki-sumqayit.site/game-15puzzle.html">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W05T401WMG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-W05T401WMG');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3725039577144467"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="game-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Favicon Settings -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .puzzle-tile {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .puzzle-tile:hover {
+            transform: scale(1.05);
+            z-index: 1;
+        }
+
+        .puzzle-tile.correct {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .puzzle-tile.empty {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
+        }
+
+        .stats-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+        }
+
+        .stats-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            display: block;
+        }
+
+        .stats-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="sticky-header">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Ana Səhifə</span>
+        </a>
+        <div class="site-logo">baki-sumqayit.site</div>
+    </header>
+
+    <div class="main-container">
+
+        <main class="game-wrapper" id="game-container">
+            <div id="puzzle-game-area" class="relative">
+                <canvas id="confetti-canvas"></canvas>
+
+                <div class="header flex justify-between items-center mb-6 max-w-[320px] mx-auto">
+                    <h1 class="text-2xl font-bold text-white">15 Puzzle</h1>
+                    <div class="flex gap-2">
+                        <div class="stats-box">
+                            <span class="stats-label">Gediş</span>
+                            <span class="stats-value" id="move-count">0</span>
+                        </div>
+                        <div class="stats-box">
+                            <span class="stats-label">Vaxt</span>
+                            <span class="stats-value" id="timer">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="puzzle-grid" id="grid">
+                    <!-- Tiles injected by JS -->
+                </div>
+
+                <div class="text-center mt-6">
+                    <button class="btn-restart" onclick="newGame()">
+                        <i class="fas fa-random mr-2"></i> Qarışdır və Başla
+                    </button>
+                </div>
+
+                <div class="text-center mt-4 text-white/50 text-sm">
+                    Rekord: <span id="best-score" class="font-bold text-white">-</span> gediş
+                </div>
+
+                <!-- Win Modal -->
+                <div id="win-modal"
+                    class="absolute inset-0 bg-slate-900/95 rounded-xl flex-col items-center justify-center hidden z-20">
+                    <h2 class="text-3xl font-bold text-green-400 mb-2">Təbriklər! 🎉</h2>
+                    <p class="text-white text-lg mb-6 text-center px-4">Tapmacanı həll etdin!</p>
+                    <button class="btn-restart" onclick="newGame()">Yenidən Oyna</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Other Games Panel -->
+        <section class="other-games-panel">
+            <div class="panel-title">
+                <i class="fas fa-gamepad"></i>
+                Digər Oyunlar
+            </div>
+            <div class="games-scroll-container">
+                <a href="game-2048.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="game-name">2048</div>
+                </a>
+                <a href="game-snake.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-staff-snake"></i></div>
+                    <div class="game-name">İlan</div>
+                </a>
+                <a href="game-arkanoid.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="game-name">Kərpic</div>
+                </a>
+                <a href="game-reflex.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="game-name">Refleks</div>
+                </a>
+                <a href="game-memory.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="game-name">Yaddaş</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- SEO Content -->
+        <article class="seo-content">
+            <h1>15 Puzzle - Klassik Zəka Testi</h1>
+            <h2>Necə Oynanılır?</h2>
+            <p>1-dən 15-ə qədər olan rəqəmləri ardıcıl düzün. Boş xanadan istifadə edərək daşları sürüşdürün.</p>
+        </article>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 baki-sumqayit.site - Bütün hüquqlar qorunur.</p>
+    </footer>
+
+    <script>
+        const grid = document.getElementById('grid');
+        const moveLabel = document.getElementById('move-count');
+        const timeLabel = document.getElementById('timer');
+        const bestScoreLabel = document.getElementById('best-score');
+        const modal = document.getElementById('win-modal');
+
+        let tiles = [];
+        let moves = 0;
+        let timer = 0;
+        let timerInterval;
+        let isPlaying = false;
+
+        let bestScore = localStorage.getItem('puzzle15BestScore') || '-';
+        bestScoreLabel.innerText = bestScore;
+
+        function newGame() {
+            modal.style.display = 'none'; // Using style for flex control manually or class
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            stopConfetti();
+
+            moves = 0;
+            timer = 0;
+            moveLabel.innerText = '0';
+            timeLabel.innerText = '00:00';
+            clearInterval(timerInterval);
+            isPlaying = true;
+
+            // Init tiles
+            tiles = Array.from({ length: 15 }, (_, i) => i + 1);
+            tiles.push(0);
+
+            // Shuffle well ensuring solvability?
+            // Actually simplest way to ensure solvability is to start solved and make valid moves
+            // But for simple 15 puzzle, we can just do random moves from solved state
+            let emptyIdx = 15;
+            let previousIdx = -1;
+
+            for (let i = 0; i < 500; i++) {
+                const neighbors = getNeighbors(emptyIdx);
+                const validNeighbors = neighbors.filter(n => n !== previousIdx);
+                const randomNeighbor = validNeighbors[Math.floor(Math.random() * validNeighbors.length)];
+
+                [tiles[emptyIdx], tiles[randomNeighbor]] = [tiles[randomNeighbor], tiles[emptyIdx]];
+                previousIdx = emptyIdx;
+                emptyIdx = randomNeighbor;
+            }
+
+            render();
+            startTimer();
+        }
+
+        function getNeighbors(idx) {
+            const row = Math.floor(idx / 4);
+            const col = idx % 4;
+            const res = [];
+            if (row > 0) res.push(idx - 4);
+            if (row < 3) res.push(idx + 4);
+            if (col > 0) res.push(idx - 1);
+            if (col < 3) res.push(idx + 1);
+            return res;
+        }
+
+        function move(idx) {
+            if (!isPlaying) return;
+
+            const emptyIdx = tiles.indexOf(0);
+            const neighbors = getNeighbors(emptyIdx);
+
+            if (neighbors.includes(idx)) {
+                [tiles[idx], tiles[emptyIdx]] = [tiles[emptyIdx], tiles[idx]];
+                moves++;
+                moveLabel.innerText = moves;
+                render();
+                checkWin();
+            }
+        }
+
+        function render() {
+            grid.innerHTML = '';
+            tiles.forEach((num, idx) => {
+                const div = document.createElement('div');
+                div.className = num === 0 ? 'puzzle-tile empty' : 'puzzle-tile';
+                if (num !== 0) {
+                    div.innerText = num;
+                    div.onclick = () => move(idx);
+                    if (num === idx + 1) div.classList.add('correct');
+                }
+                grid.appendChild(div);
+            });
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timer++;
+                const m = Math.floor(timer / 60).toString().padStart(2, '0');
+                const s = (timer % 60).toString().padStart(2, '0');
+                timeLabel.innerText = `${m}:${s}`;
+            }, 1000);
+        }
+
+        function checkWin() {
+            const isWin = tiles.slice(0, 15).every((val, i) => val === i + 1);
+            if (isWin) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(timerInterval);
+
+            if (bestScore === '-' || moves < parseInt(bestScore)) {
+                bestScore = moves;
+                localStorage.setItem('puzzle15BestScore', bestScore);
+                bestScoreLabel.innerText = bestScore;
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            startConfetti();
+        }
+
+        // Confetti
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctx = confettiCanvas.getContext('2d');
+        let confettiParticles = [];
+        let animationId;
+
+        function startConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+            confettiParticles = [];
+            for (let i = 0; i < 100; i++) {
+                confettiParticles.push({
+                    x: Math.random() * confettiCanvas.width,
+                    y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    size: Math.random() * 8 + 4,
+                    speed: Math.random() * 3 + 2,
+                    angle: Math.random() * 6.2
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiParticles.forEach((p, i) => {
+                p.y += p.speed;
+                p.x += Math.sin(p.angle);
+                p.angle += 0.1;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.y > confettiCanvas.height) confettiParticles[i].y = -10;
+            });
+            animationId = requestAnimationFrame(animateConfetti);
+        }
+
+        function stopConfetti() {
+            cancelAnimationFrame(animationId);
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        }
+
+        // Init game
+        newGame();
+    </script>
+</body>
+
+</html>

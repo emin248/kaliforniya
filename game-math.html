@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Riyaziyyat Oyunu | Baki-Sumqayit.site</title>
+    <meta name="description" content="Riyazi biliklərinizi yoxlayın və sürətli hesablamalar edin.">
+    <link rel="canonical" href="https://www.baki-sumqayit.site/game-math.html">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W05T401WMG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-W05T401WMG');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3725039577144467"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="game-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Favicon Settings -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+        .math-option {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            min-height: 80px;
+        }
+
+        .math-option:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .math-option.correct {
+            background: #22c55e !important;
+            border-color: #4ade80;
+        }
+
+        .math-option.wrong {
+            background: #ef4444 !important;
+            border-color: #f87171;
+            transform: rotate(5deg);
+        }
+
+        .timer-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: #fbbf24;
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="sticky-header">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Ana Səhifə</span>
+        </a>
+        <div class="site-logo">baki-sumqayit.site</div>
+    </header>
+
+    <div class="main-container">
+
+        <main class="game-wrapper" id="game-container">
+            <div id="math-game-area" class="relative max-w-[360px] mx-auto text-white text-center">
+
+                <h1 class="text-2xl font-bold mb-4">Riyaziyyat Yarışı</h1>
+
+                <div class="flex justify-between items-center mb-6 px-4">
+                    <div class="bg-white/10 rounded-lg p-2 min-w-[30%]">
+                        <div class="text-xs opacity-70">Xal</div>
+                        <div class="text-xl font-bold" id="score">0</div>
+                    </div>
+                    <div class="bg-white/10 rounded-lg p-2 min-w-[30%]">
+                        <div class="text-xs opacity-70">Rekord</div>
+                        <div class="text-xl font-bold" id="highScore">0</div>
+                    </div>
+                </div>
+
+                <div class="timer-bar">
+                    <div class="timer-progress" id="timerProgress"></div>
+                </div>
+
+                <div class="bg-indigo-600/20 p-8 rounded-2xl mb-8 border border-white/10 shadow-xl">
+                    <div class="text-4xl font-black" id="question">Hazırsan?</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4" id="options">
+                    <!-- Options injected here -->
+                </div>
+
+                <!-- Start Overlay -->
+                <div id="startOverlay"
+                    class="absolute inset-0 bg-slate-900 z-10 flex flex-col items-center justify-center">
+                    <div class="text-6xl mb-4">🧠</div>
+                    <p class="mb-6 opacity-80">Doğru cavabı tapmaq üçün tələs!</p>
+                    <button class="btn-restart text-lg px-8 py-3" onclick="startGame()">Başla</button>
+                </div>
+
+                <!-- Game Over Modal -->
+                <div id="gameOverModal"
+                    class="absolute inset-0 bg-slate-900/95 rounded-xl flex-col items-center justify-center hidden z-20">
+                    <h2 class="text-3xl font-bold text-red-500 mb-2">Vaxt Bitdi! ⏰</h2>
+                    <p class="text-white text-lg mb-6 text-center px-4">Xalınız: <span id="finalScore"
+                            class="font-bold text-yellow-400">0</span></p>
+                    <button class="btn-restart" onclick="startGame()">Yenidən Oyna</button>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Other Games Panel -->
+        <section class="other-games-panel">
+            <div class="panel-title">
+                <i class="fas fa-gamepad"></i>
+                Digər Oyunlar
+            </div>
+            <div class="games-scroll-container">
+                <a href="game-2048.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="game-name">2048</div>
+                </a>
+                <a href="game-tetris.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-shapes"></i></div>
+                    <div class="game-name">Tetris</div>
+                </a>
+                <a href="game-arkanoid.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="game-name">Kərpic</div>
+                </a>
+                <a href="game-snake.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-staff-snake"></i></div>
+                    <div class="game-name">İlan</div>
+                </a>
+                <a href="game-15puzzle.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-border-all"></i></div>
+                    <div class="game-name">15 Puzzle</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- SEO Content -->
+        <article class="seo-content">
+            <h1>Riyaziyyat Yarışı - Beynini Məşq Etdir</h1>
+            <h2>Necə Oynanılır?</h2>
+            <p>Ekranda sadə riyazi məsələlər görünəcək. Vaxt bitmədən doğru variantı seçmək lazımdır. Hər doğru cavab
+                vaxtı bir az artırır.</p>
+        </article>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 baki-sumqayit.site - Bütün hüquqlar qorunur.</p>
+    </footer>
+
+    <script>
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const scoreEl = document.getElementById('score');
+        const highScoreEl = document.getElementById('highScore');
+        const timerProgress = document.getElementById('timerProgress');
+        const startOverlay = document.getElementById('startOverlay');
+        const gameOverModal = document.getElementById('gameOverModal');
+        const finalScoreEl = document.getElementById('finalScore');
+
+        let score = 0;
+        let highScore = localStorage.getItem('mathHighScore') || 0;
+        let timeLeft = 100;
+        let timerInterval;
+        let gameActive = false;
+        let correctAnswer = 0;
+
+        highScoreEl.innerText = highScore;
+
+        function startGame() {
+            startOverlay.classList.add('hidden');
+            gameOverModal.classList.add('hidden');
+            gameOverModal.classList.remove('flex');
+
+            score = 0;
+            scoreEl.innerText = score;
+            gameActive = true;
+            generateQuestion();
+            startTimer();
+        }
+
+        function startTimer() {
+            timeLeft = 100;
+            clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                if (!gameActive) return;
+
+                // Difficulty increases: faster timer
+                let decay = 0.5 + (score * 0.05); // increases with score
+                timeLeft -= decay;
+
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    gameOver();
+                }
+
+                timerProgress.style.width = `${timeLeft}%`;
+
+                // Color change
+                if (timeLeft < 30) timerProgress.style.backgroundColor = '#ef4444';
+                else if (timeLeft < 60) timerProgress.style.backgroundColor = '#f59e0b';
+                else timerProgress.style.backgroundColor = '#22c55e';
+
+            }, 50);
+        }
+
+        function generateQuestion() {
+            const types = ['+', '-', '*'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            let num1, num2;
+
+            if (type === '*') {
+                num1 = Math.floor(Math.random() * 10) + 2;
+                num2 = Math.floor(Math.random() * 10) + 1;
+                correctAnswer = num1 * num2;
+            } else if (type === '+') {
+                num1 = Math.floor(Math.random() * 20) + 1;
+                num2 = Math.floor(Math.random() * 20) + 1;
+                correctAnswer = num1 + num2;
+            } else {
+                num1 = Math.floor(Math.random() * 20) + 5;
+                num2 = Math.floor(Math.random() * num1) + 1;
+                correctAnswer = num1 - num2;
+            }
+
+            questionEl.innerText = `${num1} ${type} ${num2} = ?`;
+
+            let answers = [correctAnswer];
+            while (answers.length < 4) {
+                let offset = Math.floor(Math.random() * 10) - 5;
+                let wrong = correctAnswer + offset;
+                if (wrong !== correctAnswer && !answers.includes(wrong) && wrong >= 0) {
+                    answers.push(wrong);
+                }
+            }
+
+            answers.sort(() => Math.random() - 0.5);
+
+            optionsEl.innerHTML = '';
+            answers.forEach(ans => {
+                const btn = document.createElement('div');
+                btn.className = 'math-option';
+                btn.innerText = ans;
+                btn.onclick = () => checkAnswer(btn, ans);
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(btn, answer) {
+            if (!gameActive) return;
+
+            if (answer === correctAnswer) {
+                btn.classList.add('correct');
+                score++;
+                scoreEl.innerText = score;
+                timeLeft = Math.min(100, timeLeft + 20); // Bonus time
+                setTimeout(generateQuestion, 200);
+            } else {
+                btn.classList.add('wrong');
+                // Show correct one
+                Array.from(optionsEl.children).forEach(child => {
+                    if (parseInt(child.innerText) === correctAnswer) child.classList.add('correct');
+                });
+                setTimeout(gameOver, 500);
+            }
+        }
+
+        function gameOver() {
+            gameActive = false;
+            clearInterval(timerInterval);
+
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('mathHighScore', highScore);
+                highScoreEl.innerText = highScore;
+            }
+
+            finalScoreEl.innerText = score;
+            gameOverModal.classList.remove('hidden');
+            gameOverModal.classList.add('flex');
+        }
+
+    </script>
+</body>
+
+</html>

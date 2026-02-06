@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>X-O Oyunu | Baki-Sumqayit.site</title>
+    <meta name="description" content="Klassik X-O (Tic-Tac-Toe) oyunu. Dostunla və ya robota qarşı oyna.">
+    <link rel="canonical" href="https://www.baki-sumqayit.site/game-tictactoe.html">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W05T401WMG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-W05T401WMG');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3725039577144467"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="game-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Favicon Settings -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 800;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cell:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .cell.x {
+            color: #4ade80;
+            /* Green */
+        }
+
+        .cell.o {
+            color: #f472b6;
+            /* Pink */
+        }
+
+        .cell.winning {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .mode-btn {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .mode-btn.active {
+            background: white;
+            color: #333;
+            font-weight: bold;
+            border-color: white;
+        }
+
+        .score-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 45%;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .score-box.active-turn {
+            border-color: #fbbf24;
+            /* Yellow border for active turn */
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .player-label {
+            font-size: 11px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .player-score {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="sticky-header">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Ana Səhifə</span>
+        </a>
+        <div class="site-logo">baki-sumqayit.site</div>
+    </header>
+
+    <div class="main-container">
+
+        <main class="game-wrapper" id="game-container">
+            <div id="tictactoe-game-area" class="relative max-w-[320px] mx-auto text-white">
+
+                <h1 class="text-2xl font-bold text-center mb-4">X-O Oyunu</h1>
+
+                <!-- Mode Selection -->
+                <div class="flex justify-center gap-3 mb-6">
+                    <button class="mode-btn" onclick="setMode('human')">Dostunla</button>
+                    <button class="mode-btn active" onclick="setMode('ai')">Kompyuter</button>
+                </div>
+
+                <!-- Scores -->
+                <div class="flex justify-between mb-4">
+                    <div class="score-box active-turn" id="box-x">
+                        <span class="player-label">Sən (X)</span>
+                        <span class="player-score" id="score-x">0</span>
+                    </div>
+                    <div class="score-box" id="box-o">
+                        <span class="player-label player-o-label">Kompyuter</span>
+                        <span class="player-score" id="score-o">0</span>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="text-center bg-white/10 rounded-lg py-2 mb-4 font-bold" id="status">
+                    Sıra: Səndə (X)
+                </div>
+
+                <!-- Board -->
+                <div class="board" id="board">
+                    <div class="cell" onclick="handleCellClick(0)"></div>
+                    <div class="cell" onclick="handleCellClick(1)"></div>
+                    <div class="cell" onclick="handleCellClick(2)"></div>
+                    <div class="cell" onclick="handleCellClick(3)"></div>
+                    <div class="cell" onclick="handleCellClick(4)"></div>
+                    <div class="cell" onclick="handleCellClick(5)"></div>
+                    <div class="cell" onclick="handleCellClick(6)"></div>
+                    <div class="cell" onclick="handleCellClick(7)"></div>
+                    <div class="cell" onclick="handleCellClick(8)"></div>
+                </div>
+
+                <!-- Restart -->
+                <div class="text-center mt-4">
+                    <button class="btn-restart" onclick="restartGame()">Yenidən Başla</button>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Other Games Panel -->
+        <section class="other-games-panel">
+            <div class="panel-title">
+                <i class="fas fa-gamepad"></i>
+                Digər Oyunlar
+            </div>
+            <div class="games-scroll-container">
+                <a href="game-2048.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="game-name">2048</div>
+                </a>
+                <a href="game-snake.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-staff-snake"></i></div>
+                    <div class="game-name">İlan</div>
+                </a>
+                <a href="game-arkanoid.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <div class="game-name">Kərpic</div>
+                </a>
+                <a href="game-reflex.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="game-name">Refleks</div>
+                </a>
+                <a href="game-15puzzle.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-border-all"></i></div>
+                    <div class="game-name">15 Puzzle</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- SEO Content -->
+        <article class="seo-content">
+            <h1>X-O Oyunu - Klassik Strategiya</h1>
+            <h2>Necə Oynanılır?</h2>
+            <p>Məqsəd: Öz işarənizi (X və ya O) üfüqi, şaquli və ya diaqonal olaraq 3 xanada ardıcıl düzməkdir.</p>
+        </article>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 baki-sumqayit.site - Bütün hüquqlar qorunur.</p>
+    </footer>
+
+    <script>
+        const statusDisplay = document.getElementById('status');
+        const boxX = document.getElementById('box-x');
+        const boxO = document.getElementById('box-o');
+        const cells = document.querySelectorAll('.cell');
+        const playerOLabel = document.querySelector('.player-o-label');
+        const modeBtns = document.querySelectorAll('.mode-btn');
+
+        let gameActive = true;
+        let currentPlayer = "X";
+        let gameState = ["", "", "", "", "", "", "", "", ""];
+        let gameMode = 'ai'; // Default AI
+
+        let scoreX = 0;
+        let scoreO = 0;
+
+        const winningConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        function setMode(mode) {
+            gameMode = mode;
+            modeBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Reset Names and Scores
+            if (mode === 'ai') {
+                playerOLabel.innerText = "Kompyuter";
+            } else {
+                playerOLabel.innerText = "Dostun";
+            }
+            scoreX = 0;
+            scoreO = 0;
+            document.getElementById('score-x').innerText = 0;
+            document.getElementById('score-o').innerText = 0;
+            restartGame();
+        }
+
+        function handleCellClick(clickedCellIndex) {
+            const clickedCell = cells[clickedCellIndex];
+
+            if (gameState[clickedCellIndex] !== "" || !gameActive) {
+                return;
+            }
+
+            handlePlayerPlayed(clickedCell, clickedCellIndex);
+        }
+
+        function handlePlayerPlayed(clickedCell, clickedCellIndex) {
+            gameState[clickedCellIndex] = currentPlayer;
+            clickedCell.innerText = currentPlayer;
+            clickedCell.classList.add(currentPlayer.toLowerCase());
+
+            // Validate after move
+            if (!handleResultValidation()) {
+                handlePlayerChange();
+            }
+        }
+
+        function handleResultValidation() {
+            let roundWon = false;
+            let winningLine = [];
+
+            for (let i = 0; i < 8; i++) {
+                const winCondition = winningConditions[i];
+                let a = gameState[winCondition[0]];
+                let b = gameState[winCondition[1]];
+                let c = gameState[winCondition[2]];
+
+                if (a === '' || b === '' || c === '') continue;
+                if (a === b && b === c) {
+                    roundWon = true;
+                    winningLine = winCondition;
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                statusDisplay.innerText = `Qazandı: ${currentPlayer === 'X' ? 'Sən' : (gameMode === 'ai' ? 'Kompyuter' : 'Dostun')}! 🎉`;
+                statusDisplay.classList.add('text-green-400');
+                gameActive = false;
+                updateScore(currentPlayer);
+                highlightWinningCells(winningLine);
+                return true;
+            }
+
+            let roundDraw = !gameState.includes("");
+            if (roundDraw) {
+                statusDisplay.innerText = "Heç-heçə! 🤝";
+                statusDisplay.classList.add('text-yellow-400');
+                gameActive = false;
+                return true;
+            }
+
+            return false;
+        }
+
+        function handlePlayerChange() {
+            currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+            if (currentPlayer === "X") {
+                statusDisplay.innerText = "Sıra: Səndə (X)";
+                boxX.classList.add('active-turn');
+                boxO.classList.remove('active-turn');
+            } else {
+                statusDisplay.innerText = `Sıra: ${gameMode === 'ai' ? 'Kompyuter' : 'Dostun'} (O)`;
+                boxO.classList.add('active-turn');
+                boxX.classList.remove('active-turn');
+
+                if (gameMode === 'ai' && gameActive) {
+                    setTimeout(computerMove, 500);
+                }
+            }
+        }
+
+        function computerMove() {
+            if (!gameActive) return;
+
+            // Simple AI: Find empty cells and pick random
+            let emptyIndices = [];
+            gameState.forEach((cell, index) => {
+                if (cell === "") emptyIndices.push(index);
+            });
+
+            if (emptyIndices.length > 0) {
+                // Try to win or block (optional improvement)
+                // For now random is fine as per original logic
+                const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                handleCellClick(randomIndex);
+            }
+        }
+
+        function updateScore(winner) {
+            if (winner === "X") {
+                scoreX++;
+                document.getElementById('score-x').innerText = scoreX;
+            } else {
+                scoreO++;
+                document.getElementById('score-o').innerText = scoreO;
+            }
+        }
+
+        function highlightWinningCells(indices) {
+            indices.forEach(index => {
+                cells[index].classList.add('winning');
+            });
+        }
+
+        function restartGame() {
+            gameActive = true;
+            currentPlayer = "X";
+            gameState = ["", "", "", "", "", "", "", "", ""];
+            statusDisplay.innerText = "Sıra: Səndə (X)";
+            statusDisplay.classList.remove('text-green-400', 'text-yellow-400');
+
+            boxX.classList.add('active-turn');
+            boxO.classList.remove('active-turn');
+
+            cells.forEach(cell => {
+                cell.innerText = "";
+                cell.classList.remove('winning', 'x', 'o');
+            });
+        }
+    </script>
+</body>
+
+</html>

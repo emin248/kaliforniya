@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Refleks Oyunu - Rəngləri Tut | Baki-Sumqayit.site</title>
+    <meta name="description" content="Diqqət və reflekslərinizi yoxlayın. Yazılan sözə yox, rənginə odaklanın!">
+    <link rel="canonical" href="https://www.baki-sumqayit.site/game-reflex.html">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W05T401WMG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-W05T401WMG');
+    </script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3725039577144467"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="game-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Favicon Settings -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <style>
+        .reflex-game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 20px;
+            border-radius: 12px;
+        }
+
+        .main-word {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 30px 0;
+            text-transform: uppercase;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .main-word.pop {
+            transform: scale(1.1);
+        }
+
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+        }
+
+        .color-btn {
+            border: none;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
+            /* Fallback */
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .color-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Specific Color Buttons */
+        .btn-red {
+            background-color: #ef4444;
+        }
+
+        .btn-green {
+            background-color: #22c55e;
+        }
+
+        .btn-blue {
+            background-color: #3b82f6;
+        }
+
+        .btn-yellow {
+            background-color: #eab308;
+            color: #000;
+            text-shadow: none;
+        }
+
+        .btn-purple {
+            background-color: #a855f7;
+        }
+
+        .btn-orange {
+            background-color: #f97316;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+
+        .game-over-modal {
+            position: absolute;
+            inset: 0;
+            background: rgba(30, 41, 59, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            z-index: 50;
+            padding: 20px;
+        }
+
+        .start-screen {
+            position: absolute;
+            inset: 0;
+            background: rgba(30, 41, 59, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            z-index: 40;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="sticky-header">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Ana Səhifə</span>
+        </a>
+        <div class="site-logo">baki-sumqayit.site</div>
+    </header>
+
+    <div class="main-container">
+
+        <main class="game-wrapper" id="game-container">
+
+            <div class="reflex-game-area">
+                <div class="score-board">
+                    <span>Xal: <span id="score">0</span></span>
+                    <span>Vaxt: <span id="time-display">60</span>s</span>
+                </div>
+
+                <div id="word-display" class="main-word">Hazır?</div>
+
+                <div class="buttons-grid" id="buttons-container">
+                    <!-- Buttons will be injected here -->
+                </div>
+
+                <div class="timer-bar">
+                    <div class="timer-fill" id="timer-bar"></div>
+                </div>
+            </div>
+
+            <!-- Start Screen -->
+            <div class="start-screen" id="start-screen">
+                <i class="fa-solid fa-bolt text-6xl text-yellow-400 mb-4"></i>
+                <h2 class="text-3xl font-bold text-white mb-2">Rəngləri Tut!</h2>
+                <p class="text-gray-300 mb-6 text-center max-w-md">
+                    Ekranda görünən sözün <strong class="text-red-400">oxunuşuna</strong> deyil,
+                    <strong class="text-green-400">RƏNGİNƏ</strong> uyğun düyməni seçin.
+                </p>
+                <button class="btn-restart text-lg px-8 py-3" onclick="startGame()">Başla</button>
+            </div>
+
+            <!-- Game Over Modal -->
+            <div class="game-over-modal" id="game-over-modal">
+                <h2 class="text-4xl font-bold text-white mb-2">Oyun Bitdi!</h2>
+                <p class="text-xl text-gray-300 mb-6">Nəticə: <span id="final-score"
+                        class="font-bold text-yellow-400">0</span></p>
+                <button class="btn-restart text-lg px-8 py-3" onclick="startGame()">Yenidən Oyna</button>
+            </div>
+
+        </main>
+
+        <!-- Other Games Panel -->
+        <section class="other-games-panel">
+            <div class="panel-title">
+                <i class="fas fa-gamepad"></i>
+                Digər Oyunlar
+            </div>
+
+            <div class="games-scroll-container">
+                <a href="game-2048.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="game-name">2048</div>
+                </a>
+                <a href="game-memory.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="game-name">Yaddaş</div>
+                </a>
+                <a href="game-15puzzle.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-border-all"></i></div>
+                    <div class="game-name">15 Puzzle</div>
+                </a>
+                <a href="game-snake.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-staff-snake"></i></div>
+                    <div class="game-name">İlan</div>
+                </a>
+                <a href="game-flappy.html" class="game-card">
+                    <div class="game-icon"><i class="fa-solid fa-dove"></i></div>
+                    <div class="game-name">Uçan Top</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- SEO Content -->
+        <article class="seo-content">
+            <h1>Rəngləri Tut - Refleks və Diqqət Oyunu</h1>
+            <h2>Necə Oynanılır?</h2>
+            <p>Bu oyunda məqsəd beyninizi çaşdırmağa çalışan "Stroop effekti"nə qalib gəlməkdir. Ekranda bir rəngin adı
+                yazılacaq (məsələn: "QIRMIZI"), lakin bu söz BAŞQA bir rənglə (məsələn: Mavi rəngdə) yazılacaq.</p>
+            <p>Siz sözün mənasını deyil, <strong>YAZILDIĞI RƏNGİ</strong> ifadə edən düyməni seçməlisiniz. Bu,
+                beyninizin iki yarımkürəsi arasında əlaqəni gücləndirir.</p>
+
+            <h3>Yüksək Xal Taktikaları:</h3>
+            <ul>
+                <li><strong>Oxuma, Gör!</strong> Sözləri oxumağa çalışmayın, sadəcə rəngə fokuslanın.</li>
+                <li><strong>Gözlərini Qıy:</strong> Bəzi oyunçular gözlərinə biraz qıyaraq sözü bulanıq görməyə və
+                    sadəcə rəngi seçməyə çalışırlar.</li>
+                <li><strong>Sürətli Ol:</strong> Vaxt gedir, çox düşünmək vaxt itkisidir.</li>
+            </ul>
+        </article>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 baki-sumqayit.site - Bütün hüquqlar qorunur.</p>
+    </footer>
+
+    <script>
+        // Game Logic
+        const colors = [
+            { name: "Qırmızı", code: "#ef4444", class: "btn-red" },
+            { name: "Yaşıl", code: "#22c55e", class: "btn-green" },
+            { name: "Mavi", code: "#3b82f6", class: "btn-blue" },
+            { name: "Sarı", code: "#eab308", class: "btn-yellow" },
+            // { name: "Bənövşəyi", code: "#a855f7", class: "btn-purple" },
+            // { name: "Narıncı", code: "#f97316", class: "btn-orange" }
+        ];
+
+        const wordDisplay = document.getElementById('word-display');
+        const buttonsContainer = document.getElementById('buttons-container');
+        const scoreEl = document.getElementById('score');
+        const finalScoreEl = document.getElementById('final-score');
+        const timeDisplay = document.getElementById('time-display');
+        const timerBar = document.getElementById('timer-bar');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverModal = document.getElementById('game-over-modal');
+
+        let score = 0;
+        let timeLeft = 60;
+        let timerInterval;
+        let currentColorIndex = 0; // The index of the color currently SHOWN (the correct answer)
+
+        function initButtons() {
+            buttonsContainer.innerHTML = '';
+            colors.forEach((color, index) => {
+                const btn = document.createElement('button');
+                btn.className = `color-btn ${color.class}`;
+                btn.textContent = color.name;
+                btn.onclick = () => handleInput(index);
+                buttonsContainer.appendChild(btn);
+            });
+        }
+
+        function startGame() {
+            score = 0;
+            timeLeft = 60;
+            scoreEl.textContent = "0";
+            timeDisplay.textContent = "60";
+            timerBar.style.width = "100%";
+
+            startScreen.style.display = 'none';
+            gameOverModal.style.display = 'none';
+
+            initButtons();
+            nextTurn();
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function nextTurn() {
+            // Pick a random color for the WORD TEXT (meaning)
+            const textIndex = Math.floor(Math.random() * colors.length);
+
+            // Pick a random color for the VISUAL COLOR (ink) - This is the correct answer
+            // Make sure we occasionally get match or mismatch, purely random is fine
+            currentColorIndex = Math.floor(Math.random() * colors.length);
+
+            // Update Display
+            wordDisplay.textContent = colors[textIndex].name;
+            wordDisplay.style.color = colors[currentColorIndex].code;
+
+            // Animation pop
+            wordDisplay.classList.remove('pop');
+            void wordDisplay.offsetWidth; // trigger reflow
+            wordDisplay.classList.add('pop');
+        }
+
+        function handleInput(selectedIndex) {
+            if (selectedIndex === currentColorIndex) {
+                // Correct
+                score += 10;
+                scoreEl.textContent = score;
+                // Bonus time? Maybe tiny bit
+                // timeLeft += 1; 
+                nextTurn();
+            } else {
+                // Wrong
+                score = Math.max(0, score - 5);
+                scoreEl.textContent = score;
+                // Shake effect or visual feedback could go here
+                wordDisplay.style.transform = "translateX(10px)";
+                setTimeout(() => wordDisplay.style.transform = "none", 100);
+            }
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            timeDisplay.textContent = timeLeft;
+            timerBar.style.width = (timeLeft / 60 * 100) + "%";
+
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            finalScoreEl.textContent = score;
+            gameOverModal.style.display = 'flex';
+        }
+
+        // Initialize
+        // startScreen is visible by default via CSS/HTML
+    </script>
+</body>
+
+</html>
