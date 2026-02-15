@@ -23,7 +23,7 @@
         crossorigin="anonymous"></script>
 
     <!-- Monetag Vignette Ad -->
-    
+
     <meta name="robots" content="noindex">
 
     <!-- Google AdSense -->
@@ -31,7 +31,7 @@
         crossorigin="anonymous"></script>
 
     <!-- Monetag Vignette Ad -->
-    
+
 
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,7 +75,18 @@
     <link rel="manifest" href="/site.webmanifest">
 
     <!-- Monetag Vignette Ad -->
-    <script>(function(s){s.dataset.zone='10394826',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <!-- Ad Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(reg => {
+                    console.log('SW registered!', reg);
+                }).catch(err => {
+                    console.log('SW registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </head>
 
 <body class="pb-10 min-h-screen flex flex-col">
