@@ -1028,14 +1028,46 @@
             let html = '';
             let nextTrainFound = false;
 
-            trains.forEach((train, index) => {
-                const isNext = isToday && !train.passed && !nextTrainFound;
+            // 1. Növbəti qatarın indeksini (sırasını) tapırıq
+            let nextTrainIndex = -1;
+            if (isToday) {
+                // Bu gün üçün hələ keçməmiş ilk qatarı tapırıq
+                nextTrainIndex = trains.findIndex(train => !train.passed);
+            }
 
-                // Məntiq: İlk gələcək qatar tapılanda, onun üstünə reklam yerləşdir
-                // Məntiq: İlk gələcək qatar tapılanda işaretle
-                if (isNext) {
-                    nextTrainFound = true;
+            // 2. Reklamın çıxacağı sıranı təyin edirik
+            // Əgər növbəti qatar varsa, tam onun üstündə çıxacaq. 
+            // Əgər bu gün bütün qatarlar gedibsə və ya istifadəçi başqa günü seçibsə, ən üstdə (0-cı sırada) çıxacaq.
+            let adIndex = (nextTrainIndex !== -1) ? nextTrainIndex : 0;
+
+            trains.forEach((train, index) => {
+
+                // --- SMARTLINK İNJEKSİYASI (NÖVBƏTİ QATARIN ÜZƏRİNDƏ) ---
+                if (index === adIndex) {
+                    html += `
+                    <a href="https://omg10.com/4/10186783" target="_blank" rel="nofollow" class="block ticket-card shadow-sm border border-blue-200 bg-gradient-to-r from-blue-50 to-white relative overflow-hidden my-4 group cursor-pointer hover:shadow-md transition-all" style="text-decoration:none;">
+                        <span class="absolute top-0 right-0 bg-blue-500 text-white text-[9px] font-bold px-2 py-1 rounded-bl-lg">GÜNÜN FÜRSƏTİ</span>
+                        <div class="p-4 flex items-center justify-between">
+                            <div class="flex items-center gap-2 sm:gap-4">
+                                <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-md group-hover:scale-110 transition-transform flex-shrink-0">
+                                    <i class="fa-solid fa-gift text-lg animate-pulse"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <h4 class="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors truncate">Günün Xüsusi Təklifi (Sponsorlu)</h4>
+                                    <p class="text-[11px] text-gray-500 mt-0.5 truncate">Sizin üçün seçilmiş pulsuz oyun və proqramlar</p>
+                                </div>
+                            </div>
+                            <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-2">
+                                <i class="fa-solid fa-chevron-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                            </div>
+                        </div>
+                    </a>
+                    `;
                 }
+                // --- SMARTLINK İNJEKSİYASI SONU ---
+
+                const isNext = isToday && !train.passed && !nextTrainFound;
+                if (isNext) { nextTrainFound = true; }
 
                 const opacityClass = train.passed ? 'opacity-60 grayscale' : 'opacity-100';
                 const highlightClass = isNext ? 'ring-2 ring-blue-500 ring-offset-2' : '';
@@ -1047,7 +1079,6 @@
                     badge = `<span class="absolute top-0 right-0 bg-gray-300 text-gray-600 text-[10px] font-bold px-2 py-1 rounded-bl-lg">GETDİ</span>`;
                 }
 
-                // Price HTML
                 let priceHtml = '<div class="text-[10px] text-gray-400 font-bold">BİLET: STANDARD</div>';
                 if (fareInfo) {
                     priceHtml = `
@@ -1060,7 +1091,6 @@
                     `;
                 }
 
-                // Ara duraklar
                 let stopsHtml = '';
                 if (train.stops.length > 0) {
                     stopsHtml = `
@@ -1079,7 +1109,6 @@
                     `;
                 }
 
-                // Countdown Badge
                 let timerHtml = '';
                 if (train.countdown) {
                     const colorClass = isNext ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-blue-50 text-blue-600 border-blue-100';
@@ -1153,13 +1182,11 @@
 
             resultsContainer.innerHTML = html;
 
-            // HTML yerləşəndən sonra Reklamı dinamik yükləyirik - LƏĞV EDİLDİ
-            // loadDynamicAd();
-
             setTimeout(() => {
                 const highlighted = document.querySelector('.ring-blue-500');
                 if (highlighted) {
-                    highlighted.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Cədvəl sürüşəndə həm qatar, həm də üzərindəki reklam görünsün deyə 'start' istifadə etmək daha yaxşıdır
+                    highlighted.previousElementSibling.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
                     resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
