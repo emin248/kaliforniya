@@ -1045,29 +1045,46 @@
 
             trains.forEach((train, index) => {
 
-                // --- SMARTLINK İNJEKSİYASI (NÖVBƏTİ QATARIN ÜZƏRİNDƏ) ---
+                // Monetag Smart Link
                 if (index === adIndex) {
                     html += `
-                    <a href="https://tr.ee/RrVDLI" target="_blank" rel="nofollow" class="block ticket-card shadow-sm border border-blue-200 bg-gradient-to-r from-blue-50 to-white relative overflow-hidden my-4 group cursor-pointer hover:shadow-md transition-all" style="text-decoration:none;">
-                        <span class="absolute top-0 right-0 bg-blue-500 text-white text-[9px] font-bold px-2 py-1 rounded-bl-lg">GÜNÜN FÜRSƏTİ</span>
-                        <div class="p-4 flex items-center justify-between">
-                            <div class="flex items-center gap-2 sm:gap-4">
-                                <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-md group-hover:scale-110 transition-transform flex-shrink-0">
-                                    <i class="fa-solid fa-gift text-lg animate-pulse"></i>
+                    <a href="https://gizokraijaw.net/4/8916361" target="_blank" rel="nofollow" class="block ticket-card shadow-md border-2 border-indigo-400 bg-gradient-to-r from-indigo-50 to-white relative overflow-hidden my-4 group cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-all duration-300" style="text-decoration:none;">
+                        
+                        <!-- Üstdəki Diqqət Çəkən Lent -->
+                        <span class="absolute top-0 right-0 bg-indigo-600 text-white text-[9px] font-extrabold tracking-wider px-3 py-1 rounded-bl-lg shadow-sm">VİP SƏRNİŞİN</span>
+                        
+                        <div class="p-4 flex items-center justify-between relative z-10">
+                            <div class="flex items-center gap-4">
+                                
+                                <!-- Hərəkətli İkon (Diqqət maqnitidir) -->
+                                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white w-12 h-12 flex items-center justify-center rounded-2xl shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                                    <i class="fa-solid fa-gamepad text-xl animate-bounce"></i>
                                 </div>
-                                <div class="min-w-0">
-                                    <h4 class="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors truncate">Günün Xüsusi Təklifi (Sponsorlu)</h4>
-                                    <p class="text-[11px] text-gray-500 mt-0.5 truncate">Sizin üçün seçilmiş pulsuz oyun və proqramlar</p>
+                                
+                                <!-- Başlıq və Mətn -->
+                                <div class="pr-2">
+                                    <h4 class="text-[15px] font-black text-gray-800 group-hover:text-indigo-600 transition-colors leading-tight mb-1">
+                                        Qatarda darıxmayacaqsınız! 🎮
+                                    </h4>
+                                    <p class="text-[11px] text-gray-500 font-medium leading-snug line-clamp-2">
+                                        Yolboyu vaxtınızı əyləncəli keçirmək üçün ən çox yüklənən pulsuz tətbiqlər.
+                                    </p>
                                 </div>
                             </div>
-                            <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-2">
-                                <i class="fa-solid fa-chevron-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                            
+                            <!-- Sağdakı Ox (Hərəkətə Keçirici) -->
+                            <div class="bg-indigo-100 text-indigo-600 w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 shadow-inner">
+                                <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
                             </div>
+                        </div>
+                        
+                        <!-- Arxa plan effekti -->
+                        <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i class="fa-solid fa-train-subway text-7xl"></i>
                         </div>
                     </a>
                     `;
                 }
-                // --- SMARTLINK İNJEKSİYASI SONU ---
 
                 const isNext = isToday && !train.passed && !nextTrainFound;
                 if (isNext) { nextTrainFound = true; }
@@ -1127,6 +1144,7 @@
                         </div>
                     `;
                 }
+
 
                 html += `
                 <div class="ticket-card shadow-sm ${opacityClass} ${highlightClass} group" style="animation-delay: ${index * 50}ms" tabindex="0">
