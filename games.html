@@ -82,7 +82,6 @@
             background-attachment: fixed;
             background-size: cover;
             color: #1f2937;
-            min-height: 100vh;
         }
 
         .glass-panel {
@@ -90,198 +89,183 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.1);
+        }
+
+        .game-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-8px);
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            border-color: rgba(59, 130, 246, 0.3);
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .animate-fade-in {
-            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
         }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-animation { animation: float 4s ease-in-out infinite; }
     </style>
-    <!-- Monetag Vignette Ad -->
-    <!-- Vignette Ad -->
-    <script>(function (s) { s.dataset.zone = '10612437', s.src = 'https://gizokraijaw.net/vignette.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
 
-<body class="antialiased pb-10">
+<body class="antialiased pb-20">
 
-    <div class="max-w-4xl mx-auto px-4 pt-6 sm:pt-10">
+    <main class="max-w-5xl mx-auto px-4 pt-6 sm:pt-10">
 
-        <!-- Header -->
-        <header class="mb-8 animate-fade-in">
-            <a href="index.html"
-                class="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors mb-4">
-                <i class="fa-solid fa-arrow-left mr-2"></i> Ana Səhifəyə Qayıt
+        <!-- Back Button & Nav -->
+        <div class="mb-8 animate-fade-in">
+            <a href="index.html" class="inline-flex items-center gap-2 bg-white/80 hover:bg-white text-gray-700 font-bold px-5 py-2.5 rounded-full shadow-sm border border-white/60 transition-all active:scale-95">
+                <i class="fa-solid fa-arrow-left text-blue-600"></i>
+                <span>Ana Səhifə</span>
             </a>
-            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Oyun Zonası</h1>
-            <p class="text-gray-500 mt-2">Qatar gələnədək vaxtınızı maraqlı keçirin.</p>
-        </header>
+        </div>
+
+        <!-- HERO BANNER -->
+        <section class="mb-12 animate-fade-in" style="animation-delay: 100ms;">
+            <div class="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 p-10 sm:p-14 shadow-2xl shadow-indigo-500/20 text-center">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-purple-400/20 rounded-full blur-3xl"></div>
+                
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center mb-6 shadow-xl border border-white/20 float-animation">
+                        <i class="fa-solid fa-gamepad text-4xl text-white"></i>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl font-black text-white mb-4 tracking-tighter">Oyun Zonası</h1>
+                    <p class="text-indigo-100 text-lg sm:text-xl font-medium max-w-lg leading-relaxed">
+                        Qatar gələnədək vaxtınızı maraqlı keçirmək üçün bir-birindən əyləncəli 10+ oyun.
+                    </p>
+                </div>
+            </div>
+        </section>
 
         <!-- GAMES GRID -->
-        <section class="animate-fade-in" style="animation-delay: 100ms;">
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Tycoon (NEW) -->
-                <a href="game-tycoon.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-blue-400/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+        <section class="animate-fade-in" style="animation-delay: 200ms;">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-6">
+                
+                <!-- TYCOON -->
+                <a href="game-tycoon.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-train-subway text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-blue-700">Maqnat</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">Maqnat</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Dəmir Yolu</p>
                 </a>
+
                 <!-- 2048 -->
-                <a href="game-2048.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-yellow-400/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-yellow-100 text-yellow-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <a href="game-2048.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-yellow-100 text-yellow-600 flex items-center justify-center mb-4 group-hover:bg-yellow-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-layer-group text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-yellow-700">2048</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">2048</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Məntiq</p>
                 </a>
 
-                <!-- 15 Puzzle -->
-                <a href="game-15puzzle.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-blue-400/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- 15 PUZZLE -->
+                <a href="game-15puzzle.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-border-all text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-blue-700">15 Puzzle</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">15 Puzzle</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Puzzle</p>
                 </a>
 
-                <!-- Flappy -->
-                <a href="game-flappy.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-sky-400/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- FLAPPY -->
+                <a href="game-flappy.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center mb-4 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-dove text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-sky-700">Uçan Top</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">Uçan Top</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Sürət</p>
                 </a>
 
-                <!-- Snake -->
-                <a href="game-snake.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-green-400/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- SNAKE -->
+                <a href="game-snake.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-staff-snake text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-green-700">İlan</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">İlan</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Klassik</p>
                 </a>
 
-                <!-- TicTacToe -->
-                <a href="game-tictactoe.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-red-400/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- TIC TAC TOE -->
+                <a href="game-tictactoe.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-xmarks-lines text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-red-700">X-O</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">X-O</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">2 Nəfərlik</p>
                 </a>
 
-                <!-- Tetris -->
-                <a href="game-tetris.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-indigo-400/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- TETRIS -->
+                <a href="game-tetris.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-shapes text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-indigo-700">Tetris</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">Tetris</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Retro</p>
                 </a>
 
-                <!-- Memory -->
-                <a href="game-memory.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-teal-400/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- MEMORY -->
+                <a href="game-memory.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center mb-4 group-hover:bg-teal-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-brain text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-teal-700">Yaddaş</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">Yaddaş</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Zəka</p>
                 </a>
 
-                <!-- Math -->
-                <a href="game-math.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- MATH -->
+                <a href="game-math.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-4 group-hover:bg-orange-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-calculator text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-orange-700">Riyaziyyat</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">Riyaziyyat</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Öyrən</p>
                 </a>
 
-                <!-- Reflex (ZigZag) -->
-                <a href="game-reflex.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-fuchsia-400/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-fuchsia-100 text-fuchsia-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- ZIG ZAG -->
+                <a href="game-reflex.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-fuchsia-100 text-fuchsia-600 flex items-center justify-center mb-4 group-hover:bg-fuchsia-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-bolt text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-fuchsia-700">Ziq Zaq</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">Ziq Zaq</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Refleks</p>
                 </a>
 
-                <!-- Arkanoid -->
-                <a href="game-arkanoid.html"
-                    class="glass-panel p-4 rounded-2xl flex flex-col items-center justify-center group hover:bg-white transition-all border border-white/60 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden">
-                    <div
-                        class="absolute inset-0 bg-gradient-to-br from-rose-400/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm">
+                <!-- ARKANOID -->
+                <a href="game-arkanoid.html" class="game-card glass-panel p-8 rounded-[2rem] flex flex-col items-center text-center group">
+                    <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-inner">
                         <i class="fa-solid fa-cubes text-2xl"></i>
                     </div>
-                    <span class="font-bold text-gray-700 group-hover:text-rose-700">Kərpic</span>
+                    <h3 class="font-black text-gray-800 text-lg mb-1">Kərpic</h3>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Arkanoid</p>
                 </a>
+
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="text-center mt-12 pt-6 border-t border-gray-200">
-            <p class="text-gray-400 text-sm">© 2025 Baki-Sumqayit.site | Bütün oyunlar pulsuzdur.</p>
+        <footer class="text-center mt-20 pt-8 border-t border-gray-200">
+            <div class="flex items-center justify-center gap-2 mb-4 opacity-50 grayscale">
+                <img src="favicon-32x32.png" alt="Logo" class="w-6 h-6 object-contain">
+                <span class="font-bold text-gray-800">Baki-Sumqayit.site</span>
+            </div>
+            <p class="text-gray-400 text-xs font-medium tracking-wide">© 2025 OYUN ZONASI | BÜTÜN HÜQUQLAR QORUNUR</p>
         </footer>
-    </div>
+    </main>
 
 </body>
-
 </html>

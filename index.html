@@ -227,6 +227,9 @@
             min-height: 90px;
             background: rgba(0, 0, 0, 0.02);
         }
+        /* Hide details marker */
+        summary::-webkit-details-marker { display: none; }
+        summary { list-style: none; }
     </style>
     <!-- Vignette Ad -->
     <script>(function (s) { s.dataset.zone = '10612437', s.src = 'https://gizokraijaw.net/vignette.min.js' })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
@@ -1091,23 +1094,26 @@
                     `;
                 }
 
-                let stopsHtml = '';
-                if (train.stops.length > 0) {
-                    stopsHtml = `
-                        <div class="mt-4 pt-3 border-t border-dashed border-gray-200 hidden group-focus-within:block transition-all">
-                            <p class="text-xs text-gray-400 mb-2 font-semibold uppercase">Ara Stansiyalar</p>
+                let stopsHtml = train.stops.length ? `
+                    <details class="mt-3 group/details transition-all">
+                        <summary class="list-none cursor-pointer text-center outline-none">
+                            <span class="text-[10px] text-blue-500 font-bold hover:text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 transition-all inline-flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-list-ul"></i> Detallar
+                            </span>
+                        </summary>
+                        <div class="mt-4 pt-3 border-t border-dashed border-gray-200">
+                            <p class="text-[10px] text-gray-400 mb-2 font-bold uppercase tracking-wider">Arada Dayanacaqlar</p>
                             <div class="pl-2 border-l-2 border-gray-200 space-y-3 relative">
                                 ${train.stops.map(s => `
-                                    <div class="relative pl-4 text-xs flex justify-between items-center">
-                                        <div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-gray-300 border border-white"></div>
-                                        <span class="text-gray-600">${s.s}</span>
-                                        <span class="font-mono font-medium text-gray-800">${s.t}</span>
+                                    <div class="relative pl-4 text-xs flex justify-between items-center group/stop">
+                                        <div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-gray-300 border border-white group-hover/stop:bg-blue-400 transition-colors"></div>
+                                        <span class="text-gray-600 font-medium">${s.s}</span>
+                                        <span class="font-mono font-bold text-gray-800">${s.t}</span>
                                     </div>
                                 `).join('')}
                             </div>
                         </div>
-                    `;
-                }
+                    </details>` : '';
 
                 let timerHtml = '';
                 if (train.countdown) {
@@ -1162,19 +1168,18 @@
 
                         ${timerHtml}
 
-                        ${train.stops.length ? `
-                        <div class="mt-3 text-center group-focus-within:hidden">
-                             <span class="text-[10px] text-blue-400 font-semibold cursor-pointer hover:text-blue-600 transition-colors">
-                                <i class="fa-solid fa-list-ul mr-1"></i> Detallar
-                             </span>
-                        </div>` : ''}
-                        
                         ${stopsHtml}
                     </div>
                     
-                    <div class="bg-gray-50 px-5 py-2 border-t border-dashed border-gray-200 flex justify-between items-center">
-                        <div class="text-[10px] text-gray-400 font-mono">ADY QSC</div>
-                        ${priceHtml}
+                    <div class="bg-gray-50 px-5 py-3 border-t border-dashed border-gray-200 flex justify-between items-center text-gray-400">
+                        <div class="text-[10px] font-mono">ADY QSC</div>
+                        <div class="flex items-center gap-3">
+                            ${priceHtml}
+                            <button onclick="shareTrip('${train.number}', '${from}', '${train.depTime}', '${to}', '${train.arrTime}', ${train.duration})" 
+                                    class="flex items-center gap-1.5 text-blue-600 font-bold text-[11px] hover:bg-blue-100 px-2.5 py-1.5 rounded-lg transition-colors bg-white border border-blue-100 shadow-sm">
+                                <i class="fa-solid fa-share-nodes"></i> Paylaş
+                            </button>
+                        </div>
                     </div>
                 </div>
                 `;
@@ -1195,6 +1200,24 @@
 
 
 
+
+        function shareTrip(num, dep, depT, arr, arrT, dur) {
+            const h = Math.floor(dur / 60);
+            const m = dur % 60;
+            const text = `🚋 Qatar №${num}\n📍 ${dep} (${depT}) ➡️ ${arr} (${arrT})\n⏱ Mövcud səfər müddəti: ${h}s ${m}d\n🔗 Daha çox məlumat: https://baki-sumqayit.site`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Baku-Sumqayit Trip',
+                    text: text,
+                    url: 'https://baki-sumqayit.site'
+                }).catch(err => console.log('Share failed:', err));
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Reys məlumatları kopyalandı!');
+                });
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
