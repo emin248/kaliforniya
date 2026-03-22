@@ -1202,24 +1202,71 @@
 
 
         function shareTrip(num, dep, depT, arr, arrT, dur) {
+            const route = routeSelect.value;
+            const day = dayTypeSelect.value;
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareUrl = `${baseUrl}?route=${route}&dep=${encodeURIComponent(dep)}&arr=${encodeURIComponent(arr)}&day=${day}&train=${num}`;
+
             const h = Math.floor(dur / 60);
             const m = dur % 60;
-            const text = `🚋 Qatar №${num}\n📍 ${dep} (${depT}) ➡️ ${arr} (${arrT})\n⏱ Mövcud səfər müddəti: ${h}s ${m}d\n🔗 Daha çox məlumat: https://baki-sumqayit.site`;
+            const text = `🚋 Qatar №${num}\n📍 ${dep} (${depT}) ➡️ ${arr} (${arrT})\n⏱ Mövcud səfər müddəti: ${h}s ${m}d\n🔗 Link: ${shareUrl}`;
 
             if (navigator.share) {
                 navigator.share({
                     title: 'Baku-Sumqayit Trip',
                     text: text,
-                    url: 'https://baki-sumqayit.site'
+                    url: shareUrl
                 }).catch(err => console.log('Share failed:', err));
             } else {
                 navigator.clipboard.writeText(text).then(() => {
-                    alert('Reys məlumatları kopyalandı!');
+                    alert('Reys məlumatları linklə birgə kopyalandı!');
                 });
             }
         }
 
-        document.addEventListener('DOMContentLoaded', init);
+        function handleUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const route = params.get('route');
+            const depValue = params.get('dep');
+            const arrValue = params.get('arr');
+            const dayValue = params.get('day');
+            const trainNum = params.get('train');
+
+            if (route && depValue && arrValue) {
+                routeSelect.value = route;
+                handleRouteChange();
+
+                setTimeout(() => {
+                    departureSelect.value = depValue;
+                    arrivalSelect.value = arrValue;
+                    if (dayValue) dayTypeSelect.value = dayValue;
+
+                    // Trigger search silently
+                    searchTrains({ preventDefault: () => {} });
+
+                    if (trainNum) {
+                        setTimeout(() => {
+                            const cards = document.querySelectorAll('.ticket-card');
+                            cards.forEach(card => {
+                                if (card.innerHTML.includes(`№ ${trainNum}`)) {
+                                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    card.classList.add('ring-4', 'ring-orange-500', 'scale-[1.02]');
+                                    
+                                    // Open details
+                                    const details = card.querySelector('details');
+                                    if (details) details.open = true;
+                                }
+                            });
+                        }, 800);
+                    }
+                }, 400);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            handleUrlParams();
+        });
     </script>
 
     <!-- Google AdSense (Deferred) -->
