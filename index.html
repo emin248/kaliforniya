@@ -230,6 +230,109 @@
         /* Hide details marker */
         summary::-webkit-details-marker { display: none; }
         summary { list-style: none; }
+
+        /* BusBaku Banner Reklam Stylləri */
+        .busbaku-ad-banner {
+            all: initial; /* Digər saytların CSS-indən təsirlənməmək üçün */
+            display: block;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            width: 100%;
+            margin: 15px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            text-decoration: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .busbaku-ad-banner:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -10px rgba(239, 68, 68, 0.2);
+            border-color: #fca5a5;
+        }
+
+        .busbaku-ad-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .busbaku-ad-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .busbaku-ad-icon {
+            width: 45px;
+            height: 45px;
+            background: #ef4444;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .busbaku-ad-text h4 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .busbaku-ad-text h4 span {
+            color: #ef4444;
+            font-style: italic;
+        }
+
+        .busbaku-ad-text p {
+            margin: 2px 0 0 0;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .busbaku-ad-btn {
+            background: #1e293b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .busbaku-ad-banner:hover .busbaku-ad-btn {
+            background: #ef4444;
+        }
+
+        /* Mobil Uyğunluq */
+        @media (max-width: 480px) {
+            .busbaku-ad-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .busbaku-ad-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .busbaku-ad-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
     <!-- Vignette Ad -->
     <script>(function(s){s.dataset.zone='10783163',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
@@ -1038,7 +1141,32 @@
                 nextTrainIndex = trains.findIndex(train => !train.passed);
             }
 
+            const adHtml = `
+                <a href="https://busbaku.info" target="_blank" class="busbaku-ad-banner" style="animation-delay: 150ms">
+                    <div class="busbaku-ad-content">
+                        <div class="busbaku-ad-info">
+                            <div class="busbaku-ad-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="4" y="2" width="16" height="18" rx="2"></rect>
+                                    <path d="M4 14h16"></path>
+                                    <path d="M8 18h.01"></path>
+                                    <path d="M16 18h.01"></path>
+                                </svg>
+                            </div>
+                            <div class="busbaku-ad-text">
+                                <h4>BusBaku: <span>Avtobus Cədvəlləri</span></h4>
+                                <p>Bakı şəhəri üzrə marşrutlar üçün rəqəmsal bələdçi</p>
+                            </div>
+                        </div>
+                        <div class="busbaku-ad-btn">Cədvəllərə Bax</div>
+                    </div>
+                </a>`;
+
             trains.forEach((train, index) => {
+                // Reklamı ilk növbəti qatarın üzərində (və ya siyahının başında) yerləşdiririk
+                if (index === nextTrainIndex || (nextTrainIndex === -1 && index === 0)) {
+                    html += adHtml;
+                }
 
                 const isNext = isToday && !train.passed && !nextTrainFound;
                 if (isNext) { nextTrainFound = true; }
