@@ -231,13 +231,11 @@
         summary::-webkit-details-marker { display: none; }
         summary { list-style: none; }
 
-        /* Genç Odası Takımları Banner Reklam Stylləri */
-        /* Genç Odası Takımları Banner Reklam Stylləri */
         .genc-odasi-ad-banner {
             display: block;
             width: 100%;
-            margin: 12px 0;
-            padding: 15px 20px;
+            margin: 15px 0;
+            padding: 14px 18px;
             background: linear-gradient(135deg, #ffffff 0%, #fcf9f5 100%);
             border: 1px solid #e5e7eb;
             border-radius: 20px;
@@ -249,88 +247,112 @@
             animation: fadeIn 0.5s ease-out;
         }
 
+        /* Premium background decoration for PC */
+        .genc-odasi-ad-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 121, 193, 0.05) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .genc-odasi-ad-banner:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.08);
-            border-color: #d1d5db;
+            box-shadow: 0 20px 35px -12px rgba(0, 121, 193, 0.15);
+            border-color: #0079C1;
         }
 
         .genc-odasi-ad-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .genc-odasi-ad-info {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 20px;
         }
 
         .genc-odasi-ad-logo {
-            width: 140px;
-            height: auto;
+            width: 130px;
+            height: 55px;
             background: white;
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             overflow: hidden;
-            padding: 5px;
+            padding: 6px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .genc-odasi-ad-banner:hover .genc-odasi-ad-logo {
+            transform: scale(1.03);
         }
 
         .genc-odasi-ad-logo img {
             width: 100%;
-            height: auto;
+            height: 100%;
             object-fit: contain;
         }
 
         .genc-odasi-ad-text h4 {
             margin: 0;
-            color: #0079C1; /* Lajivert Blue */
-            font-size: 19px;
+            color: #0079C1;
+            font-size: 18px;
             font-weight: 800;
             letter-spacing: -0.02em;
+            line-height: 1.2;
         }
 
-        .genc-odasi-ad-text h4 span {
-            color: #f97316; /* Orange accent from logo */
+        .genc-odasi-ad-text span {
+            color: #f97316;
             font-style: italic;
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .genc-odasi-ad-text p {
             margin: 4px 0 0 0;
-            color: #4b5563;
-            font-size: 13px;
+            color: #64748b;
+            font-size: 12px;
             font-weight: 500;
+            line-height: 1.4;
         }
 
         .genc-odasi-ad-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
         }
 
         .genc-odasi-ad-btn {
             text-decoration: none;
-            padding: 10px 18px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 10px 20px;
+            border-radius: 14px;
+            font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.03em;
+            letter-spacing: 0.05em;
             white-space: nowrap;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .genc-odasi-ad-btn.whatsapp {
@@ -344,28 +366,48 @@
         }
 
         .genc-odasi-ad-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         /* Mobil Uyğunluq */
         @media (max-width: 640px) {
+            .genc-odasi-ad-banner {
+                padding: 18px;
+            }
             .genc-odasi-ad-content {
                 flex-direction: column;
                 text-align: center;
-                gap: 20px;
+                gap: 15px;
             }
             .genc-odasi-ad-info {
                 flex-direction: column;
-                gap: 12px;
+                gap: 10px;
+            }
+            .genc-odasi-ad-logo {
+                width: 140px;
+                height: 60px;
             }
             .genc-odasi-ad-actions {
                 width: 100%;
+                flex-direction: row;
+                justify-content: center;
+                gap: 8px;
+            }
+            .genc-odasi-ad-btn {
+                flex: 1;
+                padding: 12px 10px;
+                justify-content: center;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .genc-odasi-ad-actions {
                 flex-direction: column;
             }
             .genc-odasi-ad-btn {
                 width: 100%;
-                justify-content: center;
             }
         }
     </style>
