@@ -521,10 +521,11 @@
             
             let typeLabel = "Local";
             let typeColor = "#64748b";
-            if (m.route?.name?.toLowerCase().includes('bullet')) {
+            const rName = m.route?.name?.toLowerCase() || "";
+            if (rName.includes('bullet') || rName.includes('express')) {
                 typeLabel = "BABY BULLET";
                 typeColor = "#ce202f";
-            } else if (m.route?.name?.toLowerCase().includes('limited')) {
+            } else if (rName.includes('limited')) {
                 typeLabel = "LIMITED";
                 typeColor = "#3b82f6";
             }
