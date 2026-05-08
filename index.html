@@ -275,21 +275,34 @@
 <script>
     const STATION_NAMES = {
         '70011': 'San Francisco', '70012': 'San Francisco',
-        '70061': 'Millbrae', '70062': 'Millbrae',
+        '70021': '22nd Street', '70022': '22nd Street',
+        '70031': 'Bayshore', '70032': 'Bayshore',
+        '70041': 'South San Francisco', '70042': 'South San Francisco',
         '70051': 'San Bruno', '70052': 'San Bruno',
+        '70061': 'Millbrae', '70062': 'Millbrae',
+        '70071': 'Burlingame', '70072': 'Burlingame',
         '70081': 'San Mateo', '70082': 'San Mateo',
-        '70111': 'San Carlos', '70112': 'San Carlos',
+        '70091': 'Hayward Park', '70092': 'Hayward Park',
+        '70101': 'Hillsdale', '70102': 'Hillsdale',
+        '70111': 'Belmont', '70112': 'Belmont',
+        '70121': 'San Carlos', '70122': 'San Carlos',
         '70141': 'Redwood City', '70142': 'Redwood City',
         '70161': 'Menlo Park', '70162': 'Menlo Park',
         '70171': 'Palo Alto', '70172': 'Palo Alto',
+        '70191': 'California Ave', '70192': 'California Ave',
+        '70201': 'San Antonio', '70202': 'San Antonio',
         '70211': 'Mountain View', '70212': 'Mountain View',
         '70231': 'Sunnyvale', '70232': 'Sunnyvale',
+        '70241': 'Lawrence', '70242': 'Lawrence',
         '70251': 'Santa Clara', '70252': 'Santa Clara',
         '70261': 'San Jose Diridon', '70262': 'San Jose Diridon'
     };
 
     const ZONE_MAP = {
-        'san_francisco': 1, 'san_bruno': 1, 'millbrae': 1, 'san_mateo': 2, 'redwood_city': 2, 'san_carlos': 2, 'palo_alto': 3, 'menlo_park': 3, 'mountain_view': 3, 'sunnyvale': 3, 'santa_clara': 4, 'sj_diridon': 4
+        'san_francisco': 1, '22nd_street': 1, 'bayshore': 1, 'south_sf': 1, 'san_bruno': 1, 'millbrae': 1,
+        'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2, 'belmont': 2, 'san_carlos': 2, 'redwood_city': 2,
+        'menlo_park': 3, 'palo_alto': 3, 'california_ave': 3, 'san_antonio': 3, 'mountain_view': 3, 'sunnyvale': 3,
+        'lawrence': 4, 'santa_clara': 4, 'sj_diridon': 4
     };
 
     const WEEKDAY_SERVICE = 'c_71742_b_86200_d_31';
@@ -301,15 +314,25 @@
         
         const stations = [
             {id: 'san_francisco', name: 'San Francisco'},
+            {id: '22nd_street', name: '22nd Street'},
+            {id: 'bayshore', name: 'Bayshore'},
+            {id: 'south_sf', name: 'South San Francisco'},
             {id: 'san_bruno', name: 'San Bruno'},
             {id: 'millbrae', name: 'Millbrae'},
+            {id: 'burlingame', name: 'Burlingame'},
             {id: 'san_mateo', name: 'San Mateo'},
+            {id: 'hayward_park', name: 'Hayward Park'},
+            {id: 'hillsdale', name: 'Hillsdale'},
+            {id: 'belmont', name: 'Belmont'},
             {id: 'san_carlos', name: 'San Carlos'},
             {id: 'redwood_city', name: 'Redwood City'},
             {id: 'menlo_park', name: 'Menlo Park'},
             {id: 'palo_alto', name: 'Palo Alto'},
+            {id: 'california_ave', name: 'California Ave'},
+            {id: 'san_antonio', name: 'San Antonio'},
             {id: 'mountain_view', name: 'Mountain View'},
             {id: 'sunnyvale', name: 'Sunnyvale'},
+            {id: 'lawrence', name: 'Lawrence'},
             {id: 'santa_clara', name: 'Santa Clara'},
             {id: 'sj_diridon', name: 'San Jose Diridon'}
         ];
@@ -383,13 +406,16 @@
             return;
         }
 
-        const stationsOrder = ['san_francisco', 'san_bruno', 'millbrae', 'san_mateo', 'san_carlos', 'redwood_city', 'menlo_park', 'palo_alto', 'mountain_view', 'sunnyvale', 'santa_clara', 'sj_diridon'];
+        const stationsOrder = ['san_francisco', '22nd_street', 'bayshore', 'south_sf', 'san_bruno', 'millbrae', 'burlingame', 'san_mateo', 'hayward_park', 'hillsdale', 'belmont', 'san_carlos', 'redwood_city', 'menlo_park', 'palo_alto', 'california_ave', 'san_antonio', 'mountain_view', 'sunnyvale', 'lawrence', 'santa_clara', 'sj_diridon'];
         const isSouthbound = stationsOrder.indexOf(from) < stationsOrder.indexOf(to);
         
         const suffix = isSouthbound ? '2' : '1';
         
         const GTFS_ID_MAP = {
-            'san_francisco': '7001', 'san_bruno': '7005', 'millbrae': '7006', 'san_mateo': '7008', 'san_carlos': '7011', 'redwood_city': '7014', 'menlo_park': '7016', 'palo_alto': '7017', 'mountain_view': '7021', 'sunnyvale': '7023', 'santa_clara': '7025', 'sj_diridon': '7026'
+            'san_francisco': '7001', '22nd_street': '7002', 'bayshore': '7003', 'south_sf': '7004', 'san_bruno': '7005', 'millbrae': '7006', 
+            'burlingame': '7007', 'san_mateo': '7008', 'hayward_park': '7009', 'hillsdale': '7010', 'belmont': '7011', 'san_carlos': '7012', 'redwood_city': '7014', 
+            'menlo_park': '7016', 'palo_alto': '7017', 'california_ave': '7019', 'san_antonio': '7020', 'mountain_view': '7021', 'sunnyvale': '7023', 
+            'lawrence': '7024', 'santa_clara': '7025', 'sj_diridon': '7026'
         };
 
         const depStopId = GTFS_ID_MAP[from] + suffix;
