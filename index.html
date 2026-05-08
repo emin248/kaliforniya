@@ -613,10 +613,17 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js').then(reg => {
-                console.log('Service Worker registered!', reg);
-            }).catch(err => {
-                console.log('Service Worker registration failed:', err);
+                console.log('Service Worker registered!');
             });
+        });
+        
+        // Handle automatic reload when service worker updates
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                window.location.reload();
+                refreshing = true;
+            }
         });
     }
 </script>
