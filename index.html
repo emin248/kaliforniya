@@ -406,7 +406,12 @@
             return;
         }
 
-        const stationsOrder = ['san_francisco', '22nd_street', 'bayshore', 'south_sf', 'san_bruno', 'millbrae', 'burlingame', 'san_mateo', 'hayward_park', 'hillsdale', 'belmont', 'san_carlos', 'redwood_city', 'menlo_park', 'palo_alto', 'california_ave', 'san_antonio', 'mountain_view', 'sunnyvale', 'lawrence', 'santa_clara', 'sj_diridon'];
+        const stationsOrder = [
+            'san_francisco', '22nd_street', 'bayshore', 'south_sf', 'san_bruno', 'millbrae', 
+            'burlingame', 'san_mateo', 'hayward_park', 'hillsdale', 'belmont', 'san_carlos', 
+            'redwood_city', 'menlo_park', 'palo_alto', 'california_ave', 'san_antonio', 
+            'mountain_view', 'sunnyvale', 'lawrence', 'santa_clara', 'sj_diridon'
+        ];
         const isSouthbound = stationsOrder.indexOf(from) < stationsOrder.indexOf(to);
         
         const suffix = isSouthbound ? '2' : '1';
