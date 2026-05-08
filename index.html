@@ -215,45 +215,43 @@
         Current time in San Francisco: <span id="sf-clock-large">--:--</span>
     </div>
 
-    <!-- GAME ZONE BANNER -->
-    <section style="margin-bottom: 40px;">
-        <div style="background: linear-gradient(135deg, #ce202f 0%, #91161f 100%); border-radius: 28px; padding: 30px; text-align: center; color: white; position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(206, 32, 47, 0.2);">
-            <div style="position: absolute; right: -20px; top: -20px; font-size: 8rem; opacity: 0.1;"><i class="fa-solid fa-gamepad"></i></div>
-            <h2 style="margin: 0; font-size: 1.8rem; font-weight: 800;">Game Zone</h2>
-            <p style="opacity: 0.9; font-size: 0.9rem; margin: 10px 0 20px;">Pass the time while waiting for your train!</p>
-            <a href="games.html" style="display: inline-block; background: white; color: var(--primary); padding: 12px 30px; border-radius: 14px; text-decoration: none; font-weight: 800; font-size: 0.9rem; transition: transform 0.2s;">Play Now <i class="fa-solid fa-play" style="margin-left: 5px;"></i></a>
+    <!-- AD SPACE (REPLACED GAME ZONE) -->
+    <div style="margin-bottom: 40px; text-align: center;">
+        <div style="background: rgba(0,0,0,0.03); border: 2px dashed var(--border); border-radius: 24px; padding: 40px 20px; color: var(--text); opacity: 0.5;">
+            <i class="fa-solid fa-rectangle-ad" style="font-size: 2rem; margin-bottom: 10px;"></i>
+            <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Advertisement Space</div>
         </div>
-    </section>
+    </div>
 
     <!-- USEFUL INFO GRID -->
     <section style="margin-bottom: 40px;">
-        <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 20px; padding-left: 10px;">Useful Information</h3>
+        <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 20px; padding-left: 10px;">Commuter Info</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div style="background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
-                <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-bolt"></i></div>
-                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">2024 Electric Fleet</h4>
-                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Performance & Amenities guide.</p>
+                <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-bolt-lightning"></i></div>
+                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">Electric Fleet</h4>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Learn about new high-speed rail amenities.</p>
             </div>
             <div style="background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
-                <div style="color: #10b981; font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-ticket"></i></div>
-                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">Fares & Zones</h4>
-                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Ticketing options & discounts.</p>
+                <div style="color: #10b981; font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">System Map</h4>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Full Caltrain network and zone guide.</p>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer style="text-align: center; margin-top: 40px; padding-bottom: 40px;">
-        <a href="https://t.me/emin249" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; background: white; color: #229ED9; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 700; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid rgba(34, 158, 217, 0.1);">
-            <i class="fa-brands fa-telegram" style="font-size: 1.5rem;"></i>
-            <span>Contact Support</span>
+        <a href="mailto:support@caltrainlive.info" style="display: inline-flex; align-items: center; gap: 10px; background: var(--glass); color: var(--text); padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 700; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid var(--border);">
+            <i class="fa-solid fa-circle-exclamation" style="color: var(--primary);"></i>
+            <span>Report an Issue</span>
         </a>
         <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.8rem; opacity: 0.6; margin-bottom: 15px; font-weight: 600;">
             <span>About</span>
             <span>History</span>
-            <span>Terms</span>
+            <span>Privacy</span>
         </div>
-        <p style="opacity: 0.4; font-size: 0.7rem; margin: 0;">© 2026 Caltrain Live Board<br>Unofficial Real-time Schedule Planner</p>
+        <p style="opacity: 0.4; font-size: 0.7rem; margin: 0;">© 2026 Caltrain Live Board<br>Independent Commuter Information Tool</p>
     </footer>
 </div>
 
@@ -264,14 +262,20 @@
     const STATION_NAMES = {
         '70011': 'San Francisco', '70012': 'San Francisco',
         '70061': 'Millbrae', '70062': 'Millbrae',
+        '70051': 'San Bruno', '70052': 'San Bruno',
+        '70081': 'San Mateo', '70082': 'San Mateo',
+        '70111': 'San Carlos', '70112': 'San Carlos',
         '70141': 'Redwood City', '70142': 'Redwood City',
+        '70161': 'Menlo Park', '70162': 'Menlo Park',
         '70171': 'Palo Alto', '70172': 'Palo Alto',
         '70211': 'Mountain View', '70212': 'Mountain View',
+        '70231': 'Sunnyvale', '70232': 'Sunnyvale',
+        '70251': 'Santa Clara', '70252': 'Santa Clara',
         '70261': 'San Jose Diridon', '70262': 'San Jose Diridon'
     };
 
     const ZONE_MAP = {
-        'san_francisco': 1, 'millbrae': 1, 'redwood_city': 2, 'palo_alto': 3, 'mountain_view': 3, 'sj_diridon': 4
+        'san_francisco': 1, 'san_bruno': 1, 'millbrae': 1, 'san_mateo': 2, 'redwood_city': 2, 'san_carlos': 2, 'palo_alto': 3, 'menlo_park': 3, 'mountain_view': 3, 'sunnyvale': 3, 'santa_clara': 4, 'sj_diridon': 4
     };
 
     const WEEKDAY_SERVICE = 'c_71742_b_86200_d_31';
@@ -283,10 +287,16 @@
         
         const stations = [
             {id: 'san_francisco', name: 'San Francisco'},
+            {id: 'san_bruno', name: 'San Bruno'},
             {id: 'millbrae', name: 'Millbrae'},
+            {id: 'san_mateo', name: 'San Mateo'},
+            {id: 'san_carlos', name: 'San Carlos'},
             {id: 'redwood_city', name: 'Redwood City'},
+            {id: 'menlo_park', name: 'Menlo Park'},
             {id: 'palo_alto', name: 'Palo Alto'},
             {id: 'mountain_view', name: 'Mountain View'},
+            {id: 'sunnyvale', name: 'Sunnyvale'},
+            {id: 'santa_clara', name: 'Santa Clara'},
             {id: 'sj_diridon', name: 'San Jose Diridon'}
         ];
 
@@ -320,11 +330,13 @@
     }
 
     function parseTime(t) {
+        if (!t) return 0;
         const [h, m, s] = t.split(':').map(Number);
         return h * 3600 + m * 60 + (s || 0);
     }
 
     function formatTime(t) {
+        if (!t) return '--:--';
         const [h, m] = t.split(':');
         let hour = parseInt(h);
         const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -353,21 +365,18 @@
             return;
         }
 
-        // Map station ID to GTFS Stop IDs (Northbound or Southbound)
-        const isSouthbound = ['san_francisco', 'millbrae', 'redwood_city', 'palo_alto', 'mountain_view', 'sj_diridon'].indexOf(from) < ['san_francisco', 'millbrae', 'redwood_city', 'palo_alto', 'mountain_view', 'sj_diridon'].indexOf(to);
+        const stationsOrder = ['san_francisco', 'san_bruno', 'millbrae', 'san_mateo', 'san_carlos', 'redwood_city', 'menlo_park', 'palo_alto', 'mountain_view', 'sunnyvale', 'santa_clara', 'sj_diridon'];
+        const isSouthbound = stationsOrder.indexOf(from) < stationsOrder.indexOf(to);
         
-        // Stop ID suffix: 1 for North, 2 for South
         const suffix = isSouthbound ? '2' : '1';
         
-        // Station internal IDs to GTFS IDs
         const GTFS_ID_MAP = {
-            'san_francisco': '7001', 'millbrae': '7006', 'redwood_city': '7014', 'palo_alto': '7017', 'mountain_view': '7021', 'sj_diridon': '7026'
+            'san_francisco': '7001', 'san_bruno': '7005', 'millbrae': '7006', 'san_mateo': '7008', 'san_carlos': '7011', 'redwood_city': '7014', 'menlo_park': '7016', 'palo_alto': '7017', 'mountain_view': '7021', 'sunnyvale': '7023', 'santa_clara': '7025', 'sj_diridon': '7026'
         };
 
         const depStopId = GTFS_ID_MAP[from] + suffix;
         const arrStopId = GTFS_ID_MAP[to] + suffix;
 
-        // Group stop times by trip
         const tripsWithStops = {};
         CALTRAIN_DATA.stopTimes.forEach(st => {
             if (!tripsWithStops[st.trip_id]) tripsWithStops[st.trip_id] = [];
@@ -418,11 +427,10 @@
             return;
         }
 
-        // Calculate Fare (Simplified Zone-based)
         const fromZone = ZONE_MAP[from];
         const toZone = ZONE_MAP[to];
         const zonesTraversed = Math.abs(fromZone - toZone) + 1;
-        const prices = [3.75, 6.00, 8.25, 10.50, 12.75, 15.00]; // 2024 Base prices for Adult
+        const prices = [3.75, 6.00, 8.25, 10.50, 12.75, 15.00];
         const price = prices[zonesTraversed - 1] || 3.75;
 
         let nextTrainFound = false;
@@ -444,6 +452,16 @@
             
             const nextBadge = isNext ? `<div class="next-badge">NEXT TRAIN</div>` : '';
             
+            let typeLabel = "Local";
+            let typeColor = "#64748b";
+            if (m.route?.name.toLowerCase().includes('bullet')) {
+                typeLabel = "BABY BULLET";
+                typeColor = "#ce202f";
+            } else if (m.route?.name.toLowerCase().includes('limited')) {
+                typeLabel = "LIMITED";
+                typeColor = "#3b82f6";
+            }
+            
             const durH = Math.floor(m.duration / 60);
             const durM = m.duration % 60;
             const durationText = `${durH > 0 ? durH + ' h ' : ''}${durM} min`;
@@ -451,7 +469,10 @@
             ticket.innerHTML = `
                 ${nextBadge}
                 <div class="ticket-header">
-                    <span class="train-num">№ ${m.number}</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="train-num">#${m.number}</span>
+                        <span style="background:${typeColor}; color:white; padding: 2px 8px; border-radius: 6px; font-size:0.65rem; font-weight:900; letter-spacing:0.5px;">${typeLabel}</span>
+                    </div>
                     <span class="duration"><i class="fa-regular fa-clock"></i> ${durationText}</span>
                 </div>
                 
@@ -492,7 +513,6 @@
             resultsArea.appendChild(ticket);
         });
 
-        // Scroll to next train
         const next = document.querySelector('.next-badge');
         if (next) next.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
