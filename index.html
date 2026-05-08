@@ -380,7 +380,7 @@
         if (!t) return '--:--';
         const [h, m] = t.split(':');
         let hour = parseInt(h);
-        const ampm = hour >= 12 ? '<span style="font-size: 0.6em; margin-left: 2px;">PM</span>' : '<span style="font-size: 0.6em; margin-left: 2px;">AM</span>';
+        const ampm = hour >= 12 ? '<span style="font-size: 0.7em; margin-left: 2px;">PM</span>' : '<span style="font-size: 0.7em; margin-left: 2px;">AM</span>';
         hour = hour % 12 || 12;
         return `${hour}:${m} ${ampm}`;
     }
@@ -602,7 +602,7 @@
         if (clockEl) {
             // Shrink AM/PM in live clock
             const parts = pt.split(' ');
-            clockEl.innerHTML = `${parts[0]} <span style="font-size: 0.6em;">${parts[1]}</span>`;
+            clockEl.innerHTML = `${parts[0]} <span style="font-size: 0.7em;">${parts[1]}</span>`;
         }
     }, 1000);
 
