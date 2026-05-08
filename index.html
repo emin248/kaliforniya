@@ -173,6 +173,11 @@
 
         .no-results { text-align: center; padding: 40px; opacity: 0.5; font-weight: 600; }
 
+        .opacity-50 {
+            opacity: 0.4;
+            filter: grayscale(100%);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -210,6 +215,9 @@
             <button type="submit" class="search-btn">
                 <i class="fa-solid fa-magnifying-glass"></i> Find Trains
             </button>
+            <div style="text-align: center; font-size: 0.65rem; opacity: 0.5; margin-top: 10px; padding: 0 10px;">
+                * Displaying scheduled departures only. Real-time delays are not reflected.
+            </div>
         </form>
     </section>
 
@@ -560,6 +568,17 @@
     setInterval(search, 60000);
 
     init();
+
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                console.log('Service Worker registered!', reg);
+            }).catch(err => {
+                console.log('Service Worker registration failed:', err);
+            });
+        });
+    }
 </script>
 
 </body>
