@@ -186,7 +186,7 @@
 <div class="container">
     <header>
         <img src="favicon/android-chrome-512x512.png" alt="Caltrain Live" class="logo-img">
-        <div style="font-size: 0.8rem; opacity: 0.5; font-weight: 700; letter-spacing: 1px;">CALTRAIN LIVE BOARD</div>
+        <div style="font-size: 0.8rem; opacity: 0.5; font-weight: 700; letter-spacing: 1px;">COMMUTER LIVE BOARD</div>
     </header>
 
     <section class="search-panel">
@@ -257,16 +257,7 @@
 
     <!-- FOOTER -->
     <footer style="text-align: center; margin-top: 40px; padding-bottom: 40px;">
-        <a href="mailto:support@caltrainlive.info" style="display: inline-flex; align-items: center; gap: 10px; background: var(--glass); color: var(--text); padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 700; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid var(--border);">
-            <i class="fa-solid fa-circle-exclamation" style="color: var(--primary);"></i>
-            <span>Report an Issue</span>
-        </a>
-        <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.8rem; opacity: 0.6; margin-bottom: 15px; font-weight: 600;">
-            <span>About</span>
-            <span>History</span>
-            <span>Privacy</span>
-        </div>
-        <p style="opacity: 0.4; font-size: 0.7rem; margin: 0;">© 2026 Caltrain Live Board<br>Independent Commuter Information Tool</p>
+        <p style="opacity: 0.4; font-size: 0.7rem; margin: 0;">© 2026 Commuter Live Board<br>Independent Commuter Information Tool</p>
     </footer>
 </div>
 
@@ -389,7 +380,7 @@
         if (!t) return '--:--';
         const [h, m] = t.split(':');
         let hour = parseInt(h);
-        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const ampm = hour >= 12 ? '<span style="font-size: 0.6em; margin-left: 2px;">PM</span>' : '<span style="font-size: 0.6em; margin-left: 2px;">AM</span>';
         hour = hour % 12 || 12;
         return `${hour}:${m} ${ampm}`;
     }
@@ -608,7 +599,11 @@
             hour12: true 
         }).format(now);
         const clockEl = document.getElementById('sf-clock-large');
-        if (clockEl) clockEl.innerText = pt;
+        if (clockEl) {
+            // Shrink AM/PM in live clock
+            const parts = pt.split(' ');
+            clockEl.innerHTML = `${parts[0]} <span style="font-size: 0.6em;">${parts[1]}</span>`;
+        }
     }, 1000);
 
     setInterval(search, 60000);
