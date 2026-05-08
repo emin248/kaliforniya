@@ -322,8 +322,6 @@
             e.preventDefault();
             search();
         };
-        
-        search();
     }
 
     function swapStations() {
@@ -362,6 +360,12 @@
         const to = document.getElementById('arrSelect').value;
         const dayType = document.getElementById('dayType').value;
         const serviceId = dayType === 'weekday' ? WEEKDAY_SERVICE : WEEKEND_SERVICE;
+
+        // Check if selected dayType matches real current day in SF
+        const now = new Date();
+        const ptDay = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'long' }).format(now).toLowerCase();
+        const isActuallyToday = (dayType === 'weekday' && ['monday','tuesday','wednesday','thursday','friday'].includes(ptDay)) || 
+                                (dayType === 'weekend' && ['saturday','sunday'].includes(ptDay));
 
         const resultsArea = document.getElementById('results-area');
         resultsArea.innerHTML = '';
@@ -421,7 +425,7 @@
                     route,
                     headsign: trip.headsign,
                     stops: intermediate,
-                    passed: depSec < nowSeconds
+                    passed: isActuallyToday && depSec < nowSeconds
                 });
             }
         }
@@ -441,7 +445,7 @@
 
         let nextTrainFound = false;
         matches.forEach((m, index) => {
-            const isNext = !m.passed && !nextTrainFound;
+            const isNext = isActuallyToday && !m.passed && !nextTrainFound;
             if (isNext) nextTrainFound = true;
 
             const ticket = document.createElement('div');
@@ -450,7 +454,9 @@
             
             const diffMin = Math.round((m.depSec - nowSeconds)/60);
             let countdownText = '';
-            if (isNext) {
+            
+            // Show countdown for ALL upcoming trains only if searched day is today
+            if (isActuallyToday && !m.passed) {
                 const h = Math.floor(diffMin / 60);
                 const min = diffMin % 60;
                 countdownText = `<div class="countdown-timer"><i class="fa-regular fa-clock"></i> Departs in ${h > 0 ? h + ' h ' : ''}${min} min</div>`;
