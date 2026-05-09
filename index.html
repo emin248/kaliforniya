@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="version" content="1.1.0 - Full 22 Stations & Bug Fixes">
+    <title>Caltrain Live - Trip Planner & Schedule</title>
+    <!-- Favicons & App Icons -->
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon/android-chrome-512x512.png">
+    <link rel="manifest" href="site.webmanifest">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #ce202f;
+            --primary-light: #ffeff0;
+            --bg: #f3f4f6;
+            --text: #1f2937;
+            --glass: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.05);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --text: #f8fafc;
+                --glass: rgba(30, 41, 59, 0.85);
+                --border: rgba(255, 255, 255, 0.05);
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-top: 20px;
+        }
+
+        .logo-img { height: 50px; margin-bottom: 10px; }
+
+        /* Search Panel */
+        .search-panel {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .input-group { margin-bottom: 16px; position: relative; }
+        label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.6; margin-bottom: 6px; margin-left: 4px; }
+        
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 600;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .swap-btn {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: var(--primary);
+            border: none;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .search-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 18px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .search-btn:active { transform: scale(0.97); }
+
+        /* Ticket Card */
+        .ticket {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.4s ease-out backwards;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } }
+
+        .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .train-num { font-weight: 800; font-size: 0.85rem; background: var(--primary-light); color: var(--primary); padding: 4px 10px; border-radius: 8px; }
+        .duration { font-size: 0.8rem; opacity: 0.6; font-weight: 600; }
+
+        .route-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .time-area { text-align: center; flex: 1; }
+        .time { font-size: 1.8rem; font-weight: 800; font-family: 'Outfit', sans-serif; }
+        .station-name { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.5; margin-top: 4px; max-width: 100px; margin-left: auto; margin-right: auto; }
+
+        .route-path { flex: 2; height: 2px; background: rgba(0,0,0,0.1); margin: 0 15px; position: relative; }
+        @media (prefers-color-scheme: dark) { .route-path { background: rgba(255,255,255,0.1); } }
+        .path-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; position: absolute; top: -3px; }
+        .path-dot.start { left: 0; }
+        .path-dot.end { right: 0; }
+
+        .ticket-footer { border-top: 1px dashed var(--border); padding-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .price-tag { font-weight: 800; color: #10b981; font-size: 1rem; }
+        
+        .details-btn { 
+            background: none; border: none; color: var(--primary); font-weight: 700; font-size: 0.85rem; cursor: pointer; padding: 5px 10px; border-radius: 8px;
+        }
+        
+        .stops-list { margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px; display: none; }
+        .stop-item { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.02); }
+
+        .next-badge { position: absolute; top: 0; right: 0; background: #10b981; color: white; font-size: 0.6rem; font-weight: 900; padding: 4px 12px; border-radius: 0 0 0 12px; }
+
+        .countdown-timer { text-align: center; margin-top: 10px; font-size: 0.8rem; font-weight: 700; color: var(--primary); }
+
+        .no-results { text-align: center; padding: 40px; opacity: 0.5; font-weight: 600; }
+
+        .opacity-50 {
+            opacity: 0.4;
+            filter: grayscale(100%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <img src="favicon/android-chrome-512x512.png" alt="Caltrain Live" class="logo-img">
+        <div style="font-size: 0.8rem; opacity: 0.5; font-weight: 700; letter-spacing: 1px;">COMMUTER LIVE BOARD</div>
+    </header>
+
+    <section class="search-panel">
+        <form id="searchForm">
+            <div class="input-group">
+                <label>From</label>
+                <select id="depSelect"></select>
+            </div>
+
+            <div class="input-group" style="margin-top: -8px; margin-bottom: 8px;">
+                <button type="button" class="swap-btn" onclick="swapStations()"><i class="fa-solid fa-arrows-up-down"></i></button>
+            </div>
+
+            <div class="input-group">
+                <label>To</label>
+                <select id="arrSelect"></select>
+            </div>
+
+            <div class="input-group">
+                <label>Schedule Type</label>
+                <select id="dayType">
+                    <option value="weekday" selected>Workdays (Mon-Fri)</option>
+                    <option value="weekend">Weekend (Sat-Sun)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i> Find Trains
+            </button>
+            <div style="text-align: center; font-size: 0.65rem; opacity: 0.5; margin-top: 10px; padding: 0 10px;">
+                * Displaying scheduled departures only. Real-time delays are not reflected.
+            </div>
+        </form>
+    </section>
+
+    <div id="results-area">
+        <!-- Results will be injected here -->
+    </div>
+
+    <div id="sf-time-context" style="text-align: center; margin-top: 20px; font-size: 0.85rem; opacity: 0.7; font-weight: 600; margin-bottom: 30px;">
+        Current time in San Francisco: <span id="sf-clock-large">--:--</span>
+    </div>
+
+    <!-- AD SPACE (REPLACED GAME ZONE) -->
+    <div style="margin-bottom: 40px; text-align: center;">
+        <div style="background: rgba(0,0,0,0.03); border: 2px dashed var(--border); border-radius: 24px; padding: 40px 20px; color: var(--text); opacity: 0.5;">
+            <i class="fa-solid fa-rectangle-ad" style="font-size: 2rem; margin-bottom: 10px;"></i>
+            <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Advertisement Space</div>
+        </div>
+    </div>
+
+    <!-- USEFUL INFO GRID -->
+    <section style="margin-bottom: 40px;">
+        <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 20px; padding-left: 10px;">Commuter Info</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
+                <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-bolt-lightning"></i></div>
+                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">Electric Fleet</h4>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Learn about new high-speed rail amenities.</p>
+            </div>
+            <div style="background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
+                <div style="color: #10b981; font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">System Map</h4>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Full Caltrain network and zone guide.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="text-align: center; margin-top: 40px; padding-bottom: 40px;">
+        <p style="opacity: 0.4; font-size: 0.7rem; margin: 0;">© 2026 Commuter Live Board<br>Independent Commuter Information Tool</p>
+    </footer>
+</div>
+
+<!-- GTFS DATA -->
+<script src="gtfs/data.js"></script>
+
+<script>
+    const STATION_NAMES = {
+        '7001': 'San Francisco', '70011': 'San Francisco', '70012': 'San Francisco',
+        '7002': '22nd Street', '70021': '22nd Street', '70022': '22nd Street',
+        '7003': 'Bayshore', '70031': 'Bayshore', '70032': 'Bayshore',
+        '7004': 'South San Francisco', '70041': 'South San Francisco', '70042': 'South San Francisco',
+        '7005': 'San Bruno', '70051': 'San Bruno', '70052': 'San Bruno',
+        '7006': 'Millbrae', '70061': 'Millbrae', '70062': 'Millbrae',
+        '7007': 'Burlingame', '70071': 'Burlingame', '70072': 'Burlingame',
+        '7008': 'San Mateo', '70081': 'San Mateo', '70082': 'San Mateo',
+        '7009': 'Hayward Park', '70091': 'Hayward Park', '70092': 'Hayward Park',
+        '7010': 'Hillsdale', '70101': 'Hillsdale', '70102': 'Hillsdale',
+        '7011': 'Belmont', '70111': 'Belmont', '70112': 'Belmont',
+        '7012': 'San Carlos', '70121': 'San Carlos', '70122': 'San Carlos',
+        '7014': 'Redwood City', '70141': 'Redwood City', '70142': 'Redwood City',
+        '7016': 'Menlo Park', '70161': 'Menlo Park', '70162': 'Menlo Park',
+        '7017': 'Palo Alto', '70171': 'Palo Alto', '70172': 'Palo Alto',
+        '7019': 'California Ave', '70191': 'California Ave', '70192': 'California Ave',
+        '7020': 'San Antonio', '70201': 'San Antonio', '70202': 'San Antonio',
+        '7021': 'Mountain View', '70211': 'Mountain View', '70212': 'Mountain View',
+        '7023': 'Sunnyvale', '70231': 'Sunnyvale', '70232': 'Sunnyvale',
+        '7024': 'Lawrence', '70241': 'Lawrence', '70242': 'Lawrence',
+        '7025': 'Santa Clara', '70251': 'Santa Clara', '70252': 'Santa Clara',
+        '7026': 'San Jose Diridon', '70261': 'San Jose Diridon', '70262': 'San Jose Diridon'
+    };
+
+    const ZONE_MAP = {
+        'san_francisco': 1, '22nd_street': 1, 'bayshore': 1, 'south_sf': 1, 'san_bruno': 1, 'millbrae': 1,
+        'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2, 'belmont': 2, 'san_carlos': 2, 'redwood_city': 2,
+        'menlo_park': 3, 'palo_alto': 3, 'california_ave': 3, 'san_antonio': 3, 'mountain_view': 3, 'sunnyvale': 3,
+        'lawrence': 4, 'santa_clara': 4, 'sj_diridon': 4
+    };
+
+    // Dinamik Service ID tapıcı
+    let WEEKDAY_SERVICE = '';
+    let WEEKEND_SERVICE = '';
+
+    function detectServiceIds() {
+        const counts = {};
+        for (const tripId in CALTRAIN_DATA.trips) {
+            const sid = CALTRAIN_DATA.trips[tripId].serviceId;
+            counts[sid] = (counts[sid] || 0) + 1;
+        }
+        // Reyslərin sayına görə sıralayırıq (Ən çox reys Həftəiçi olur, ikinci ən çox Həftəsonu)
+        const sortedSids = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+        WEEKDAY_SERVICE = sortedSids[0] || '';
+        WEEKEND_SERVICE = sortedSids[1] || sortedSids[0];
+    }
+
+    function init() {
+        detectServiceIds(); // Sistemi işə salan kimi datanı oxuyur
+
+        const depSelect = document.getElementById('depSelect');
+        const arrSelect = document.getElementById('arrSelect');
+        
+        const stations =[
+            {id: 'san_francisco', name: 'San Francisco'},
+            {id: '22nd_street', name: '22nd Street'},
+            {id: 'bayshore', name: 'Bayshore'},
+            {id: 'south_sf', name: 'South San Francisco'},
+            {id: 'san_bruno', name: 'San Bruno'},
+            {id: 'millbrae', name: 'Millbrae'},
+            {id: 'burlingame', name: 'Burlingame'},
+            {id: 'san_mateo', name: 'San Mateo'},
+            {id: 'hayward_park', name: 'Hayward Park'},
+            {id: 'hillsdale', name: 'Hillsdale'},
+            {id: 'belmont', name: 'Belmont'},
+            {id: 'san_carlos', name: 'San Carlos'},
+            {id: 'redwood_city', name: 'Redwood City'},
+            {id: 'menlo_park', name: 'Menlo Park'},
+            {id: 'palo_alto', name: 'Palo Alto'},
+            {id: 'california_ave', name: 'California Ave'},
+            {id: 'san_antonio', name: 'San Antonio'},
+            {id: 'mountain_view', name: 'Mountain View'},
+            {id: 'sunnyvale', name: 'Sunnyvale'},
+            {id: 'lawrence', name: 'Lawrence'},
+            {id: 'santa_clara', name: 'Santa Clara'},
+            {id: 'sj_diridon', name: 'San Jose Diridon'}
+        ];
+
+        stations.forEach(s => {
+            depSelect.add(new Option(s.name, s.id));
+            arrSelect.add(new Option(s.name, s.id));
+        });
+
+        depSelect.value = 'san_francisco';
+        arrSelect.value = 'california_ave';
+
+        const day = new Date().getDay();
+        document.getElementById('dayType').value = (day === 0 || day === 6) ? 'weekend' : 'weekday';
+
+        document.getElementById('searchForm').onsubmit = (e) => {
+            e.preventDefault();
+            search();
+        };
+    }
+
+    function swapStations() {
+        const dep = document.getElementById('depSelect');
+        const arr = document.getElementById('arrSelect');
+        const temp = dep.value;
+        dep.value = arr.value;
+        arr.value = temp;
+        search();
+    }
+
+    function parseTime(t) {
+        if (!t) return 0;
+        const [h, m, s] = t.split(':').map(Number);
+        return h * 3600 + m * 60 + (s || 0);
+    }
+
+    function formatTime(t) {
+        if (!t) return '--:--';
+        const [h, m] = t.split(':');
+        let hour = parseInt(h);
+        const ampm = hour >= 12 ? '<span style="font-size: 0.7em; margin-left: 2px;">PM</span>' : '<span style="font-size: 0.7em; margin-left: 2px;">AM</span>';
+        hour = hour % 12 || 12;
+        return `${hour}:${m} ${ampm}`;
+    }
+
+    function getSFSeconds() {
+        const now = new Date();
+        const pt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false }).format(now);
+        const[h, m, s] = pt.split(':').map(Number);
+        return h * 3600 + m * 60 + s;
+    }
+
+    function search() {
+        const from = document.getElementById('depSelect').value;
+        const to = document.getElementById('arrSelect').value;
+        const dayType = document.getElementById('dayType').value;
+        const serviceId = dayType === 'weekday' ? WEEKDAY_SERVICE : WEEKEND_SERVICE;
+
+        const now = new Date();
+        const ptDay = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'long' }).format(now).toLowerCase();
+        const isActuallyToday = (dayType === 'weekday' && ['monday','tuesday','wednesday','thursday','friday'].includes(ptDay)) || 
+                                (dayType === 'weekend' && ['saturday','sunday'].includes(ptDay));
+
+        const resultsArea = document.getElementById('results-area');
+        resultsArea.innerHTML = '';
+
+        if (from === to) {
+            resultsArea.innerHTML = '<div class="no-results">Please select different stations.</div>';
+            return;
+        }
+
+        const stationsOrder =[
+            'san_francisco', '22nd_street', 'bayshore', 'south_sf', 'san_bruno', 'millbrae', 
+            'burlingame', 'san_mateo', 'hayward_park', 'hillsdale', 'belmont', 'san_carlos', 
+            'redwood_city', 'menlo_park', 'palo_alto', 'california_ave', 'san_antonio', 
+            'mountain_view', 'sunnyvale', 'lawrence', 'santa_clara', 'sj_diridon'
+        ];
+        
+        const GTFS_ID_MAP = {
+            'san_francisco': '7001', '22nd_street': '7002', 'bayshore': '7003', 'south_sf': '7004', 'san_bruno': '7005', 'millbrae': '7006', 
+            'burlingame': '7007', 'san_mateo': '7008', 'hayward_park': '7009', 'hillsdale': '7010', 'belmont': '7011', 'san_carlos': '7012', 'redwood_city': '7014', 
+            'menlo_park': '7016', 'palo_alto': '7017', 'california_ave': '7019', 'san_antonio': '7020', 'mountain_view': '7021', 'sunnyvale': '7023', 
+            'lawrence': '7024', 'santa_clara': '7025', 'sj_diridon': '7026'
+        };
+
+        const depBaseId = GTFS_ID_MAP[from];
+        const arrBaseId = GTFS_ID_MAP[to];
+
+        const tripsWithStops = {};
+        CALTRAIN_DATA.stopTimes.forEach(st => {
+            if (!tripsWithStops[st.trip_id]) tripsWithStops[st.trip_id] = [];
+            tripsWithStops[st.trip_id].push(st);
+        });
+
+        const matches =[];
+        const nowSeconds = getSFSeconds();
+
+        for (const tripId in tripsWithStops) {
+            const trip = CALTRAIN_DATA.trips[tripId];
+            if (!trip || trip.serviceId !== serviceId) continue;
+
+            const stops = tripsWithStops[tripId].sort((a,b) => parseTime(a.arrival_time) - parseTime(b.arrival_time));
+            
+            // "startsWith" ilə axtarış fərqli suffix xətalarını yox edir
+            const depIdx = stops.findIndex(s => s.stop_id.startsWith(depBaseId));
+            const arrIdx = stops.findIndex(s => s.stop_id.startsWith(arrBaseId));
+
+            if (depIdx !== -1 && arrIdx !== -1 && depIdx < arrIdx) {
+                const depTime = stops[depIdx].arrival_time;
+                const arrTime = stops[arrIdx].arrival_time;
+                const route = CALTRAIN_DATA.routes[trip.routeId];
+                
+                const depSec = parseTime(depTime);
+                const arrSec = parseTime(arrTime);
+                let dur = (arrSec - depSec) / 60;
+
+                const intermediate = stops.slice(depIdx + 1, arrIdx);
+
+                matches.push({
+                    tripId,
+                    number: tripId,
+                    depTime,
+                    arrTime,
+                    depSec,
+                    duration: Math.round(dur),
+                    route,
+                    headsign: trip.headsign,
+                    stops: intermediate,
+                    passed: isActuallyToday && depSec < nowSeconds
+                });
+            }
+        }
+
+        matches.sort((a, b) => a.depSec - b.depSec);
+
+        if (matches.length === 0) {
+            resultsArea.innerHTML = '<div class="no-results">No trains found for this route.</div>';
+            return;
+        }
+
+        const fromZone = ZONE_MAP[from];
+        const toZone = ZONE_MAP[to];
+        const zonesTraversed = Math.abs(fromZone - toZone) + 1;
+        const prices =[3.75, 6.00, 8.25, 10.50, 12.75, 15.00];
+        const price = prices[zonesTraversed - 1] || 3.75;
+
+        // Bilet başlığında göstəriləcək təmiz stansiya adları
+        const depName = document.getElementById('depSelect').options[document.getElementById('depSelect').selectedIndex].text;
+        const arrName = document.getElementById('arrSelect').options[document.getElementById('arrSelect').selectedIndex].text;
+
+        let nextTrainFound = false;
+        matches.forEach((m, index) => {
+            const isNext = isActuallyToday && !m.passed && !nextTrainFound;
+            if (isNext) nextTrainFound = true;
+
+            const ticket = document.createElement('div');
+            ticket.className = `ticket ${m.passed ? 'opacity-50' : ''}`;
+            ticket.style.animationDelay = (index * 0.1) + 's';
+            
+            const diffMin = Math.round((m.depSec - nowSeconds)/60);
+            let countdownText = '';
+            
+            if (isActuallyToday && !m.passed) {
+                const h = Math.floor(diffMin / 60);
+                const min = diffMin % 60;
+                countdownText = `<div class="countdown-timer"><i class="fa-regular fa-clock"></i> Departs in ${h > 0 ? h + ' h ' : ''}${min} min</div>`;
+            }
+            
+            const nextBadge = isNext ? `<div class="next-badge">NEXT TRAIN</div>` : '';
+            
+            let typeLabel = "Local";
+            let typeColor = "#64748b";
+            const rName = m.route?.name?.toLowerCase() || "";
+            if (rName.includes('bullet') || rName.includes('express')) {
+                typeLabel = "BABY BULLET";
+                typeColor = "#ce202f";
+            } else if (rName.includes('limited')) {
+                typeLabel = "LIMITED";
+                typeColor = "#3b82f6";
+            }
+            
+            const durH = Math.floor(m.duration / 60);
+            const durM = m.duration % 60;
+            const durationText = `${durH > 0 ? durH + ' h ' : ''}${durM} min`;
+
+            ticket.innerHTML = `
+                ${nextBadge}
+                <div class="ticket-header">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="train-num">#${m.number}</span>
+                        <span style="background:${typeColor}; color:white; padding: 2px 8px; border-radius: 6px; font-size:0.65rem; font-weight:900; letter-spacing:0.5px;">${typeLabel}</span>
+                    </div>
+                    <span class="duration"><i class="fa-regular fa-clock"></i> ${durationText}</span>
+                </div>
+                
+                <div class="route-main">
+                    <div class="time-area">
+                        <div class="time">${formatTime(m.depTime)}</div>
+                        <div class="station-name">${depName}</div>
+                    </div>
+                    <div class="route-path">
+                        <div class="path-dot start"></div>
+                        <div class="path-dot end"></div>
+                    </div>
+                    <div class="time-area">
+                        <div class="time">${formatTime(m.arrTime)}</div>
+                        <div class="station-name">${arrName}</div>
+                    </div>
+                </div>
+
+                ${countdownText}
+
+                <div class="stops-list" id="stops-${m.tripId}">
+                    ${m.stops.map(s => `
+                        <div class="stop-item">
+                            <span>${STATION_NAMES[s.stop_id] || s.stop_id}</span>
+                            <b>${formatTime(s.arrival_time)}</b>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="ticket-footer">
+                    <div class="price-tag">$${price.toFixed(2)}</div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="details-btn" onclick="toggleStops('${m.tripId}')"><i class="fa-solid fa-list-ul"></i> Details</button>
+                        <button class="details-btn" onclick="shareTrip('${m.number}', '${m.depTime}', '${depName}', '${arrName}')"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                </div>
+            `;
+            resultsArea.appendChild(ticket);
+        });
+
+        const next = document.querySelector('.next-badge');
+        if (next) next.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function toggleStops(id) {
+        const el = document.getElementById('stops-' + id);
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function shareTrip(num, time, from, to) {
+        const text = `🚋 Caltrain #${num}\n📍 From: ${from} (${formatTime(time)})\n🏁 To: ${to}\nCheck live board for details.`;
+        if (navigator.share) {
+            navigator.share({ title: 'Caltrain Trip', text: text });
+        } else {
+            navigator.clipboard.writeText(text);
+            alert('Copied to clipboard!');
+        }
+    }
+
+    setInterval(() => {
+        const now = new Date();
+        const pt = new Intl.DateTimeFormat('en-US', { 
+            timeZone: 'America/Los_Angeles', 
+            hour: 'numeric', minute: 'numeric', 
+            hour12: true 
+        }).format(now);
+        const clockEl = document.getElementById('sf-clock-large');
+        if (clockEl) {
+            // Shrink AM/PM in live clock
+            const parts = pt.split(' ');
+            clockEl.innerHTML = `${parts[0]} <span style="font-size: 0.7em;">${parts[1]}</span>`;
+        }
+    }, 1000);
+
+    setInterval(search, 60000);
+
+    init();
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                console.log('Service Worker registered!');
+            });
+        });
+        
+        // Handle automatic reload when service worker updates
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                window.location.reload();
+                refreshing = true;
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
