@@ -186,7 +186,7 @@
 <div class="container">
     <header>
         <img src="favicon/android-chrome-512x512.png" alt="Caltrain Live" class="logo-img">
-        <div style="font-size: 0.8rem; opacity: 0.5; font-weight: 700; letter-spacing: 1px;">COMMUTER LIVE BOARD</div>
+        <div style="font-size: 0.8rem; opacity: 0.5; font-weight: 700; letter-spacing: 1px;">Live Train Schedule: San Francisco ⇄ San Jose</div>
     </header>
 
     <section class="search-panel">
@@ -255,9 +255,25 @@
         </div>
     </section>
 
+    <!-- POPULAR ROUTES FOR SEO (FOR GOOGLEBOT) -->
+    <section style="margin-bottom: 40px; padding: 20px; background: var(--glass); border-radius: 20px; border: 1px solid var(--border);">
+        <h3 style="font-weight: 800; font-size: 1rem; margin-bottom: 15px;">Popular Caltrain Routes</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem;">
+            <a href="?from=san_francisco&to=sj_diridon" style="color: var(--primary); text-decoration: none; font-weight: 600;">San Francisco to San Jose</a>
+            <a href="?from=san_francisco&to=palo_alto" style="color: var(--primary); text-decoration: none; font-weight: 600;">San Francisco to Palo Alto</a>
+            <a href="?from=sj_diridon&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">San Jose to San Francisco</a>
+            <a href="?from=millbrae&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">Millbrae to San Francisco</a>
+            <a href="?from=palo_alto&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">Palo Alto to San Francisco</a>
+            <a href="?from=sunnyvale&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sunnyvale to San Francisco</a>
+        </div>
+    </section>
+
     <!-- FOOTER -->
     <footer style="text-align: center; margin-top: 40px; padding-bottom: 40px;">
         <p style="opacity: 0.4; font-size: 0.7rem; margin: 0;">© 2026 Commuter Live Board<br>Independent Commuter Information Tool</p>
+        <div style="font-size: 0.6rem; opacity: 0.15; margin-top: 20px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.4; pointer-events: none;">
+            Live Caltrain schedule and timetable from San Francisco to San Jose Diridon. Check daily and weekend commuter trains for Millbrae, Palo Alto, Redwood City, and Mountain View. Offline trip planner for Bay Area commuters.
+        </div>
     </footer>
 </div>
 
@@ -297,7 +313,7 @@
         'lawrence': 4, 'santa_clara': 4, 'sj_diridon': 4
     };
 
-    // Dinamik Service ID tapıcı
+    // Dynamic Service ID finder
     let WEEKDAY_SERVICE = '';
     let WEEKEND_SERVICE = '';
 
@@ -307,14 +323,14 @@
             const sid = CALTRAIN_DATA.trips[tripId].serviceId;
             counts[sid] = (counts[sid] || 0) + 1;
         }
-        // Reyslərin sayına görə sıralayırıq (Ən çox reys Həftəiçi olur, ikinci ən çox Həftəsonu)
+        // Sort by trip count (Most trips on Weekdays, second most on Weekends)
         const sortedSids = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
         WEEKDAY_SERVICE = sortedSids[0] || '';
         WEEKEND_SERVICE = sortedSids[1] || sortedSids[0];
     }
 
     function init() {
-        detectServiceIds(); // Sistemi işə salan kimi datanı oxuyur
+        detectServiceIds();
 
         const depSelect = document.getElementById('depSelect');
         const arrSelect = document.getElementById('arrSelect');
@@ -349,16 +365,35 @@
             arrSelect.add(new Option(s.name, s.id));
         });
 
-        depSelect.value = 'san_francisco';
-        arrSelect.value = 'california_ave';
+        // FOR SEO: Read parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromParam = urlParams.get('from');
+        const toParam = urlParams.get('to');
+
+        if (fromParam && toParam && fromParam !== toParam) {
+            depSelect.value = fromParam;
+            arrSelect.value = toParam;
+        } else {
+            depSelect.value = 'san_francisco';
+            arrSelect.value = 'sj_diridon';
+        }
 
         const day = new Date().getDay();
         document.getElementById('dayType').value = (day === 0 || day === 6) ? 'weekend' : 'weekday';
 
         document.getElementById('searchForm').onsubmit = (e) => {
             e.preventDefault();
+            // Update URL when searching
+            const fromVal = document.getElementById('depSelect').value;
+            const toVal = document.getElementById('arrSelect').value;
+            window.history.pushState({}, '', `?from=${fromVal}&to=${toVal}`);
             search();
         };
+
+        // If parameters exist in URL, trigger search immediately
+        if (fromParam && toParam) {
+            search();
+        }
     }
 
     function swapStations() {
@@ -443,7 +478,7 @@
 
             const stops = tripsWithStops[tripId].sort((a,b) => parseTime(a.arrival_time) - parseTime(b.arrival_time));
             
-            // "startsWith" ilə axtarış fərqli suffix xətalarını yox edir
+            // Searching with "startsWith" prevents suffix errors
             const depIdx = stops.findIndex(s => s.stop_id.startsWith(depBaseId));
             const arrIdx = stops.findIndex(s => s.stop_id.startsWith(arrBaseId));
 
@@ -486,7 +521,7 @@
         const prices =[3.75, 6.00, 8.25, 10.50, 12.75, 15.00];
         const price = prices[zonesTraversed - 1] || 3.75;
 
-        // Bilet başlığında göstəriləcək təmiz stansiya adları
+        // Clean station names to show in ticket header
         const depName = document.getElementById('depSelect').options[document.getElementById('depSelect').selectedIndex].text;
         const arrName = document.getElementById('arrSelect').options[document.getElementById('arrSelect').selectedIndex].text;
 
@@ -574,6 +609,14 @@
 
         const next = document.querySelector('.next-badge');
         if (next) next.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // DYNAMIC SEO TITLE (For Googlebot)
+        if (matches.length > 0) {
+            document.title = `${depName} to ${arrName} Train Schedule | Live Caltrain Times`;
+            
+            // Also update URL so people can share the route directly
+            window.history.replaceState({}, '', `?from=${from}&to=${to}`);
+        }
     }
 
     function toggleStops(id) {
