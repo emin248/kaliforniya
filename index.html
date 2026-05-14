@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="version" content="1.1.0 - Full 22 Stations & Bug Fixes">
+    <meta property="og:url" content="https://sf-sanjosetrain.com">
+    <link rel="canonical" href="https://sf-sanjosetrain.com">
     <title>Caltrain Live - Trip Planner & Schedule</title>
     <!-- Favicons & App Icons -->
     <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
@@ -600,7 +602,7 @@
                     <div class="price-tag">$${price.toFixed(2)}</div>
                     <div style="display: flex; gap: 10px;">
                         <button class="details-btn" onclick="toggleStops('${m.tripId}')"><i class="fa-solid fa-list-ul"></i> Details</button>
-                        <button class="details-btn" onclick="shareTrip('${m.number}', '${m.depTime}', '${depName}', '${arrName}')"><i class="fa-solid fa-share-nodes"></i></button>
+                        <button class="details-btn" onclick="shareTrip('${m.number}', '${m.depTime}', '${depName}', '${arrName}', '${from}', '${to}')"><i class="fa-solid fa-share-nodes"></i></button>
                     </div>
                 </div>
             `;
@@ -624,12 +626,13 @@
         el.style.display = el.style.display === 'block' ? 'none' : 'block';
     }
 
-    function shareTrip(num, time, from, to) {
-        const text = `🚋 Caltrain #${num}\n📍 From: ${from} (${formatTime(time)})\n🏁 To: ${to}\nCheck live board for details.`;
+    function shareTrip(num, time, fromName, toName, fromId, toId) {
+        const url = `https://sf-sanjosetrain.com?from=${fromId}&to=${toId}`;
+        const text = `🚋 Caltrain #${num}\n📍 From: ${fromName} (${formatTime(time)})\n🏁 To: ${toName}\nCheck live board for details.`;
         if (navigator.share) {
-            navigator.share({ title: 'Caltrain Trip', text: text });
+            navigator.share({ title: 'Caltrain Trip', text: text, url: url });
         } else {
-            navigator.clipboard.writeText(text);
+            navigator.clipboard.writeText(text + '\n' + url);
             alert('Copied to clipboard!');
         }
     }

@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://caltrainlive.site/sitemap.xml
+Sitemap: https://sf-sanjosetrain.com/sitemap.xml
 

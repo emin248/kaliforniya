@@ -2,22 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Caltrain Live</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cookie Policy & Privacy Notice - sf-sanjosetrain.com</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; color: #333; }
-        h1 { color: #ce202f; }
+        :root {
+            --primary: #ce202f;
+            --bg: #f3f4f6;
+            --text: #1f2937;
+            --glass: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --text: #f8fafc;
+                --glass: rgba(30, 41, 59, 0.85);
+                --border: rgba(255, 255, 255, 0.05);
+            }
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 40px auto; background: var(--glass); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        h1, h2 { font-family: 'Outfit', sans-serif; color: var(--primary); }
+        h1 { font-size: 1.8rem; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+        h2 { font-size: 1.3rem; margin-top: 30px; }
+        p, li { font-size: 0.95rem; opacity: 0.9; margin-bottom: 15px; }
+        ul { padding-left: 20px; }
+        a { color: var(--primary); text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
+        .no-bs { background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 25px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--text); font-weight: 600; opacity: 0.7; }
+        .back-link:hover { opacity: 1; text-decoration: none; }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p>Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our service.</p>
-    <h2>Data Collection</h2>
-    <p>We do not collect any personal identification information. We may use cookies to improve your experience and analyze site traffic via third-party services like Google Analytics.</p>
-    <h2>Third-Party Services</h2>
-    <p>We may display advertisements from Google AdSense. These third-party vendors use cookies to serve ads based on your prior visits to our website or other websites.</p>
-    <h2>Changes to This Policy</h2>
-    <p>We reserve the right to update this policy at any time. Changes will be posted on this page.</p>
-    <p>© 2026 Caltrain Live. All rights reserved.</p>
+    <div class="container">
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Schedule</a>
+        
+        <h1>Cookie Policy & Privacy Notice</h1>
+        
+        <div class="no-bs">
+            <strong>The No-BS Summary:</strong> We built <em>sf-sanjosetrain.com</em> for Bay Area commuters who just want to catch the train, not be tracked across the web. We don't do creepy tracking, and if you're using Brave or strict adblockers, our app gracefully degrades and still works perfectly. 
+        </div>
+
+        <h2>1. No Creepy Tracking (What We Store)</h2>
+        <p>We do not use aggressive third-party cookies or fingerprinting. We primarily rely on your browser's <code>localStorage</code> to remember simple, essential UI preferences:</p>
+        <ul>
+            <li>Your preferred theme (Dark Mode / Light Mode).</li>
+            <li>Your recent route swaps (e.g., from San Francisco to San Jose Diridon).</li>
+            <li>Your cookie banner consent status so we don't annoy you on every visit.</li>
+        </ul>
+        <p>This data never leaves your device. It's stored locally and stays locally.</p>
+
+        <h2>2. Minimal Ads & Analytics</h2>
+        <p>To keep the servers running and the coffee flowing, we use lightweight, privacy-respecting analytics and essential ad banners. These services are strictly limited to measuring aggregate site performance and displaying standard, non-intrusive ads. We actively configure these tools to respect your privacy to the fullest extent possible.</p>
+
+        <h2>3. We Respect DNT & Global Privacy Control (GPC)</h2>
+        <p>If your browser is configured to send a <strong>"Do Not Track" (DNT)</strong> or <strong>Global Privacy Control (GPC)</strong> signal, our code automatically detects it and disables any optional analytics or ad scripts. We believe in your fundamental right to opt-out silently, at the browser level.</p>
+
+        <h2>4. Brave Users & Storage Blockers</h2>
+        <p>If you're using a privacy-first browser like Brave, or if you block cookies and local storage entirely, <strong>the site still works perfectly</strong>. We practice "graceful degradation." You might have to select your stations manually each time you visit, but you will never be locked out of checking the schedule.</p>
+
+        <h2 id="ccpa">5. Do Not Sell or Share My Personal Information (CCPA/CPRA)</h2>
+        <p>Under the California Consumer Privacy Act (CCPA) and California Privacy Rights Act (CPRA), California residents have the right to opt-out of the "sale" or "sharing" of their personal information.</p>
+        <p><strong>Here is how we comply:</strong></p>
+        <ul>
+            <li><strong>We don't "sell" data.</strong> Period. We don't broker your identity to data brokers.</li>
+            <li>If you want to ensure no tracking/analytics data is shared, simply click <strong>"Essential Only"</strong> on our cookie banner when you first visit.</li>
+            <li>Alternatively, just enable the <strong>Global Privacy Control (GPC)</strong> or <strong>Do Not Track (DNT)</strong> in your browser settings, and we will automatically treat that as a valid opt-out request and disable all non-essential scripts.</li>
+        </ul>
+
+        <h2>6. Contact Us</h2>
+        <p>If you have any questions or want to exercise your privacy rights, just reach out to the developer. We're happy to chat.</p>
+        <p style="text-align: center; margin-top: 40px; opacity: 0.5; font-size: 0.8rem;">
+            Last Updated: May 2026<br>
+            © 2026 sf-sanjosetrain.com
+        </p>
+    </div>
 </body>
 </html>
