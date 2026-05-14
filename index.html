@@ -181,6 +181,30 @@
             filter: grayscale(100%);
             pointer-events: none;
         }
+
+        /* CCPA Cookie Banner Styles */
+        .cookie-banner {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 550px; background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(209, 213, 219, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-radius: 16px; padding: 20px; z-index: 99999; opacity: 0;
+            transition: opacity 0.4s ease, bottom 0.4s ease;
+        }
+        .cookie-banner.show { opacity: 1; bottom: 30px; }
+        .cookie-banner.hidden { display: none; }
+        .cookie-content { display: flex; flex-direction: column; gap: 15px; }
+        .cookie-buttons { display: flex; gap: 10px; justify-content: flex-end; }
+        .btn-cookie { padding: 10px 16px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .btn-outline { background: transparent; border: 1px solid #cbd5e1; color: #334155; }
+        .btn-outline:hover { background: #f8fafc; }
+        .btn-solid { background: #2563eb; border: 1px solid #2563eb; color: white; }
+        .btn-solid:hover { background: #1d4ed8; }
+        @media (min-width: 600px) {
+            .cookie-content { flex-direction: row; align-items: center; }
+            .cookie-text { flex: 2; }
+            .cookie-buttons { flex: 1; flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -277,6 +301,25 @@
             Live Caltrain schedule and timetable from San Francisco to San Jose Diridon. Check daily and weekend commuter trains for Millbrae, Palo Alto, Redwood City, and Mountain View. Offline trip planner for Bay Area commuters.
         </div>
     </footer>
+
+    <!-- CCPA & Privacy Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner hidden">
+        <div class="cookie-content">
+            <div class="cookie-text text-left">
+                <h4 style="margin: 0 0 5px 0; font-size: 0.95rem; font-weight: 800; color: #1e293b;">We respect your privacy</h4>
+                <p style="margin: 0; font-size: 0.75rem; color: #64748b; line-height: 1.4;">
+                    We use strictly necessary cookies to ensure the site works fast. With your consent, we use optional analytics/ads to support this free tool. Under California CCPA, you have the right to opt-out.
+                </p>
+            </div>
+            <div class="cookie-buttons">
+                <button id="btn-essential" class="btn-cookie btn-outline">Essential Only</button>
+                <button id="btn-accept" class="btn-cookie btn-solid">Accept All</button>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+            <a href="privacy.html" style="font-size: 0.65rem; color: #94a3b8; text-decoration: underline;">Do Not Sell or Share My Personal Information (CCPA)</a>
+        </div>
+    </div>
 </div>
 
 <!-- GTFS DATA -->
@@ -514,6 +557,13 @@
 
         if (matches.length === 0) {
             resultsArea.innerHTML = '<div class="no-results">No trains found for this route.</div>';
+            // Proqrammatik SEO: Boş səhifələri indeksləməkdən qorumaq
+            if (!document.querySelector('meta[name="robots"]')) {
+                const meta = document.createElement('meta');
+                meta.name = "robots";
+                meta.content = "noindex";
+                document.head.appendChild(meta);
+            }
             return;
         }
 
@@ -672,6 +722,70 @@
             }
         });
     }
+
+    // Privacy & CCPA Cookie Management (Brave Browser Friendly)
+    function initPrivacyManager() {
+        const banner = document.getElementById('cookie-banner');
+        const btnAccept = document.getElementById('btn-accept');
+        const btnEssential = document.getElementById('btn-essential');
+        
+        let userConsent = null;
+
+        try {
+            userConsent = localStorage.getItem('caltrain_cookie_consent');
+        } catch (e) {
+            console.warn("Privacy browser strictly blocking storage. Defaulting to essential only.");
+            userConsent = 'essential'; 
+        }
+
+        const doNotTrack = window.navigator.doNotTrack === "1" || window.navigator.doNotTrack === "yes";
+
+        if (!userConsent) {
+            if (banner) {
+                banner.classList.remove('hidden');
+                setTimeout(() => banner.classList.add('show'), 500);
+            }
+        } else if (userConsent === 'all') {
+            loadOptionalScripts();
+        }
+
+        if(btnAccept) {
+            btnAccept.onclick = () => {
+                saveConsent('all');
+                loadOptionalScripts();
+            };
+        }
+
+        if(btnEssential) {
+            btnEssential.onclick = () => {
+                saveConsent('essential');
+            };
+        }
+
+        function saveConsent(level) {
+            try {
+                localStorage.setItem('caltrain_cookie_consent', level);
+            } catch (e) {}
+            if (banner) {
+                banner.classList.remove('show');
+                setTimeout(() => banner.classList.add('hidden'), 400);
+            }
+        }
+
+        function loadOptionalScripts() {
+            if (doNotTrack) {
+                console.log("Global Do Not Track is enabled. Skipping optional trackers.");
+                return; 
+            }
+            // Google Analytics və ya Reklam scriptlərini gələcəkdə bura əlavə edə bilərsən
+            console.log("User consented. Analytics/Ads can be loaded here safely.");
+        }
+    }
+
+    // Sistemi işə sal
+    document.addEventListener('DOMContentLoaded', () => {
+        initPrivacyManager();
+    });
 </script>
 
 </body>
