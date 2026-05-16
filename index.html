@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <!-- Google Analytics Consent Mode v2 -->
     <script>
@@ -19,10 +19,11 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="version" content="1.1.0 - Full 22 Stations & Bug Fixes">
+    <meta name="version" content="1.2.0 - Premium Design Update">
     <meta property="og:url" content="https://sf-sanjosetrain.com">
     <link rel="canonical" href="https://sf-sanjosetrain.com">
     <title>Caltrain Live - Trip Planner & Schedule</title>
+    
     <!-- Favicons & App Icons -->
     <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -35,8 +36,11 @@
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         :root {
@@ -44,300 +48,236 @@
             --primary-light: #ffeff0;
             --bg: #f3f4f6;
             --text: #1f2937;
-            --glass: rgba(255, 255, 255, 0.9);
+            --glass: rgba(255, 255, 255, 0.85);
             --border: rgba(0, 0, 0, 0.05);
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #0f172a;
-                --text: #f8fafc;
-                --glass: rgba(30, 41, 59, 0.85);
-                --border: rgba(255, 255, 255, 0.05);
-            }
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background: #f3f4f6;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0.05) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.05) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.05) 0, transparent 50%);
+            background-attachment: scroll;
+            background-size: cover;
+            color: #1f2937;
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 550px;
-            margin: 0 auto;
-            padding: 20px;
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed;
+            }
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding-top: 20px;
-        }
-
-        .logo-img { height: 50px; margin-bottom: 10px; }
-
-        /* Search Panel */
-        .search-panel {
-            background: var(--glass);
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
-            border-radius: 28px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-            margin-bottom: 24px;
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
 
-        .input-group { margin-bottom: 16px; position: relative; }
-        label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; opacity: 0.6; margin-bottom: 6px; margin-left: 4px; }
-        
-        select {
-            width: 100%;
-            padding: 14px 16px;
+        .glass-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(209, 213, 219, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .glass-input:focus {
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(206, 32, 47, 0.15);
+            border-color: #ce202f;
+        }
+
+        .ticket-card {
+            position: relative;
+            background: white;
             border-radius: 16px;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-            font-size: 1rem;
-            font-weight: 600;
-            appearance: none;
-            outline: none;
-            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .swap-btn {
+        .ticket-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .ticket-card::before,
+        .ticket-card::after {
+            content: '';
             position: absolute;
-            right: 20px;
+            height: 20px;
+            width: 20px;
+            background-color: #f3f4f6;
+            border-radius: 50%;
             top: 50%;
             transform: translateY(-50%);
-            width: 36px;
-            height: 36px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            color: var(--primary);
-            border: none;
             z-index: 10;
-            cursor: pointer;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
-        .search-btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 18px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: transform 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .ticket-card::before { left: -10px; }
+        .ticket-card::after { right: -10px; }
+
+        .pulse-btn:active {
+            animation: pulse-soft 0.2s;
         }
 
-        .search-btn:active { transform: scale(0.97); }
-
-        /* Ticket Card */
-        .ticket {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-            animation: slideUp 0.4s ease-out backwards;
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.98); }
         }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } }
-
-        .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .train-num { font-weight: 800; font-size: 0.85rem; background: var(--primary-light); color: var(--primary); padding: 4px 10px; border-radius: 8px; }
-        .duration { font-size: 0.8rem; opacity: 0.6; font-weight: 600; }
-
-        .route-main { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .time-area { text-align: center; flex: 1; }
-        .time { font-size: 1.8rem; font-weight: 800; font-family: 'Outfit', sans-serif; }
-        .station-name { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; opacity: 0.5; margin-top: 4px; max-width: 100px; margin-left: auto; margin-right: auto; }
-
-        .route-path { flex: 2; height: 2px; background: rgba(0,0,0,0.1); margin: 0 15px; position: relative; }
-        @media (prefers-color-scheme: dark) { .route-path { background: rgba(255,255,255,0.1); } }
-        .path-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; position: absolute; top: -3px; }
-        .path-dot.start { left: 0; }
-        .path-dot.end { right: 0; }
-
-        .ticket-footer { border-top: 1px dashed var(--border); padding-top: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .price-tag { font-weight: 800; color: #10b981; font-size: 1rem; }
-        
-        .details-btn { 
-            background: none; border: none; color: var(--primary); font-weight: 700; font-size: 0.85rem; cursor: pointer; padding: 5px 10px; border-radius: 8px;
-        }
-        
-        .stops-list { margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px; display: none; }
-        .stop-item { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.02); }
-
-        .next-badge { position: absolute; top: 0; right: 0; background: #10b981; color: white; font-size: 0.6rem; font-weight: 900; padding: 4px 12px; border-radius: 0 0 0 12px; }
-
-        .countdown-timer { text-align: center; margin-top: 10px; font-size: 0.8rem; font-weight: 700; color: var(--primary); }
-
-        .no-results { text-align: center; padding: 40px; opacity: 0.5; font-weight: 600; }
-
-        .opacity-50 {
-            opacity: 0.4;
-            filter: grayscale(100%);
-            pointer-events: none;
-        }
-
-        /* CCPA Cookie Banner Styles */
+        /* Cookie Banner */
         .cookie-banner {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 92%; max-width: 550px; background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(209, 213, 219, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border-radius: 16px; padding: 20px; z-index: 99999; opacity: 0;
-            transition: opacity 0.4s ease, bottom 0.4s ease;
+            backdrop-filter: blur(12px); border: 1px solid rgba(209, 213, 219, 0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-radius: 16px; padding: 20px; z-index: 99999;
+            transition: all 0.4s ease;
         }
-        .cookie-banner.show { opacity: 1; bottom: 30px; }
-        .cookie-banner.hidden { display: none; }
-        .cookie-content { display: flex; flex-direction: column; gap: 15px; }
-        .cookie-buttons { display: flex; gap: 10px; justify-content: flex-end; }
-        .btn-cookie { padding: 10px 16px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-        .btn-outline { background: transparent; border: 1px solid #cbd5e1; color: #334155; }
-        .btn-outline:hover { background: #f8fafc; }
-        .btn-solid { background: #2563eb; border: 1px solid #2563eb; color: white; }
-        .btn-solid:hover { background: #1d4ed8; }
-        @media (min-width: 600px) {
-            .cookie-content { flex-direction: row; align-items: center; }
-            .cookie-text { flex: 2; }
-            .cookie-buttons { flex: 1; flex-direction: column; }
-        }
+        .cookie-banner.hidden { display: none; opacity: 0; transform: translate(-50%, 20px); }
+
+        summary::-webkit-details-marker { display: none; }
+        summary { list-style: none; }
     </style>
 </head>
-<body>
-
-<div class="container">
-    <header>
-        <img src="favicon/android-chrome-512x512.png" alt="Caltrain Live" class="logo-img">
-        <div style="font-size: 0.8rem; opacity: 0.5; font-weight: 700; letter-spacing: 1px;">Live Train Schedule: San Francisco ⇄ San Jose</div>
-    </header>
-
-    <section class="search-panel">
-        <form id="searchForm">
-            <div class="input-group">
-                <label>From</label>
-                <select id="depSelect"></select>
+<body class="antialiased pb-10">
+    <main class="max-w-lg md:max-w-2xl mx-auto px-4 pt-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="inline-flex items-center justify-center mb-4 transform rotate-3 hover:rotate-0 transition-all duration-300">
+                <img src="favicon/android-chrome-192x192.png" alt="Caltrain Live Logo" class="w-16 h-16 object-contain drop-shadow-xl">
             </div>
-
-            <div class="input-group" style="margin-top: -8px; margin-bottom: 8px;">
-                <button type="button" class="swap-btn" onclick="swapStations()"><i class="fa-solid fa-arrows-up-down"></i></button>
+            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight mb-1">Caltrain Live Schedule</h1>
+            <div class="text-2xl font-bold text-gray-500 flex justify-center items-center">
+                SF <span class="text-red-600 mx-3 text-3xl">⇌</span> San Jose
             </div>
+            <p class="text-gray-500 text-xs mt-3 font-bold inline-block px-4 py-1.5 rounded-full bg-white/50 backdrop-blur-sm border border-white/40">
+                <i class="fa-regular fa-clock mr-1"></i> Live Board: <span id="sf-clock-top">--:--</span>
+            </p>
+        </header>
 
-            <div class="input-group">
-                <label>To</label>
-                <select id="arrSelect"></select>
-            </div>
+        <!-- Search Box -->
+        <section class="glass-panel rounded-3xl p-6 mb-8 relative z-20">
+            <form id="searchForm" class="space-y-4">
+                <div class="flex flex-col sm:flex-row gap-4 relative">
+                    <div class="flex-1">
+                        <label class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Departure</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-red-600">
+                                <i class="fa-regular fa-circle-dot"></i>
+                            </div>
+                            <select id="depSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none"></select>
+                        </div>
+                    </div>
 
-            <div class="input-group">
-                <label>Schedule Type</label>
-                <select id="dayType">
-                    <option value="weekday" selected>Workdays (Mon-Fri)</option>
-                    <option value="weekend">Weekend (Sat-Sun)</option>
-                </select>
-            </div>
+                    <button type="button" onclick="swapStations()" class="absolute sm:static left-1/2 sm:left-auto top-[42%] sm:top-auto -translate-x-1/2 sm:translate-x-0 z-10 bg-white p-2.5 rounded-full shadow-lg text-red-600 border border-gray-100 hover:bg-red-50 transition-all w-11 h-11 flex items-center justify-center">
+                        <i class="fa-solid fa-arrow-right-arrow-left text-sm"></i>
+                    </button>
 
-            <button type="submit" class="search-btn">
-                <i class="fa-solid fa-magnifying-glass"></i> Find Trains
-            </button>
-            <div style="text-align: center; font-size: 0.65rem; opacity: 0.5; margin-top: 10px; padding: 0 10px;">
-                * Displaying scheduled departures only. Real-time delays are not reflected.
-            </div>
-        </form>
-    </section>
+                    <div class="flex-1">
+                        <label class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Arrival</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-800">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <select id="arrSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none"></select>
+                        </div>
+                    </div>
+                </div>
 
-    <div id="results-area">
-        <!-- Results will be injected here -->
-    </div>
+                <div>
+                    <label class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Schedule Type</label>
+                    <div class="relative">
+                        <select id="dayType" class="glass-input w-full p-3.5 pr-10 rounded-2xl appearance-none text-sm text-gray-700 font-bold outline-none cursor-pointer">
+                            <option value="weekday" selected>Workdays (Mon-Fri)</option>
+                            <option value="weekend">Weekend (Sat-Sun)</option>
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                            <i class="fa-regular fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
 
-    <div id="sf-time-context" style="text-align: center; margin-top: 20px; font-size: 0.85rem; opacity: 0.7; font-weight: 600; margin-bottom: 30px;">
-        Current time in San Francisco: <span id="sf-clock-large">--:--</span>
-    </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-extrabold py-4 rounded-2xl shadow-xl shadow-red-500/20 transform transition-all active:scale-95 flex items-center justify-center gap-2 text-lg pulse-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i> Find Trains
+                </button>
+            </form>
+        </section>
 
-    <!-- AD SPACE (REPLACED GAME ZONE) -->
-    <div style="margin-bottom: 40px; text-align: center;">
-        <div style="background: rgba(0,0,0,0.03); border: 2px dashed var(--border); border-radius: 24px; padding: 40px 20px; color: var(--text); opacity: 0.5;">
-            <i class="fa-solid fa-rectangle-ad" style="font-size: 2rem; margin-bottom: 10px;"></i>
-            <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Advertisement Space</div>
+        <div id="results-area" class="space-y-6 pb-8">
+            <!-- Results injected here -->
         </div>
-    </div>
 
-    <!-- USEFUL INFO GRID -->
-    <section style="margin-bottom: 40px;">
-        <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 20px; padding-left: 10px;">Commuter Info</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div style="background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
-                <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-bolt-lightning"></i></div>
-                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">Electric Fleet</h4>
-                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Learn about new high-speed rail amenities.</p>
+        <!-- Info Grid -->
+        <section class="mb-12">
+            <h2 class="text-xl font-extrabold text-gray-800 mb-5 flex items-center px-1">
+                <i class="fa-solid fa-circle-info text-red-600 mr-3"></i> Commuter Info
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="glass-panel p-6 rounded-2xl group hover:bg-white/80 transition-all border border-white/60 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="bg-red-100 text-red-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-bolt-lightning text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1">Electric Fleet</h3>
+                        <p class="text-sm text-gray-500 mb-0">Learn about new high-speed rail amenities and electrification.</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl group hover:bg-white/80 transition-all border border-white/60 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="bg-green-100 text-green-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-map-location-dot text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1">System Map</h3>
+                        <p class="text-sm text-gray-500 mb-0">Full Caltrain network and zone guide for commuters.</p>
+                    </div>
+                </div>
             </div>
-            <div style="background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
-                <div style="color: #10b981; font-size: 1.5rem; margin-bottom: 10px;"><i class="fa-solid fa-map-location-dot"></i></div>
-                <h4 style="margin: 0; font-size: 0.9rem; font-weight: 800;">System Map</h4>
-                <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;">Full Caltrain network and zone guide.</p>
+        </section>
+
+        <!-- Popular Routes -->
+        <section class="glass-panel p-6 rounded-3xl mb-12 border border-white/40">
+            <h3 class="font-extrabold text-gray-800 text-lg mb-4">Popular Caltrain Routes</h3>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+                <a href="?from=san_francisco&to=sj_diridon" class="text-red-600 hover:underline font-bold">SF to San Jose</a>
+                <a href="?from=san_francisco&to=palo_alto" class="text-red-600 hover:underline font-bold">SF to Palo Alto</a>
+                <a href="?from=sj_diridon&to=san_francisco" class="text-red-600 hover:underline font-bold">San Jose to SF</a>
+                <a href="?from=millbrae&to=san_francisco" class="text-red-600 hover:underline font-bold">Millbrae to SF</a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center pb-10">
+            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-4">© 2026 Commuter Live Board</p>
+            <div class="flex flex-wrap justify-center gap-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <a href="about.html" class="hover:text-red-600">About</a>
+                <a href="contact.html" class="hover:text-red-600">Contact</a>
+                <a href="privacy.html" class="hover:text-red-600">Privacy</a>
+                <a href="terms.html" class="hover:text-red-600">Terms</a>
+            </div>
+        </footer>
+
+        <!-- Cookie Banner -->
+        <div id="cookie-banner" class="cookie-banner hidden">
+            <div class="flex flex-col gap-4">
+                <div>
+                    <h4 class="text-sm font-extrabold text-gray-800">Privacy Notice</h4>
+                    <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+                        We use cookies to ensure the site works fast. By continuing, you agree to our use of essential cookies.
+                    </p>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button id="btn-essential" class="px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 text-gray-600 hover:bg-gray-50">Essential</button>
+                    <button id="btn-accept" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-700">Accept All</button>
+                </div>
             </div>
         </div>
-    </section>
-
-    <!-- POPULAR ROUTES FOR SEO (FOR GOOGLEBOT) -->
-    <section style="margin-bottom: 40px; padding: 20px; background: var(--glass); border-radius: 20px; border: 1px solid var(--border);">
-        <h3 style="font-weight: 800; font-size: 1rem; margin-bottom: 15px;">Popular Caltrain Routes</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem;">
-            <a href="?from=san_francisco&to=sj_diridon" style="color: var(--primary); text-decoration: none; font-weight: 600;">San Francisco to San Jose</a>
-            <a href="?from=san_francisco&to=palo_alto" style="color: var(--primary); text-decoration: none; font-weight: 600;">San Francisco to Palo Alto</a>
-            <a href="?from=sj_diridon&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">San Jose to San Francisco</a>
-            <a href="?from=millbrae&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">Millbrae to San Francisco</a>
-            <a href="?from=palo_alto&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">Palo Alto to San Francisco</a>
-            <a href="?from=sunnyvale&to=san_francisco" style="color: var(--primary); text-decoration: none; font-weight: 600;">Sunnyvale to San Francisco</a>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer style="text-align: center; margin-top: 40px; padding-bottom: 40px;">
-        <p style="opacity: 0.4; font-size: 0.7rem; margin: 0;">© 2026 Commuter Live Board<br>Independent Commuter Information Tool</p>
-        <div style="font-size: 0.6rem; opacity: 0.15; margin-top: 20px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.4; pointer-events: none;">
-            Live Caltrain schedule and timetable from San Francisco to San Jose Diridon. Check daily and weekend commuter trains for Millbrae, Palo Alto, Redwood City, and Mountain View. Offline trip planner for Bay Area commuters.
-        </div>
-    </footer>
-
-    <!-- CCPA & Privacy Cookie Banner -->
-    <div id="cookie-banner" class="cookie-banner hidden">
-        <div class="cookie-content">
-            <div class="cookie-text text-left">
-                <h4 style="margin: 0 0 5px 0; font-size: 0.95rem; font-weight: 800; color: #1e293b;">We respect your privacy</h4>
-                <p style="margin: 0; font-size: 0.75rem; color: #64748b; line-height: 1.4;">
-                    We use strictly necessary cookies to ensure the site works fast. With your consent, we use optional analytics/ads to support this free tool. Under California CCPA, you have the right to opt-out.
-                </p>
-            </div>
-            <div class="cookie-buttons">
-                <button id="btn-essential" class="btn-cookie btn-outline">Essential Only</button>
-                <button id="btn-accept" class="btn-cookie btn-solid">Accept All</button>
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: 12px;">
-            <a href="privacy.html" style="font-size: 0.65rem; color: #94a3b8; text-decoration: underline;">Do Not Sell or Share My Personal Information (CCPA)</a>
-        </div>
-    </div>
-</div>
-
+    </main>
 <!-- GTFS DATA -->
 <script src="gtfs/data.js"></script>
 
@@ -374,7 +314,6 @@
         'lawrence': 4, 'santa_clara': 4, 'sj_diridon': 4
     };
 
-    // Dynamic Service ID finder
     let WEEKDAY_SERVICE = '';
     let WEEKEND_SERVICE = '';
 
@@ -384,7 +323,6 @@
             const sid = CALTRAIN_DATA.trips[tripId].serviceId;
             counts[sid] = (counts[sid] || 0) + 1;
         }
-        // Sort by trip count (Most trips on Weekdays, second most on Weekends)
         const sortedSids = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
         WEEKDAY_SERVICE = sortedSids[0] || '';
         WEEKEND_SERVICE = sortedSids[1] || sortedSids[0];
@@ -392,10 +330,8 @@
 
     function init() {
         detectServiceIds();
-
         const depSelect = document.getElementById('depSelect');
         const arrSelect = document.getElementById('arrSelect');
-        
         const stations =[
             {id: 'san_francisco', name: 'San Francisco'},
             {id: '22nd_street', name: '22nd Street'},
@@ -420,17 +356,14 @@
             {id: 'santa_clara', name: 'Santa Clara'},
             {id: 'sj_diridon', name: 'San Jose Diridon'}
         ];
-
         stations.forEach(s => {
             depSelect.add(new Option(s.name, s.id));
             arrSelect.add(new Option(s.name, s.id));
         });
 
-        // FOR SEO: Read parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
         const fromParam = urlParams.get('from');
         const toParam = urlParams.get('to');
-
         if (fromParam && toParam && fromParam !== toParam) {
             depSelect.value = fromParam;
             arrSelect.value = toParam;
@@ -438,23 +371,15 @@
             depSelect.value = 'san_francisco';
             arrSelect.value = 'sj_diridon';
         }
-
         const day = new Date().getDay();
         document.getElementById('dayType').value = (day === 0 || day === 6) ? 'weekend' : 'weekday';
 
         document.getElementById('searchForm').onsubmit = (e) => {
             e.preventDefault();
-            // Update URL when searching
-            const fromVal = document.getElementById('depSelect').value;
-            const toVal = document.getElementById('arrSelect').value;
-            window.history.pushState({}, '', `?from=${fromVal}&to=${toVal}`);
             search();
         };
 
-        // If parameters exist in URL, trigger search immediately
-        if (fromParam && toParam) {
-            search();
-        }
+        if (fromParam && toParam) search();
     }
 
     function swapStations() {
@@ -476,7 +401,7 @@
         if (!t) return '--:--';
         const [h, m] = t.split(':');
         let hour = parseInt(h);
-        const ampm = hour >= 12 ? '<span style="font-size: 0.7em; margin-left: 2px;">PM</span>' : '<span style="font-size: 0.7em; margin-left: 2px;">AM</span>';
+        const ampm = hour >= 12 ? 'PM' : 'AM';
         hour = hour % 12 || 12;
         return `${hour}:${m} ${ampm}`;
     }
@@ -503,24 +428,16 @@
         resultsArea.innerHTML = '';
 
         if (from === to) {
-            resultsArea.innerHTML = '<div class="no-results">Please select different stations.</div>';
+            resultsArea.innerHTML = '<div class="text-center py-10 opacity-50 font-bold">Please select different stations.</div>';
             return;
         }
 
-        const stationsOrder =[
-            'san_francisco', '22nd_street', 'bayshore', 'south_sf', 'san_bruno', 'millbrae', 
-            'burlingame', 'san_mateo', 'hayward_park', 'hillsdale', 'belmont', 'san_carlos', 
-            'redwood_city', 'menlo_park', 'palo_alto', 'california_ave', 'san_antonio', 
-            'mountain_view', 'sunnyvale', 'lawrence', 'santa_clara', 'sj_diridon'
-        ];
-        
         const GTFS_ID_MAP = {
             'san_francisco': '7001', '22nd_street': '7002', 'bayshore': '7003', 'south_sf': '7004', 'san_bruno': '7005', 'millbrae': '7006', 
             'burlingame': '7007', 'san_mateo': '7008', 'hayward_park': '7009', 'hillsdale': '7010', 'belmont': '7011', 'san_carlos': '7012', 'redwood_city': '7014', 
             'menlo_park': '7016', 'palo_alto': '7017', 'california_ave': '7019', 'san_antonio': '7020', 'mountain_view': '7021', 'sunnyvale': '7023', 
             'lawrence': '7024', 'santa_clara': '7025', 'sj_diridon': '7026'
         };
-
         const depBaseId = GTFS_ID_MAP[from];
         const arrBaseId = GTFS_ID_MAP[to];
 
@@ -530,16 +447,13 @@
             tripsWithStops[st.trip_id].push(st);
         });
 
-        const matches =[];
+        const matches = [];
         const nowSeconds = getSFSeconds();
 
         for (const tripId in tripsWithStops) {
             const trip = CALTRAIN_DATA.trips[tripId];
             if (!trip || trip.serviceId !== serviceId) continue;
-
             const stops = tripsWithStops[tripId].sort((a,b) => parseTime(a.arrival_time) - parseTime(b.arrival_time));
-            
-            // Searching with "startsWith" prevents suffix errors
             const depIdx = stops.findIndex(s => s.stop_id.startsWith(depBaseId));
             const arrIdx = stops.findIndex(s => s.stop_id.startsWith(arrBaseId));
 
@@ -547,275 +461,166 @@
                 const depTime = stops[depIdx].arrival_time;
                 const arrTime = stops[arrIdx].arrival_time;
                 const route = CALTRAIN_DATA.routes[trip.routeId];
-                
                 const depSec = parseTime(depTime);
                 const arrSec = parseTime(arrTime);
-                let dur = (arrSec - depSec) / 60;
-
                 const intermediate = stops.slice(depIdx + 1, arrIdx);
-
                 matches.push({
-                    tripId,
-                    number: tripId,
-                    depTime,
-                    arrTime,
-                    depSec,
-                    duration: Math.round(dur),
-                    route,
-                    headsign: trip.headsign,
-                    stops: intermediate,
+                    tripId, number: tripId, depTime, arrTime, depSec,
+                    duration: Math.round((arrSec - depSec) / 60),
+                    route, headsign: trip.headsign, stops: intermediate,
                     passed: isActuallyToday && depSec < nowSeconds
                 });
             }
         }
 
         matches.sort((a, b) => a.depSec - b.depSec);
-
         if (matches.length === 0) {
-            resultsArea.innerHTML = '<div class="no-results">No trains found for this route.</div>';
-            // Proqrammatik SEO: Boş səhifələri indeksləməkdən qorumaq
-            if (!document.querySelector('meta[name="robots"]')) {
-                const meta = document.createElement('meta');
-                meta.name = "robots";
-                meta.content = "noindex";
-                document.head.appendChild(meta);
-            }
+            resultsArea.innerHTML = '<div class="text-center py-10 opacity-50 font-bold">No trains found for this route.</div>';
             return;
         }
 
         const fromZone = ZONE_MAP[from];
         const toZone = ZONE_MAP[to];
-        const zonesTraversed = Math.abs(fromZone - toZone) + 1;
-        const prices =[3.75, 6.00, 8.25, 10.50, 12.75, 15.00];
-        const price = prices[zonesTraversed - 1] || 3.75;
-
-        // Clean station names to show in ticket header
+        const prices = [3.75, 6.00, 8.25, 10.50, 12.75, 15.00];
+        const price = prices[Math.abs(fromZone - toZone)] || 3.75;
         const depName = document.getElementById('depSelect').options[document.getElementById('depSelect').selectedIndex].text;
         const arrName = document.getElementById('arrSelect').options[document.getElementById('arrSelect').selectedIndex].text;
 
         let nextTrainFound = false;
+        let html = '';
+
         matches.forEach((m, index) => {
             const isNext = isActuallyToday && !m.passed && !nextTrainFound;
             if (isNext) nextTrainFound = true;
+            const opacityClass = m.passed ? 'opacity-60 grayscale' : 'opacity-100';
+            const highlightClass = isNext ? 'ring-2 ring-red-500 ring-offset-2' : '';
+            
+            let badge = '';
+            if (isNext) badge = `<span class="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg animate-pulse">NEXT TRAIN</span>`;
+            else if (m.passed) badge = `<span class="absolute top-0 right-0 bg-gray-200 text-gray-500 text-[10px] font-bold px-2 py-1 rounded-bl-lg">PASSED</span>`;
 
-            const ticket = document.createElement('div');
-            ticket.className = `ticket ${m.passed ? 'opacity-50' : ''}`;
-            ticket.style.animationDelay = (index * 0.1) + 's';
-            
-            const diffMin = Math.round((m.depSec - nowSeconds)/60);
-            let countdownText = '';
-            
-            if (isActuallyToday && !m.passed) {
-                const h = Math.floor(diffMin / 60);
-                const min = diffMin % 60;
-                countdownText = `<div class="countdown-timer"><i class="fa-regular fa-clock"></i> Departs in ${h > 0 ? h + ' h ' : ''}${min} min</div>`;
-            }
-            
-            const nextBadge = isNext ? `<div class="next-badge">NEXT TRAIN</div>` : '';
-            
-            let typeLabel = "Local";
-            let typeColor = "#64748b";
+            let typeLabel = "Local", typeColor = "bg-slate-400";
             const rName = m.route?.name?.toLowerCase() || "";
-            if (rName.includes('bullet') || rName.includes('express')) {
-                typeLabel = "BABY BULLET";
-                typeColor = "#ce202f";
-            } else if (rName.includes('limited')) {
-                typeLabel = "LIMITED";
-                typeColor = "#3b82f6";
+            if (rName.includes('bullet')) { typeLabel = "BABY BULLET"; typeColor = "bg-red-600"; }
+            else if (rName.includes('limited')) { typeLabel = "LIMITED"; typeColor = "bg-blue-500"; }
+
+            let timerHtml = '';
+            if (isActuallyToday && !m.passed) {
+                const diffMin = Math.round((m.depSec - nowSeconds)/60);
+                const h = Math.floor(diffMin / 60), min = diffMin % 60;
+                timerHtml = `
+                    <div class="mt-3 flex justify-center">
+                        <span class="${isNext ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-blue-50 text-blue-600 border-blue-100'} border px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock ${isNext ? 'animate-pulse' : ''}"></i> Departs in ${h > 0 ? h + 'h ' : ''}${min}m
+                        </span>
+                    </div>`;
             }
-            
-            const durH = Math.floor(m.duration / 60);
-            const durM = m.duration % 60;
-            const durationText = `${durH > 0 ? durH + ' h ' : ''}${durM} min`;
 
-            ticket.innerHTML = `
-                ${nextBadge}
-                <div class="ticket-header">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span class="train-num">#${m.number}</span>
-                        <span style="background:${typeColor}; color:white; padding: 2px 8px; border-radius: 6px; font-size:0.65rem; font-weight:900; letter-spacing:0.5px;">${typeLabel}</span>
-                    </div>
-                    <span class="duration"><i class="fa-regular fa-clock"></i> ${durationText}</span>
-                </div>
-                
-                <div class="route-main">
-                    <div class="time-area">
-                        <div class="time">${formatTime(m.depTime)}</div>
-                        <div class="station-name">${depName}</div>
-                    </div>
-                    <div class="route-path">
-                        <div class="path-dot start"></div>
-                        <div class="path-dot end"></div>
-                    </div>
-                    <div class="time-area">
-                        <div class="time">${formatTime(m.arrTime)}</div>
-                        <div class="station-name">${arrName}</div>
-                    </div>
-                </div>
-
-                ${countdownText}
-
-                <div class="stops-list" id="stops-${m.tripId}">
-                    ${m.stops.map(s => `
-                        <div class="stop-item">
-                            <span>${STATION_NAMES[s.stop_id] || s.stop_id}</span>
-                            <b>${formatTime(s.arrival_time)}</b>
+            html += `
+                <div class="ticket-card ${opacityClass} ${highlightClass}" style="animation: slideUp 0.4s ease-out forwards; animation-delay: ${index * 0.05}s">
+                    ${badge}
+                    <div class="p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-gray-100 text-gray-700 text-[10px] font-bold px-2 py-1 rounded">#${m.number}</span>
+                                <span class="${typeColor} text-white text-[9px] font-black px-2 py-1 rounded tracking-tighter uppercase">${typeLabel}</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-gray-400 flex items-center"><i class="fa-regular fa-clock mr-1.5"></i> ${Math.floor(m.duration / 60)}h ${m.duration % 60}m</span>
                         </div>
-                    `).join('')}
-                </div>
-
-                <div class="ticket-footer">
-                    <div class="price-tag">$${price.toFixed(2)}</div>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="details-btn" onclick="toggleStops('${m.tripId}')"><i class="fa-solid fa-list-ul"></i> Details</button>
-                        <button class="details-btn" onclick="shareTrip('${m.number}', '${m.depTime}', '${depName}', '${arrName}', '${from}', '${to}')"><i class="fa-solid fa-share-nodes"></i></button>
+                        <div class="flex items-center justify-between px-2">
+                            <div class="text-left">
+                                <div class="text-2xl font-black text-gray-800 leading-none">${formatTime(m.depTime)}</div>
+                                <div class="text-[9px] uppercase font-bold text-gray-400 mt-1.5 truncate max-w-[85px]">${depName}</div>
+                            </div>
+                            <div class="flex-1 px-4 flex flex-col items-center">
+                                <div class="w-full h-[1px] bg-gray-200 relative flex items-center justify-between">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                                    <i class="fa-solid fa-angle-right text-gray-300 text-[10px] bg-white px-1"></i>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-black text-gray-800 leading-none">${formatTime(m.arrTime)}</div>
+                                <div class="text-[9px] uppercase font-bold text-gray-400 mt-1.5 truncate max-w-[85px]">${arrName}</div>
+                            </div>
+                        </div>
+                        ${timerHtml}
+                        <details class="mt-4 group/details">
+                            <summary class="cursor-pointer text-center outline-none">
+                                <span class="text-[10px] text-red-600 font-bold hover:bg-red-50 px-3 py-1.5 rounded-full border border-red-100 transition-all inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-list-ul"></i> View Stops
+                                </span>
+                            </summary>
+                            <div class="mt-4 pt-3 border-t border-dashed border-gray-100 space-y-2.5">
+                                ${m.stops.map(s => `
+                                    <div class="flex justify-between items-center text-[11px] px-2">
+                                        <span class="text-gray-500 font-medium">${STATION_NAMES[s.stop_id] || s.stop_id}</span>
+                                        <span class="font-bold text-gray-700">${formatTime(s.arrival_time)}</span>
+                                    </div>`).join('')}
+                            </div>
+                        </details>
                     </div>
-                </div>
-            `;
-            resultsArea.appendChild(ticket);
+                    <div class="bg-gray-50 px-5 py-3 border-t border-dashed border-gray-100 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[11px] font-bold">$${price.toFixed(2)}</span>
+                            <span class="text-[9px] text-gray-400 font-bold uppercase">Standard</span>
+                        </div>
+                        <button onclick="shareTrip('${m.number}', '${depName}', '${m.depTime}', '${arrName}', '${from}', '${to}')" class="text-red-600 font-bold text-[11px] flex items-center gap-1.5 hover:bg-white px-2 py-1 rounded transition-all">
+                            <i class="fa-solid fa-share-nodes"></i> Share
+                        </button>
+                    </div>
+                </div>`;
         });
-
-        const next = document.querySelector('.next-badge');
-        if (next) next.parentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        // DYNAMIC SEO TITLE (For Googlebot)
-        if (matches.length > 0) {
-            document.title = `${depName} to ${arrName} Train Schedule | Live Caltrain Times`;
-            
-            // Also update URL so people can share the route directly
-            window.history.replaceState({}, '', `?from=${from}&to=${to}`);
+        resultsArea.innerHTML = html;
+        if (nextTrainFound) {
+            setTimeout(() => {
+                const next = document.querySelector('.ring-red-500');
+                if (next) next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
         }
+        document.title = `${depName} to ${arrName} Train Schedule | Caltrain Live`;
+        window.history.replaceState({}, '', `?from=${from}&to=${to}`);
     }
 
-    function toggleStops(id) {
-        const el = document.getElementById('stops-' + id);
-        el.style.display = el.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function shareTrip(num, time, fromName, toName, fromId, toId) {
+    function shareTrip(num, fromName, time, toName, fromId, toId) {
         const url = `https://sf-sanjosetrain.com?from=${fromId}&to=${toId}`;
         const text = `🚋 Caltrain #${num}\n📍 From: ${fromName} (${formatTime(time)})\n🏁 To: ${toName}\nCheck live board for details.`;
-        if (navigator.share) {
-            navigator.share({ title: 'Caltrain Trip', text: text, url: url });
-        } else {
-            navigator.clipboard.writeText(text + '\n' + url);
-            alert('Copied to clipboard!');
-        }
+        if (navigator.share) navigator.share({ title: 'Caltrain Trip', text, url });
+        else { navigator.clipboard.writeText(text + '\n' + url); alert('Copied to clipboard!'); }
+    }
+
+    function initPrivacyManager() {
+        const banner = document.getElementById('cookie-banner'), btnAccept = document.getElementById('btn-accept'), btnEssential = document.getElementById('btn-essential');
+        let userConsent = null;
+        try { userConsent = localStorage.getItem('caltrain_cookie_consent'); } catch (e) { userConsent = 'essential'; }
+        if (!userConsent && banner) banner.classList.remove('hidden');
+        if(btnAccept) btnAccept.onclick = () => {
+            localStorage.setItem('caltrain_cookie_consent', 'all');
+            if (typeof gtag === 'function') gtag('consent', 'update', { 'analytics_storage': 'granted', 'ad_storage': 'granted' });
+            banner.classList.add('hidden');
+        };
+        if(btnEssential) btnEssential.onclick = () => { localStorage.setItem('caltrain_cookie_consent', 'essential'); banner.classList.add('hidden'); };
     }
 
     setInterval(() => {
-        const now = new Date();
-        const pt = new Intl.DateTimeFormat('en-US', { 
-            timeZone: 'America/Los_Angeles', 
-            hour: 'numeric', minute: 'numeric', 
-            hour12: true 
-        }).format(now);
-        const clockEl = document.getElementById('sf-clock-large');
-        if (clockEl) {
-            // Shrink AM/PM in live clock
-            const parts = pt.split(' ');
-            clockEl.innerHTML = `${parts[0]} <span style="font-size: 0.7em;">${parts[1]}</span>`;
-        }
+        const pt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', minute: 'numeric', hour12: true }).format(new Date());
+        const el = document.getElementById('sf-clock-top');
+        if (el) el.innerHTML = pt;
     }, 1000);
 
-    setInterval(search, 60000);
-
-    init();
+    document.addEventListener('DOMContentLoaded', () => {
+        init();
+        initPrivacyManager();
+    });
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js').then(reg => {
-                console.log('Service Worker registered!');
-            });
+            navigator.serviceWorker.register('sw.js');
         });
-        
-        // Handle automatic reload when service worker updates
-        let refreshing = false;
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (!refreshing) {
-                window.location.reload();
-                refreshing = true;
-            }
+            window.location.reload();
         });
     }
-
-    // Privacy & CCPA Cookie Management (Brave Browser Friendly)
-    function initPrivacyManager() {
-        const banner = document.getElementById('cookie-banner');
-        const btnAccept = document.getElementById('btn-accept');
-        const btnEssential = document.getElementById('btn-essential');
-        
-        let userConsent = null;
-
-        try {
-            userConsent = localStorage.getItem('caltrain_cookie_consent');
-        } catch (e) {
-            console.warn("Privacy browser strictly blocking storage. Defaulting to essential only.");
-            userConsent = 'essential'; 
-        }
-
-        const doNotTrack = window.navigator.doNotTrack === "1" || window.navigator.doNotTrack === "yes";
-
-        if (!userConsent) {
-            if (banner) {
-                banner.classList.remove('hidden');
-                setTimeout(() => banner.classList.add('show'), 500);
-            }
-        } else if (userConsent === 'all') {
-            loadOptionalScripts();
-        }
-
-        if(btnAccept) {
-            btnAccept.onclick = () => {
-                saveConsent('all');
-                // Consent Mode v2: Grant full tracking
-                if (typeof gtag === 'function') {
-                    gtag('consent', 'update', {
-                        'analytics_storage': 'granted',
-                        'ad_storage': 'granted'
-                    });
-                }
-                loadOptionalScripts();
-            };
-        }
-
-        if(btnEssential) {
-            btnEssential.onclick = () => {
-                saveConsent('essential');
-                // Consent Mode v2: Keep denied — anonymous ping only, no cookies
-                if (typeof gtag === 'function') {
-                    gtag('consent', 'update', {
-                        'analytics_storage': 'denied',
-                        'ad_storage': 'denied'
-                    });
-                }
-            };
-        }
-
-        function saveConsent(level) {
-            try {
-                localStorage.setItem('caltrain_cookie_consent', level);
-            } catch (e) {}
-            if (banner) {
-                banner.classList.remove('show');
-                setTimeout(() => banner.classList.add('hidden'), 400);
-            }
-        }
-
-        function loadOptionalScripts() {
-            if (doNotTrack) {
-                console.log("Global Do Not Track is enabled. Skipping optional trackers.");
-                return; 
-            }
-            // Google Analytics və ya Reklam scriptlərini gələcəkdə bura əlavə edə bilərsən
-            console.log("User consented. Analytics/Ads can be loaded here safely.");
-        }
-    }
-
-    // Sistemi işə sal
-    document.addEventListener('DOMContentLoaded', () => {
-        initPrivacyManager();
-    });
 </script>
 
 </body>
