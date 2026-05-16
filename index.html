@@ -166,7 +166,7 @@
             <form id="searchForm" class="space-y-4">
                 <div class="flex flex-col sm:flex-row gap-4 relative">
                     <div class="flex-1">
-                        <label class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Departure</label>
+                        <label for="depSelect" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Departure</label>
                         <div class="relative">
                             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-red-600">
                                 <i class="fa-regular fa-circle-dot"></i>
@@ -180,7 +180,7 @@
                     </button>
 
                     <div class="flex-1">
-                        <label class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Arrival</label>
+                        <label for="arrSelect" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Arrival</label>
                         <div class="relative">
                             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-800">
                                 <i class="fa-solid fa-location-dot"></i>
@@ -191,7 +191,7 @@
                 </div>
 
                 <div>
-                    <label class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Schedule Type</label>
+                    <label for="dayType" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Schedule Type</label>
                     <div class="relative">
                         <select id="dayType" class="glass-input w-full p-3.5 pr-10 rounded-2xl appearance-none text-sm text-gray-700 font-bold outline-none cursor-pointer">
                             <option value="weekday" selected>Workdays (Mon-Fri)</option>
@@ -284,34 +284,45 @@
 <script>
     const STATION_NAMES = {
         '7001': 'San Francisco', '70011': 'San Francisco', '70012': 'San Francisco',
+        '7001': 'San Francisco', '70011': 'San Francisco', '70012': 'San Francisco',
         '7002': '22nd Street', '70021': '22nd Street', '70022': '22nd Street',
         '7003': 'Bayshore', '70031': 'Bayshore', '70032': 'Bayshore',
         '7004': 'South San Francisco', '70041': 'South San Francisco', '70042': 'South San Francisco',
         '7005': 'San Bruno', '70051': 'San Bruno', '70052': 'San Bruno',
         '7006': 'Millbrae', '70061': 'Millbrae', '70062': 'Millbrae',
-        '7007': 'Burlingame', '70071': 'Burlingame', '70072': 'Burlingame',
-        '7008': 'San Mateo', '70081': 'San Mateo', '70082': 'San Mateo',
-        '7009': 'Hayward Park', '70091': 'Hayward Park', '70092': 'Hayward Park',
-        '7010': 'Hillsdale', '70101': 'Hillsdale', '70102': 'Hillsdale',
-        '7011': 'Belmont', '70111': 'Belmont', '70112': 'Belmont',
-        '7012': 'San Carlos', '70121': 'San Carlos', '70122': 'San Carlos',
+        '7007': 'Broadway', '70071': 'Broadway', '70072': 'Broadway',
+        '7008': 'Burlingame', '70081': 'Burlingame', '70082': 'Burlingame',
+        '7009': 'San Mateo', '70091': 'San Mateo', '70092': 'San Mateo',
+        '7010': 'Hayward Park', '70101': 'Hayward Park', '70102': 'Hayward Park',
+        '7011': 'Hillsdale', '70111': 'Hillsdale', '70112': 'Hillsdale',
+        '7012': 'Belmont', '70121': 'Belmont', '70122': 'Belmont',
+        '7013': 'San Carlos', '70131': 'San Carlos', '70132': 'San Carlos',
         '7014': 'Redwood City', '70141': 'Redwood City', '70142': 'Redwood City',
         '7016': 'Menlo Park', '70161': 'Menlo Park', '70162': 'Menlo Park',
         '7017': 'Palo Alto', '70171': 'Palo Alto', '70172': 'Palo Alto',
+        '253774': 'Stanford', '2537740': 'Stanford', '2537744': 'Stanford',
         '7019': 'California Ave', '70191': 'California Ave', '70192': 'California Ave',
         '7020': 'San Antonio', '70201': 'San Antonio', '70202': 'San Antonio',
         '7021': 'Mountain View', '70211': 'Mountain View', '70212': 'Mountain View',
-        '7023': 'Sunnyvale', '70231': 'Sunnyvale', '70232': 'Sunnyvale',
-        '7024': 'Lawrence', '70241': 'Lawrence', '70242': 'Lawrence',
-        '7025': 'Santa Clara', '70251': 'Santa Clara', '70252': 'Santa Clara',
-        '7026': 'San Jose Diridon', '70261': 'San Jose Diridon', '70262': 'San Jose Diridon'
+        '7022': 'Sunnyvale', '70221': 'Sunnyvale', '70222': 'Sunnyvale',
+        '7023': 'Lawrence', '70231': 'Lawrence', '70232': 'Lawrence',
+        '7024': 'Santa Clara', '70241': 'Santa Clara', '70242': 'Santa Clara',
+        '7025': 'College Park', '70251': 'College Park', '70252': 'College Park',
+        '7026': 'San Jose Diridon', '70261': 'San Jose Diridon', '70262': 'San Jose Diridon',
+        '7027': 'Tamien', '70271': 'Tamien', '70272': 'Tamien',
+        '7028': 'Capitol', '70281': 'Capitol', '70282': 'Capitol',
+        '7029': 'Blossom Hill', '70291': 'Blossom Hill', '70292': 'Blossom Hill',
+        '7030': 'Morgan Hill', '70301': 'Morgan Hill', '70302': 'Morgan Hill',
+        '7031': 'San Martin', '70311': 'San Martin', '70312': 'San Martin',
+        '7032': 'Gilroy', '70321': 'Gilroy', '70322': 'Gilroy'
     };
 
     const ZONE_MAP = {
         'san_francisco': 1, '22nd_street': 1, 'bayshore': 1, 'south_sf': 1, 'san_bruno': 1, 'millbrae': 1,
-        'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2, 'belmont': 2, 'san_carlos': 2, 'redwood_city': 2,
-        'menlo_park': 3, 'palo_alto': 3, 'california_ave': 3, 'san_antonio': 3, 'mountain_view': 3, 'sunnyvale': 3,
-        'lawrence': 4, 'santa_clara': 4, 'sj_diridon': 4
+        'broadway': 2, 'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2, 'belmont': 2, 'san_carlos': 2, 'redwood_city': 2,
+        'menlo_park': 3, 'palo_alto': 3, 'stanford': 3, 'california_ave': 3, 'san_antonio': 3, 'mountain_view': 3, 'sunnyvale': 3,
+        'lawrence': 4, 'santa_clara': 4, 'college_park': 4, 'sj_diridon': 4, 'tamien': 4, 'capitol': 4, 'blossom_hill': 4,
+        'morgan_hill': 5, 'san_martin': 6, 'gilroy': 6
     };
 
     let WEEKDAY_SERVICE = '';
@@ -339,6 +350,7 @@
             {id: 'south_sf', name: 'South San Francisco'},
             {id: 'san_bruno', name: 'San Bruno'},
             {id: 'millbrae', name: 'Millbrae'},
+            {id: 'broadway', name: 'Broadway'},
             {id: 'burlingame', name: 'Burlingame'},
             {id: 'san_mateo', name: 'San Mateo'},
             {id: 'hayward_park', name: 'Hayward Park'},
@@ -348,13 +360,21 @@
             {id: 'redwood_city', name: 'Redwood City'},
             {id: 'menlo_park', name: 'Menlo Park'},
             {id: 'palo_alto', name: 'Palo Alto'},
+            {id: 'stanford', name: 'Stanford'},
             {id: 'california_ave', name: 'California Ave'},
             {id: 'san_antonio', name: 'San Antonio'},
             {id: 'mountain_view', name: 'Mountain View'},
             {id: 'sunnyvale', name: 'Sunnyvale'},
             {id: 'lawrence', name: 'Lawrence'},
             {id: 'santa_clara', name: 'Santa Clara'},
-            {id: 'sj_diridon', name: 'San Jose Diridon'}
+            {id: 'college_park', name: 'College Park'},
+            {id: 'sj_diridon', name: 'San Jose Diridon'},
+            {id: 'tamien', name: 'Tamien'},
+            {id: 'capitol', name: 'Capitol'},
+            {id: 'blossom_hill', name: 'Blossom Hill'},
+            {id: 'morgan_hill', name: 'Morgan Hill'},
+            {id: 'san_martin', name: 'San Martin'},
+            {id: 'gilroy', name: 'Gilroy'}
         ];
         stations.forEach(s => {
             depSelect.add(new Option(s.name, s.id));
@@ -399,11 +419,12 @@
 
     function formatTime(t) {
         if (!t) return '--:--';
-        const [h, m] = t.split(':');
+        let [h, m] = t.split(':');
         let hour = parseInt(h);
+        hour = hour % 24;
         const ampm = hour >= 12 ? 'PM' : 'AM';
-        hour = hour % 12 || 12;
-        return `${hour}:${m} ${ampm}`;
+        const displayHour = hour % 12 || 12;
+        return `${displayHour}:${m} ${ampm}`;
     }
 
     function getSFSeconds() {
@@ -434,9 +455,10 @@
 
         const GTFS_ID_MAP = {
             'san_francisco': '7001', '22nd_street': '7002', 'bayshore': '7003', 'south_sf': '7004', 'san_bruno': '7005', 'millbrae': '7006', 
-            'burlingame': '7007', 'san_mateo': '7008', 'hayward_park': '7009', 'hillsdale': '7010', 'belmont': '7011', 'san_carlos': '7012', 'redwood_city': '7014', 
-            'menlo_park': '7016', 'palo_alto': '7017', 'california_ave': '7019', 'san_antonio': '7020', 'mountain_view': '7021', 'sunnyvale': '7023', 
-            'lawrence': '7024', 'santa_clara': '7025', 'sj_diridon': '7026'
+            'broadway': '7007', 'burlingame': '7008', 'san_mateo': '7009', 'hayward_park': '7010', 'hillsdale': '7011', 'belmont': '7012', 'san_carlos': '7013', 'redwood_city': '7014', 
+            'menlo_park': '7016', 'palo_alto': '7017', 'stanford': '253774', 'california_ave': '7019', 'san_antonio': '7020', 'mountain_view': '7021', 'sunnyvale': '7022', 
+            'lawrence': '7023', 'santa_clara': '7024', 'college_park': '7025', 'sj_diridon': '7026', 'tamien': '7027', 'capitol': '7028', 'blossom_hill': '7029', 'morgan_hill': '7030', 
+            'san_martin': '7031', 'gilroy': '7032'
         };
         const depBaseId = GTFS_ID_MAP[from];
         const arrBaseId = GTFS_ID_MAP[to];
@@ -474,14 +496,23 @@
         }
 
         matches.sort((a, b) => a.depSec - b.depSec);
+
+        const robotsMeta = document.querySelector('meta[name="robots"]');
         if (matches.length === 0) {
+            if (!robotsMeta) {
+                const m = document.createElement('meta');
+                m.name = "robots"; m.content = "noindex";
+                document.head.appendChild(m);
+            } else { robotsMeta.content = "noindex"; }
             resultsArea.innerHTML = '<div class="text-center py-10 opacity-50 font-bold">No trains found for this route.</div>';
             return;
+        } else if (robotsMeta) {
+            robotsMeta.content = "index, follow";
         }
 
         const fromZone = ZONE_MAP[from];
         const toZone = ZONE_MAP[to];
-        const prices = [3.75, 6.00, 8.25, 10.50, 12.75, 15.00];
+        const prices = [4.00, 6.25, 8.50, 10.75, 13.00, 15.25];
         const price = prices[Math.abs(fromZone - toZone)] || 3.75;
         const depName = document.getElementById('depSelect').options[document.getElementById('depSelect').selectedIndex].text;
         const arrName = document.getElementById('arrSelect').options[document.getElementById('arrSelect').selectedIndex].text;
@@ -579,6 +610,8 @@
             }, 500);
         }
         document.title = `${depName} to ${arrName} Train Schedule | Caltrain Live`;
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (canonical) canonical.href = `https://sf-sanjosetrain.com?from=${from}&to=${to}`;
         window.history.replaceState({}, '', `?from=${from}&to=${to}`);
     }
 
