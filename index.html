@@ -284,62 +284,59 @@
 <script src="gtfs/data.js"></script>
 
 <script>
+    // Stop name lookup — keyed by the exact stop_ids used in stop_times.txt
     const STATION_NAMES = {
-        '7001': 'San Francisco', '70011': 'San Francisco', '70012': 'San Francisco',
-        '7001': 'San Francisco', '70011': 'San Francisco', '70012': 'San Francisco',
-        '7002': '22nd Street', '70021': '22nd Street', '70022': '22nd Street',
-        '7003': 'Bayshore', '70031': 'Bayshore', '70032': 'Bayshore',
-        '7004': 'South San Francisco', '70041': 'South San Francisco', '70042': 'South San Francisco',
-        '7005': 'San Bruno', '70051': 'San Bruno', '70052': 'San Bruno',
-        '7006': 'Millbrae', '70061': 'Millbrae', '70062': 'Millbrae',
-        '7007': 'Broadway', '70071': 'Broadway', '70072': 'Broadway',
-        '7008': 'Burlingame', '70081': 'Burlingame', '70082': 'Burlingame',
-        '7009': 'San Mateo', '70091': 'San Mateo', '70092': 'San Mateo',
-        '7010': 'Hayward Park', '70101': 'Hayward Park', '70102': 'Hayward Park',
-        '7011': 'Hillsdale', '70111': 'Hillsdale', '70112': 'Hillsdale',
-        '7012': 'Belmont', '70121': 'Belmont', '70122': 'Belmont',
-        '7013': 'San Carlos', '70131': 'San Carlos', '70132': 'San Carlos',
-        '7014': 'Redwood City', '70141': 'Redwood City', '70142': 'Redwood City',
-        '7016': 'Menlo Park', '70161': 'Menlo Park', '70162': 'Menlo Park',
-        '7017': 'Palo Alto', '70171': 'Palo Alto', '70172': 'Palo Alto',
-        '253774': 'Stanford', '2537740': 'Stanford', '2537744': 'Stanford',
-        '7019': 'California Ave', '70191': 'California Ave', '70192': 'California Ave',
-        '7020': 'San Antonio', '70201': 'San Antonio', '70202': 'San Antonio',
-        '7021': 'Mountain View', '70211': 'Mountain View', '70212': 'Mountain View',
-        '7022': 'Sunnyvale', '70221': 'Sunnyvale', '70222': 'Sunnyvale',
-        '7023': 'Lawrence', '70231': 'Lawrence', '70232': 'Lawrence',
-        '7024': 'Santa Clara', '70241': 'Santa Clara', '70242': 'Santa Clara',
-        '7025': 'College Park', '70251': 'College Park', '70252': 'College Park',
-        '7026': 'San Jose Diridon', '70261': 'San Jose Diridon', '70262': 'San Jose Diridon',
-        '7027': 'Tamien', '70271': 'Tamien', '70272': 'Tamien',
-        '7028': 'Capitol', '70281': 'Capitol', '70282': 'Capitol',
-        '7029': 'Blossom Hill', '70291': 'Blossom Hill', '70292': 'Blossom Hill',
-        '7030': 'Morgan Hill', '70301': 'Morgan Hill', '70302': 'Morgan Hill',
-        '7031': 'San Martin', '70311': 'San Martin', '70312': 'San Martin',
-        '7032': 'Gilroy', '70321': 'Gilroy', '70322': 'Gilroy'
+        '70011': 'San Francisco', '70012': 'San Francisco',
+        '70021': '22nd Street',   '70022': '22nd Street',
+        '70031': 'Bayshore',      '70032': 'Bayshore',
+        '70041': 'South San Francisco', '70042': 'South San Francisco',
+        '70051': 'San Bruno',     '70052': 'San Bruno',
+        '70061': 'Millbrae',      '70062': 'Millbrae',
+        '70071': 'Broadway',      '70072': 'Broadway',
+        '70081': 'Burlingame',    '70082': 'Burlingame',
+        '70091': 'San Mateo',     '70092': 'San Mateo',
+        '70101': 'Hayward Park',  '70102': 'Hayward Park',
+        '70111': 'Hillsdale',     '70112': 'Hillsdale',
+        '70121': 'Belmont',       '70122': 'Belmont',
+        '70131': 'San Carlos',    '70132': 'San Carlos',
+        '70141': 'Redwood City',  '70142': 'Redwood City',
+        '70161': 'Menlo Park',    '70162': 'Menlo Park',
+        '70171': 'Palo Alto',     '70172': 'Palo Alto',
+        '2537740': 'Stanford',    '2537744': 'Stanford',
+        '70191': 'California Ave','70192': 'California Ave',
+        '70201': 'San Antonio',   '70202': 'San Antonio',
+        '70211': 'Mountain View', '70212': 'Mountain View',
+        '70221': 'Sunnyvale',     '70222': 'Sunnyvale',
+        '70231': 'Lawrence',      '70232': 'Lawrence',
+        '70241': 'Santa Clara',   '70242': 'Santa Clara',
+        '70251': 'College Park',  '70252': 'College Park',
+        '70261': 'San Jose Diridon', '70262': 'San Jose Diridon',
+        '70271': 'Tamien',        '70272': 'Tamien',
+        '70281': 'Capitol',       '70282': 'Capitol',
+        '70291': 'Blossom Hill',  '70292': 'Blossom Hill',
+        '70301': 'Morgan Hill',   '70302': 'Morgan Hill',
+        '70311': 'San Martin',    '70312': 'San Martin',
+        '70321': 'Gilroy',        '70322': 'Gilroy'
     };
 
+    // Zone map — zone_ids from stops.txt: 2275=Zone1, 2276=Zone2, 2277=Zone3, 2272=Zone4, 2273=Zone5, 2274=Zone6
+    // Mapped to 1-6 for price calculation (prices[] index = |z1-z2| - 1)
     const ZONE_MAP = {
         'san_francisco': 1, '22nd_street': 1, 'bayshore': 1, 'south_sf': 1, 'san_bruno': 1, 'millbrae': 1,
-        'broadway': 2, 'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2, 'belmont': 2, 'san_carlos': 2, 'redwood_city': 2,
-        'menlo_park': 3, 'palo_alto': 3, 'stanford': 3, 'california_ave': 3, 'san_antonio': 3, 'mountain_view': 3, 'sunnyvale': 3,
-        'lawrence': 4, 'santa_clara': 4, 'college_park': 4, 'sj_diridon': 4, 'tamien': 4, 'capitol': 4, 'blossom_hill': 4,
-        'morgan_hill': 5, 'san_martin': 6, 'gilroy': 6
+        'broadway': 2, 'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2,
+        'belmont': 2, 'san_carlos': 2, 'redwood_city': 2,
+        'menlo_park': 3, 'palo_alto': 3, 'stanford': 3, 'california_ave': 3,
+        'san_antonio': 3, 'mountain_view': 3, 'sunnyvale': 3,
+        'lawrence': 4, 'santa_clara': 4, 'college_park': 4, 'sj_diridon': 4,
+        'tamien': 4, 'capitol': 5, 'blossom_hill': 5,
+        'morgan_hill': 6, 'san_martin': 6, 'gilroy': 6
     };
 
-    let WEEKDAY_SERVICE = '';
-    let WEEKEND_SERVICE = '';
+    // Real service IDs from calendar.txt
+    const WEEKDAY_SERVICE = 'c_71742_b_86200_d_31';  // Mon-Fri
+    const WEEKEND_SERVICE = 'c_71742_b_86200_d_96';  // Sat-Sun
 
-    function detectServiceIds() {
-        const counts = {};
-        for (const tripId in CALTRAIN_DATA.trips) {
-            const sid = CALTRAIN_DATA.trips[tripId].serviceId;
-            counts[sid] = (counts[sid] || 0) + 1;
-        }
-        const sortedSids = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
-        WEEKDAY_SERVICE = sortedSids[0] || '';
-        WEEKEND_SERVICE = sortedSids[1] || sortedSids[0];
-    }
+    function detectServiceIds() { /* kept for API compat — values hardcoded above */ }
 
     function init() {
         detectServiceIds();
@@ -444,32 +441,53 @@
 
         const now = new Date();
         const ptDay = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'long' }).format(now).toLowerCase();
-        const isActuallyToday = (dayType === 'weekday' && ['monday','tuesday','wednesday','thursday','friday'].includes(ptDay)) || 
+        const isActuallyToday = (dayType === 'weekday' && ['monday','tuesday','wednesday','thursday','friday'].includes(ptDay)) ||
                                 (dayType === 'weekend' && ['saturday','sunday'].includes(ptDay));
 
         const resultsArea = document.getElementById('results-area');
-        resultsArea.innerHTML = '';
 
         if (from === to) {
-            resultsArea.innerHTML = '<div class="text-center py-10 opacity-50 font-bold">Please select different stations.</div>';
+            const stName = document.getElementById('depSelect').options[document.getElementById('depSelect').selectedIndex].text;
+            resultsArea.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 px-4">
+                    <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-800 font-extrabold text-base text-center"><span class="text-red-600">${stName}</span> is selected as both your departure and arrival station.</p>
+                    <p class="text-gray-500 text-sm mt-1 text-center">Please choose <strong>two different stations</strong>.</p>
+                </div>`;
             return;
         }
 
         const GTFS_ID_MAP = {
-            'san_francisco': '7001', '22nd_street': '7002', 'bayshore': '7003', 'south_sf': '7004', 'san_bruno': '7005', 'millbrae': '7006', 
-            'broadway': '7007', 'burlingame': '7008', 'san_mateo': '7009', 'hayward_park': '7010', 'hillsdale': '7011', 'belmont': '7012', 'san_carlos': '7013', 'redwood_city': '7014', 
-            'menlo_park': '7016', 'palo_alto': '7017', 'stanford': '253774', 'california_ave': '7019', 'san_antonio': '7020', 'mountain_view': '7021', 'sunnyvale': '7022', 
-            'lawrence': '7023', 'santa_clara': '7024', 'college_park': '7025', 'sj_diridon': '7026', 'tamien': '7027', 'capitol': '7028', 'blossom_hill': '7029', 'morgan_hill': '7030', 
-            'san_martin': '7031', 'gilroy': '7032'
+            'san_francisco': '70011', '22nd_street': '70021', 'bayshore': '70031',
+            'south_sf': '70041', 'san_bruno': '70051', 'millbrae': '70061',
+            'broadway': '70071', 'burlingame': '70081', 'san_mateo': '70091',
+            'hayward_park': '70101', 'hillsdale': '70111', 'belmont': '70121',
+            'san_carlos': '70131', 'redwood_city': '70141',
+            'menlo_park': '70161', 'palo_alto': '70171', 'stanford': '2537740',
+            'california_ave': '70191', 'san_antonio': '70201', 'mountain_view': '70211',
+            'sunnyvale': '70221', 'lawrence': '70231', 'santa_clara': '70241',
+            'college_park': '70251', 'sj_diridon': '70261', 'tamien': '70271',
+            'capitol': '70281', 'blossom_hill': '70291', 'morgan_hill': '70301',
+            'san_martin': '70311', 'gilroy': '70321'
         };
+        // Match both NB and SB platforms: stop_id starts with this prefix
         const depBaseId = GTFS_ID_MAP[from];
         const arrBaseId = GTFS_ID_MAP[to];
+        // Use prefix match (strip last digit) to cover NB/SB variants
+        const depPrefix = depBaseId.slice(0, -1);
+        const arrPrefix = arrBaseId.slice(0, -1);
 
+        // ── Build a lookup: tripId → sorted stop-times ────────────────────────
+        // Use a plain object instead of re-scanning the full array every call.
         const tripsWithStops = {};
-        CALTRAIN_DATA.stopTimes.forEach(st => {
+        const stopTimes = CALTRAIN_DATA.stopTimes;
+        for (let i = 0; i < stopTimes.length; i++) {
+            const st = stopTimes[i];
             if (!tripsWithStops[st.trip_id]) tripsWithStops[st.trip_id] = [];
             tripsWithStops[st.trip_id].push(st);
-        });
+        }
 
         const matches = [];
         const nowSeconds = getSFSeconds();
@@ -477,9 +495,9 @@
         for (const tripId in tripsWithStops) {
             const trip = CALTRAIN_DATA.trips[tripId];
             if (!trip || trip.serviceId !== serviceId) continue;
-            const stops = tripsWithStops[tripId].sort((a,b) => parseTime(a.arrival_time) - parseTime(b.arrival_time));
-            const depIdx = stops.findIndex(s => s.stop_id.startsWith(depBaseId));
-            const arrIdx = stops.findIndex(s => s.stop_id.startsWith(arrBaseId));
+            const stops = tripsWithStops[tripId].sort((a, b) => parseTime(a.arrival_time) - parseTime(b.arrival_time));
+            const depIdx = stops.findIndex(s => s.stop_id.startsWith(depPrefix));
+            const arrIdx = stops.findIndex(s => s.stop_id.startsWith(arrPrefix));
 
             if (depIdx !== -1 && arrIdx !== -1 && depIdx < arrIdx) {
                 const depTime = stops[depIdx].arrival_time;
@@ -503,13 +521,14 @@
         if (matches.length === 0) {
             if (!robotsMeta) {
                 const m = document.createElement('meta');
-                m.name = "robots"; m.content = "noindex";
+                m.name = 'robots'; m.content = 'noindex';
                 document.head.appendChild(m);
-            } else { robotsMeta.content = "noindex"; }
+            } else { robotsMeta.content = 'noindex'; }
+            // Replace content without blanking the screen first
             resultsArea.innerHTML = '<div class="text-center py-10 opacity-50 font-bold">No trains found for this route.</div>';
             return;
         } else if (robotsMeta) {
-            robotsMeta.content = "index, follow";
+            robotsMeta.content = 'index, follow';
         }
 
         const fromZone = ZONE_MAP[from];
@@ -520,26 +539,28 @@
         const arrName = document.getElementById('arrSelect').options[document.getElementById('arrSelect').selectedIndex].text;
 
         let nextTrainFound = false;
-        let html = '';
+        // ── Build the full HTML string FIRST, then write once ─────────────────
+        const parts = [];
 
         matches.forEach((m, index) => {
             const isNext = isActuallyToday && !m.passed && !nextTrainFound;
             if (isNext) nextTrainFound = true;
             const opacityClass = m.passed ? 'opacity-60 grayscale' : 'opacity-100';
             const highlightClass = isNext ? 'ring-2 ring-red-500 ring-offset-2' : '';
-            
+
             let badge = '';
             if (isNext) badge = `<span class="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg animate-pulse">NEXT TRAIN</span>`;
             else if (m.passed) badge = `<span class="absolute top-0 right-0 bg-gray-200 text-gray-500 text-[10px] font-bold px-2 py-1 rounded-bl-lg">PASSED</span>`;
 
-            let typeLabel = "Local", typeColor = "bg-slate-400";
-            const rName = m.route?.name?.toLowerCase() || "";
-            if (rName.includes('bullet')) { typeLabel = "BABY BULLET"; typeColor = "bg-red-600"; }
-            else if (rName.includes('limited')) { typeLabel = "LIMITED"; typeColor = "bg-blue-500"; }
+            let typeLabel = 'Local', typeColor = 'bg-slate-400';
+            const rShort = (m.route?.short || '').toLowerCase();
+            if (rShort.includes('express'))      { typeLabel = 'EXPRESS';      typeColor = 'bg-red-600'; }
+            else if (rShort.includes('limited')) { typeLabel = 'LIMITED';      typeColor = 'bg-blue-500'; }
+            else if (rShort.includes('south'))   { typeLabel = 'SOUTH COUNTY'; typeColor = 'bg-amber-500'; }
 
             let timerHtml = '';
             if (isActuallyToday && !m.passed) {
-                const diffMin = Math.round((m.depSec - nowSeconds)/60);
+                const diffMin = Math.round((m.depSec - nowSeconds) / 60);
                 const h = Math.floor(diffMin / 60), min = diffMin % 60;
                 timerHtml = `
                     <div class="mt-3 flex justify-center">
@@ -549,8 +570,8 @@
                     </div>`;
             }
 
-            html += `
-                <div class="ticket-card ${opacityClass} ${highlightClass}" style="animation: slideUp 0.4s ease-out forwards; animation-delay: ${index * 0.05}s">
+            parts.push(`
+                <div class="ticket-card ${opacityClass} ${highlightClass}" style="animation: slideUp 0.4s ease-out forwards; animation-delay: ${index * 0.04}s">
                     ${badge}
                     <div class="p-5">
                         <div class="flex justify-between items-center mb-4">
@@ -578,20 +599,33 @@
                             </div>
                         </div>
                         ${timerHtml}
-                        <details class="mt-4 group/details">
-                            <summary class="cursor-pointer text-center outline-none">
-                                <span class="text-[10px] text-red-600 font-bold hover:bg-red-50 px-3 py-1.5 rounded-full border border-red-100 transition-all inline-flex items-center gap-1.5">
-                                    <i class="fa-solid fa-list-ul"></i> View Stops
-                                </span>
+                        ${m.stops.length > 0 ? `
+                        <details class="mt-4 group/stops">
+                            <summary class="cursor-pointer list-none outline-none pt-3 border-t border-dashed border-gray-100">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="fa-solid fa-list-ul text-gray-400 text-[10px]"></i>
+                                        <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Stops Along the Way (${m.stops.length})</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down text-gray-300 text-[10px] transition-transform group-open/stops:rotate-180"></i>
+                                </div>
                             </summary>
-                            <div class="mt-4 pt-3 border-t border-dashed border-gray-100 space-y-2.5">
+                            <div class="mt-2 space-y-1.5">
                                 ${m.stops.map(s => `
-                                    <div class="flex justify-between items-center text-[11px] px-2">
-                                        <span class="text-gray-500 font-medium">${STATION_NAMES[s.stop_id] || s.stop_id}</span>
-                                        <span class="font-bold text-gray-700">${formatTime(s.arrival_time)}</span>
+                                    <div class="flex justify-between items-center text-[11px] px-2 py-0.5 rounded-lg hover:bg-gray-50 transition-colors">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-gray-300 flex-shrink-0"></span>
+                                            <span class="text-gray-600 font-medium">${STATION_NAMES[s.stop_id] || s.stop_id}</span>
+                                        </div>
+                                        <span class="font-bold text-gray-700 tabular-nums">${formatTime(s.arrival_time)}</span>
                                     </div>`).join('')}
                             </div>
-                        </details>
+                        </details>` : `
+                        <div class="mt-3 flex justify-center">
+                            <span class="bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-bolt-lightning"></i> Non-stop service
+                            </span>
+                        </div>`}
                     </div>
                     <div class="bg-gray-50 px-5 py-3 border-t border-dashed border-gray-100 flex justify-between items-center">
                         <div class="flex items-center gap-2">
@@ -602,15 +636,20 @@
                             <i class="fa-solid fa-share-nodes"></i> Share
                         </button>
                     </div>
-                </div>`;
+                </div>`);
         });
-        resultsArea.innerHTML = html;
+
+        // Single DOM write — no flash, no blank moment
+        resultsArea.innerHTML = parts.join('');
+
+        // Scroll to next train immediately after paint (no setTimeout delay)
         if (nextTrainFound) {
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 const next = document.querySelector('.ring-red-500');
                 if (next) next.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 500);
+            });
         }
+
         document.title = `${depName} to ${arrName} Train Schedule | Caltrain Live`;
         const canonical = document.querySelector('link[rel="canonical"]');
         if (canonical) canonical.href = `https://sf-sanjosetrain.com?from=${from}&to=${to}`;
