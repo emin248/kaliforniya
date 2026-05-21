@@ -173,7 +173,9 @@
                             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-red-600">
                                 <i class="fa-regular fa-circle-dot"></i>
                             </div>
-                            <select id="depSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none"></select>
+                            <select id="depSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none">
+                                <option value="" disabled selected>— Select Station —</option>
+                            </select>
                         </div>
                     </div>
 
@@ -187,7 +189,9 @@
                             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-800">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
-                            <select id="arrSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none"></select>
+                            <select id="arrSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none">
+                                <option value="" disabled selected>— Select Station —</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -320,10 +324,9 @@
     };
 
     // Zone map — zone_ids from stops.txt: 2275=Zone1, 2276=Zone2, 2277=Zone3, 2272=Zone4, 2273=Zone5, 2274=Zone6
-    // Mapped to 1-6 for price calculation (prices[] index = |z1-z2| - 1)
     const ZONE_MAP = {
-        'san_francisco': 1, '22nd_street': 1, 'bayshore': 1, 'south_sf': 1, 'san_bruno': 1, 'millbrae': 1,
-        'broadway': 2, 'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2,
+        'san_francisco': 1, '22nd_street': 1, 'bayshore': 1, 'south_sf': 1, 'san_bruno': 1,
+        'millbrae': 2, 'broadway': 2, 'burlingame': 2, 'san_mateo': 2, 'hayward_park': 2, 'hillsdale': 2,
         'belmont': 2, 'san_carlos': 2, 'redwood_city': 2,
         'menlo_park': 3, 'palo_alto': 3, 'stanford': 3, 'california_ave': 3,
         'san_antonio': 3, 'mountain_view': 3, 'sunnyvale': 3,
@@ -386,10 +389,8 @@
         if (fromParam && toParam && fromParam !== toParam) {
             depSelect.value = fromParam;
             arrSelect.value = toParam;
-        } else {
-            depSelect.value = 'san_francisco';
-            arrSelect.value = 'sj_diridon';
         }
+        // else: leave placeholder selected — user must choose manually
         const day = new Date().getDay();
         document.getElementById('dayType').value = (day === 0 || day === 6) ? 'weekend' : 'weekday';
 
@@ -438,6 +439,17 @@
         const to = document.getElementById('arrSelect').value;
         const dayType = document.getElementById('dayType').value;
         const serviceId = dayType === 'weekday' ? WEEKDAY_SERVICE : WEEKEND_SERVICE;
+
+        if (!from || !to) {
+            document.getElementById('results-area').innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 px-4">
+                    <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-train text-red-500 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-800 font-extrabold text-base text-center">Please select both a <span class="text-red-600">departure</span> and <span class="text-red-600">arrival</span> station.</p>
+                </div>`;
+            return;
+        }
 
         const now = new Date();
         const ptDay = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'long' }).format(now).toLowerCase();
