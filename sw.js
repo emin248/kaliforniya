@@ -1,9 +1,9 @@
 const CACHE_NAME = 'caltrain-v3';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/gtfs/data.js',
-  '/favicon/android-chrome-512x512.png',
+  './',
+  'index.html',
+  'gtfs/data.js',
+  'favicon/android-chrome-512x512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 

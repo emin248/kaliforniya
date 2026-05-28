@@ -20,7 +20,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="version" content="1.2.0 - Premium Design Update">
+    <meta name="description" content="Caltrain Live - Fast, interactive, and offline-friendly commuter train schedule board between San Francisco and San Jose. View real-time timetables, zones, and electric fleet schedules.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://sf-sanjosetrain.com">
+    <meta property="og:title" content="Caltrain Live Schedule - SF ⇄ San Jose">
+    <meta property="og:description" content="The ultimate offline-friendly live schedule board for Caltrain commuters. Fast, beautiful, and zone-aware.">
+    <meta property="og:image" content="https://sf-sanjosetrain.com/favicon/android-chrome-512x512.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://sf-sanjosetrain.com">
+    <meta name="twitter:title" content="Caltrain Live Schedule - SF ⇄ San Jose">
+    <meta name="twitter:description" content="The ultimate offline-friendly live schedule board for Caltrain commuters.">
+    <meta name="twitter:image" content="https://sf-sanjosetrain.com/favicon/android-chrome-512x512.png">
+
     <link rel="canonical" href="https://sf-sanjosetrain.com">
     <title>Caltrain Live - Trip Planner & Schedule</title>
     
@@ -341,8 +356,70 @@
 
     function detectServiceIds() { /* kept for API compat — values hardcoded above */ }
 
+    let tripsWithStops = null;
+
+    function prebuildTripsWithStops() {
+        if (tripsWithStops) return;
+        tripsWithStops = {};
+        const stopTimes = CALTRAIN_DATA.stopTimes;
+        for (let i = 0; i < stopTimes.length; i++) {
+            const st = stopTimes[i];
+            if (!tripsWithStops[st.trip_id]) tripsWithStops[st.trip_id] = [];
+            tripsWithStops[st.trip_id].push(st);
+        }
+        // Pre-sort all stops for each trip by arrival time
+        for (const tripId in tripsWithStops) {
+            tripsWithStops[tripId].sort((a, b) => parseTime(a.arrival_time) - parseTime(b.arrival_time));
+        }
+    }
+
+    function updateStationOptions() {
+        const depSelect = document.getElementById('depSelect');
+        const arrSelect = document.getElementById('arrSelect');
+        const selectedDep = depSelect.value;
+        const selectedArr = arrSelect.value;
+
+        // Filter Departure options based on selected Arrival
+        Array.from(depSelect.options).forEach(opt => {
+            if (opt.value === '') return; // Skip placeholder
+            if (selectedArr && opt.value === selectedArr) {
+                opt.hidden = true;
+                opt.disabled = true;
+            } else {
+                opt.hidden = false;
+                opt.disabled = false;
+            }
+        });
+
+        // Filter Arrival options based on selected Departure
+        Array.from(arrSelect.options).forEach(opt => {
+            if (opt.value === '') return; // Skip placeholder
+            if (selectedDep && opt.value === selectedDep) {
+                opt.hidden = true;
+                opt.disabled = true;
+            } else {
+                opt.hidden = false;
+                opt.disabled = false;
+            }
+        });
+    }
+
+    function saveToStorage() {
+        const depVal = document.getElementById('depSelect').value;
+        const arrVal = document.getElementById('arrSelect').value;
+        if (depVal && arrVal && depVal !== arrVal) {
+            try {
+                localStorage.setItem('caltrain_last_dep', depVal);
+                localStorage.setItem('caltrain_last_arr', arrVal);
+            } catch (e) {
+                console.error('Failed to save to localStorage', e);
+            }
+        }
+    }
+
     function init() {
         detectServiceIds();
+        prebuildTripsWithStops();
         const depSelect = document.getElementById('depSelect');
         const arrSelect = document.getElementById('arrSelect');
         const stations =[
@@ -386,11 +463,41 @@
         const urlParams = new URLSearchParams(window.location.search);
         const fromParam = urlParams.get('from');
         const toParam = urlParams.get('to');
+        
+        let loadedFromStorage = false;
+
         if (fromParam && toParam && fromParam !== toParam) {
             depSelect.value = fromParam;
             arrSelect.value = toParam;
+            saveToStorage();
+        } else {
+            // Try loading from localStorage if URL parameters are not set
+            try {
+                const storedDep = localStorage.getItem('caltrain_last_dep');
+                const storedArr = localStorage.getItem('caltrain_last_arr');
+                if (storedDep && storedArr && storedDep !== storedArr) {
+                    depSelect.value = storedDep;
+                    arrSelect.value = storedArr;
+                    loadedFromStorage = true;
+                }
+            } catch (e) {
+                console.error('Failed to load from localStorage', e);
+            }
         }
-        // else: leave placeholder selected — user must choose manually
+
+        // Apply initial filtering based on restored values
+        updateStationOptions();
+
+        // Listen for selection changes to update filtering and persist selection
+        depSelect.addEventListener('change', () => {
+            updateStationOptions();
+            saveToStorage();
+        });
+        arrSelect.addEventListener('change', () => {
+            updateStationOptions();
+            saveToStorage();
+        });
+
         const day = new Date().getDay();
         document.getElementById('dayType').value = (day === 0 || day === 6) ? 'weekend' : 'weekday';
 
@@ -399,7 +506,7 @@
             search();
         };
 
-        if (fromParam && toParam) search();
+        if ((fromParam && toParam) || loadedFromStorage) search();
     }
 
     function swapStations() {
@@ -408,6 +515,9 @@
         const temp = dep.value;
         dep.value = arr.value;
         arr.value = temp;
+        
+        updateStationOptions();
+        saveToStorage();
         search();
     }
 
@@ -491,23 +601,16 @@
         const depPrefix = depBaseId.slice(0, -1);
         const arrPrefix = arrBaseId.slice(0, -1);
 
-        // ── Build a lookup: tripId → sorted stop-times ────────────────────────
-        // Use a plain object instead of re-scanning the full array every call.
-        const tripsWithStops = {};
-        const stopTimes = CALTRAIN_DATA.stopTimes;
-        for (let i = 0; i < stopTimes.length; i++) {
-            const st = stopTimes[i];
-            if (!tripsWithStops[st.trip_id]) tripsWithStops[st.trip_id] = [];
-            tripsWithStops[st.trip_id].push(st);
-        }
-
         const matches = [];
         const nowSeconds = getSFSeconds();
+
+        // Ensure static map is prebuilt
+        prebuildTripsWithStops();
 
         for (const tripId in tripsWithStops) {
             const trip = CALTRAIN_DATA.trips[tripId];
             if (!trip || trip.serviceId !== serviceId) continue;
-            const stops = tripsWithStops[tripId].sort((a, b) => parseTime(a.arrival_time) - parseTime(b.arrival_time));
+            const stops = tripsWithStops[tripId]; // Pre-sorted stops
             const depIdx = stops.findIndex(s => s.stop_id.startsWith(depPrefix));
             const arrIdx = stops.findIndex(s => s.stop_id.startsWith(arrPrefix));
 
