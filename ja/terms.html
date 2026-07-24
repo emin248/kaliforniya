@@ -1,8 +1,33 @@
 <!DOCTYPE html>
-<html lang="ja" translate="no" translate="no">
+<html lang="ja" translate="no" translate="no" translate="no">
 <head>
     <meta name="google" content="notranslate">
     <meta name="robots" content="notranslate">
+    <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
+    <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
+    <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
+    <link rel="alternate" hreflang="ja" href="https://sf-sanjosetrain.com/ja/" />
+    <link rel="alternate" hreflang="de" href="https://sf-sanjosetrain.com/de/" />
+    <meta name="google" content="notranslate">
+    <meta name="robots" content="notranslate">
+
+    <script>
+        (function() {
+            const path = window.location.pathname;
+            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
+            if (!isLangDir) {
+                const preferred = localStorage.getItem('preferred_lang');
+                if (preferred && preferred !== 'en') {
+                    const search = window.location.search;
+                    let newPath = path;
+                    if (newPath === '/') newPath = '/' + preferred + '/';
+                    else newPath = '/' + preferred + newPath;
+                    window.location.replace(newPath + search);
+                }
+            }
+        })();
+    </script>
+    
     <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
     <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
     <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
@@ -70,6 +95,45 @@
     </style>
 </head>
 <body>
+
+    <!-- Language Switcher -->
+    <div class="fixed top-4 right-4 z-50">
+        <select id="lang-switcher" onchange="changeLanguage(this.value)" class="glass-input p-1.5 rounded-lg text-xs font-bold text-gray-700 outline-none cursor-pointer bg-white/90 shadow-sm border border-gray-200 hover:border-red-400 transition-colors">
+            <option value="en">🇺🇸 EN</option>
+            <option value="es">🇪🇸 ES</option>
+            <option value="zh">🇨🇳 ZH</option>
+            <option value="ja">🇯🇵 JA</option>
+            <option value="de">🇩🇪 DE</option>
+        </select>
+    </div>
+    <script>
+        function changeLanguage(lang) {
+            localStorage.setItem('preferred_lang', lang);
+            const path = window.location.pathname;
+            const search = window.location.search;
+            let newPath = path;
+            
+            // Remove current language prefix if exists
+            newPath = newPath.replace(/^\/(es|zh|ja|de)\//, '/');
+            if (newPath === '/es' || newPath === '/zh' || newPath === '/ja' || newPath === '/de') newPath = '/';
+            
+            if (lang !== 'en') {
+                if (newPath === '/') newPath = '/' + lang + '/';
+                else newPath = '/' + lang + newPath;
+            }
+            window.location.href = newPath + search;
+        }
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            const path = window.location.pathname;
+            let currentLang = 'en';
+            const match = path.match(/^\/(es|zh|ja|de)(\/|$)/);
+            if (match) currentLang = match[1];
+            const select = document.getElementById('lang-switcher');
+            if (select) select.value = currentLang;
+        });
+    </script>
+    
 
     <!-- Language Switcher -->
     <div class="fixed top-4 right-4 z-50">
