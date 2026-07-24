@@ -1,26 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth" translate="no">
+<html lang="ja" class="scroll-smooth" translate="no">
 <head>
     <meta name="google" content="notranslate">
     <meta name="robots" content="notranslate">
-
-    <script>
-        (function() {
-            const path = window.location.pathname;
-            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
-            if (!isLangDir) {
-                const preferred = localStorage.getItem('preferred_lang');
-                if (preferred && preferred !== 'en') {
-                    const search = window.location.search;
-                    let newPath = path;
-                    if (newPath === '/') newPath = '/' + preferred + '/';
-                    else newPath = '/' + preferred + newPath;
-                    window.location.replace(newPath + search);
-                }
-            }
-        })();
-    </script>
-    
     <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
     <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
     <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
@@ -28,7 +10,7 @@
     <link rel="alternate" hreflang="de" href="https://sf-sanjosetrain.com/de/" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Ultimate Commuter Guide to Oracle Park | Commuter Blog</title>
+    <title>How to take Caltrain to Levi's Stadium | Commuter Blog</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -111,44 +93,43 @@
 
         <article class="glass-panel rounded-3xl overflow-hidden">
             <div class="w-full h-64 md:h-80 bg-gray-200 relative">
-                <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Oracle Park" class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Levi's Stadium" class="w-full h-full object-cover">
             </div>
 
             <div class="p-6 md:p-10">
                 <div class="flex items-center gap-3 mb-4">
-                    <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Sports</span>
-                    <span class="text-xs text-gray-400 font-bold">June 28, 2026 • 2 min read</span>
+                    <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">イベント</span>
+                    <span class="text-xs text-gray-400 font-bold">June 28, 2026 • 3 min read</span>
                 </div>
 
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 leading-tight tracking-tight">The Ultimate Commuter Guide to Oracle Park for Giants Games</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 leading-tight tracking-tight">リーバイス・スタジアムのコンサートへカルトレインで行く方法</h1>
 
                 <div class="prose">
-                    <p>Summer in the Bay Area means one thing: baseball season is in full swing. If you are heading to Oracle Park to watch the San Francisco Giants, driving into the city and paying for $40+ parking is the last thing you want to do. Here is your ultimate commuter guide to taking Caltrain to the game.</p>
+                    <p>Levi’s Stadium hosts some of the biggest summer concerts in the world. However, the traffic on Highway 101 and the nightmare of getting out of the parking lot can ruin a great night. The smart move? Taking the Caltrain.</p>
                     
-                    <h2>The Closest Station to Oracle Park</h2>
-                    <p>The beauty of Caltrain is that the final northbound stop, the <strong>San Francisco Station (4th & King)</strong>, is located just one block away from Oracle Park. Once you step off the electric train, it’s a short, scenic 5-minute walk to the stadium gates alongside hundreds of other fans.</p>
+                    <h2>The Mountain View Transfer</h2>
+                    <p>Levi's Stadium isn't directly on the Caltrain line, but getting there is seamless. You need to take the Caltrain to the <strong>Mountain View Station</strong>. From there, you will transfer to the VTA Light Rail (Orange Line), which drops you off directly at the stadium's Great America station.</p>
 
                     <!-- Tətbiqə Çəkən CTA -->
                     <div class="my-8 bg-gradient-to-br from-red-50 to-white border border-red-100 rounded-2xl p-6 shadow-sm relative overflow-hidden">
                         <div class="absolute -right-4 -top-4 text-red-100 opacity-50 transform rotate-12">
-                            <i class="fa-solid fa-baseball-bat-ball text-8xl"></i>
+                            <i class="fa-solid fa-music text-8xl"></i>
                         </div>
-                        <h3 class="text-lg font-extrabold text-gray-800 mb-2 relative z-10">Check Next Trains to San Francisco</h3>
-                        <p class="text-sm text-gray-600 mb-4 font-medium relative z-10">Don't miss the first pitch! Plan your trip from San Jose directly on our live board.</p>
-                        <a href="../index.html?from=sj_diridon&to=san_francisco" class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-extrabold py-3 px-6 rounded-xl transition-transform active:scale-95 shadow-lg shadow-red-600/20 relative z-10">
-                            <i class="fa-solid fa-clock mr-2"></i> View Live Schedule
+                        <h3 class="text-lg font-extrabold text-gray-800 mb-2 relative z-10">Find Fast Trains to Mountain View</h3>
+                        <p class="text-sm text-gray-600 mb-4 font-medium relative z-10">Check our offline-friendly schedule board to catch the next electric train.</p>
+                        <a href="../index.html?from=san_francisco&to=mountain_view" class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-extrabold py-3 px-6 rounded-xl transition-transform active:scale-95 shadow-lg shadow-red-600/20 relative z-10">
+                            <i class="fa-solid fa-bolt mr-2"></i> Find Your Train
                         </a>
                     </div>
 
-                    <h2>Post-Game Express Trains</h2>
-                    <p>Caltrain knows how busy game days get. Usually, they run special post-game express trains that depart 15-25 minutes after the last out. These trains skip local stops and get you back to the Peninsula and South Bay much faster.</p>
-                    
+                    <h2>Timing Your Trip</h2>
                     <ul>
-                        <li><strong>Pro Tip:</strong> Buy a Day Pass on your Clipper Card before you board. The ticket machines at 4th & King get incredibly crowded after the game ends.</li>
-                        <li><strong>Food & Drinks:</strong> You can bring your own food and non-alcoholic drinks on the train. Make it a pre-game picnic!</li>
+                        <li><strong>Arrive Early:</strong> Concerts mean crowded trains. Aim to arrive at Mountain View at least 90 minutes before the opening act starts.</li>
+                        <li><strong>VTA Connection:</strong> The VTA Light Rail ride takes about 25-30 minutes from Mountain View to the stadium.</li>
+                        <li><strong>Heading Home:</strong> Caltrain often coordinates with VTA to hold the last northbound trains until concert-goers arrive back at Mountain View. Just don't linger too long after the encore!</li>
                     </ul>
 
-                    <p>Skip the Bay Bridge traffic, relax in the air-conditioned electric fleet, and enjoy the game!</p>
+                    <p>Using the new electric fleet makes the ride down from San Francisco not only eco-friendly but exceptionally smooth. Grab your friends, queue up your playlist, and enjoy the ride!</p>
                 </div>
 
                 <div class="mt-10 pt-6 border-t border-gray-100 flex justify-between items-center">

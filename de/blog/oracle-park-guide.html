@@ -1,26 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth" translate="no">
+<html lang="de" class="scroll-smooth" translate="no">
 <head>
     <meta name="google" content="notranslate">
     <meta name="robots" content="notranslate">
-
-    <script>
-        (function() {
-            const path = window.location.pathname;
-            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
-            if (!isLangDir) {
-                const preferred = localStorage.getItem('preferred_lang');
-                if (preferred && preferred !== 'en') {
-                    const search = window.location.search;
-                    let newPath = path;
-                    if (newPath === '/') newPath = '/' + preferred + '/';
-                    else newPath = '/' + preferred + newPath;
-                    window.location.replace(newPath + search);
-                }
-            }
-        })();
-    </script>
-    
     <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
     <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
     <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
@@ -116,11 +98,11 @@
 
             <div class="p-6 md:p-10">
                 <div class="flex items-center gap-3 mb-4">
-                    <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Sports</span>
+                    <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Sport</span>
                     <span class="text-xs text-gray-400 font-bold">June 28, 2026 • 2 min read</span>
                 </div>
 
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 leading-tight tracking-tight">The Ultimate Commuter Guide to Oracle Park for Giants Games</h1>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 leading-tight tracking-tight">Der ultimative Pendler-Guide zum Oracle Park für Giants-Spiele</h1>
 
                 <div class="prose">
                     <p>Summer in the Bay Area means one thing: baseball season is in full swing. If you are heading to Oracle Park to watch the San Francisco Giants, driving into the city and paying for $40+ parking is the last thing you want to do. Here is your ultimate commuter guide to taking Caltrain to the game.</p>

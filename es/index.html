@@ -1,26 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth" translate="no">
+<html lang="es" class="scroll-smooth" translate="no">
 <head>
     <meta name="google" content="notranslate">
     <meta name="robots" content="notranslate">
-
-    <script>
-        (function() {
-            const path = window.location.pathname;
-            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
-            if (!isLangDir) {
-                const preferred = localStorage.getItem('preferred_lang');
-                if (preferred && preferred !== 'en') {
-                    const search = window.location.search;
-                    let newPath = path;
-                    if (newPath === '/') newPath = '/' + preferred + '/';
-                    else newPath = '/' + preferred + newPath;
-                    window.location.replace(newPath + search);
-                }
-            }
-        })();
-    </script>
-    
     <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
     <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
     <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
@@ -50,19 +32,19 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sf-sanjosetrain.com">
-    <meta property="og:title" content="Caltrain Live Schedule - SF ⇄ San Jose">
+    <meta property="og:title" content="Horario en Vivo de Caltrain - SF ⇄ San Jose">
     <meta property="og:description" content="The ultimate offline-friendly live schedule board for Caltrain commuters. Fast, beautiful, and zone-aware.">
     <meta property="og:image" content="https://sf-sanjosetrain.com/favicon/android-chrome-512x512.png">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://sf-sanjosetrain.com">
-    <meta name="twitter:title" content="Caltrain Live Schedule - SF ⇄ San Jose">
+    <meta name="twitter:title" content="Horario en Vivo de Caltrain - SF ⇄ San Jose">
     <meta name="twitter:description" content="The ultimate offline-friendly live schedule board for Caltrain commuters.">
     <meta name="twitter:image" content="https://sf-sanjosetrain.com/favicon/android-chrome-512x512.png">
 
     <link rel="canonical" href="https://sf-sanjosetrain.com">
-    <title>Caltrain Live - Trip Planner & Schedule</title>
+    <title>Caltrain Live - Planificador y Horario</title>
     
     <!-- Favicons & App Icons -->
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico">
@@ -228,17 +210,17 @@
     <main class="max-w-lg md:max-w-2xl mx-auto px-4 pt-8">
         <!-- Header -->
         <header class="text-center mb-8">
-            <a href="/index.html" class="inline-block group">
+            <a href="/es/index.html" class="inline-block group">
                 <div class="inline-flex items-center justify-center mb-4 transform rotate-3 group-hover:rotate-0 transition-all duration-300">
                     <img src="/favicon/android-chrome-192x192.png" alt="Caltrain Live Logo" class="w-16 h-16 object-contain drop-shadow-xl">
                 </div>
-                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight mb-1 group-hover:text-red-600 transition-colors">Caltrain Live Schedule</h1>
+                <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight mb-1 group-hover:text-red-600 transition-colors">Horario en Vivo de Caltrain</h1>
             </a>
             <div class="text-2xl font-bold text-gray-500 flex justify-center items-center">
                 SF <span class="text-red-600 mx-3 text-3xl">⇌</span> San Jose
             </div>
             <p class="text-gray-500 text-xs mt-3 font-bold inline-block px-4 py-1.5 rounded-full bg-white/50 backdrop-blur-sm border border-white/40">
-                <i class="fa-regular fa-clock mr-1"></i> Live Board: <span id="sf-clock-top">--:--</span>
+                <i class="fa-regular fa-clock mr-1"></i> Tablero en vivo: <span id="sf-clock-top">--:--</span>
             </p>
         </header>
 
@@ -247,13 +229,13 @@
             <form id="searchForm" class="space-y-4">
                 <div class="flex flex-col sm:flex-row gap-4 relative">
                     <div class="flex-1">
-                        <label for="depSelect" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Departure</label>
+                        <label for="depSelect" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Salida</label>
                         <div class="relative">
                             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-red-600">
                                 <i class="fa-regular fa-circle-dot"></i>
                             </div>
                             <select id="depSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none">
-                                <option value="" disabled selected>— Select Station —</option>
+                                <option value="" disabled selected>— Seleccionar Estación —</option>
                             </select>
                         </div>
                     </div>
@@ -263,24 +245,24 @@
                     </button>
 
                     <div class="flex-1">
-                        <label for="arrSelect" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Arrival</label>
+                        <label for="arrSelect" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Llegada</label>
                         <div class="relative">
                             <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-800">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
                             <select id="arrSelect" class="glass-input w-full p-4 pl-10 pr-8 rounded-2xl appearance-none text-gray-800 font-bold cursor-pointer outline-none">
-                                <option value="" disabled selected>— Select Station —</option>
+                                <option value="" disabled selected>— Seleccionar Estación —</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <label for="dayType" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Schedule Type</label>
+                    <label for="dayType" class="text-[10px] font-extrabold text-gray-500 uppercase tracking-widest ml-1 mb-1.5 block">Tipo de horario</label>
                     <div class="relative">
                         <select id="dayType" class="glass-input w-full p-3.5 pr-10 rounded-2xl appearance-none text-sm text-gray-700 font-bold outline-none cursor-pointer">
-                            <option value="weekday" selected>Workdays (Mon-Fri)</option>
-                            <option value="weekend">Weekend (Sat-Sun)</option>
+                            <option value="weekday" selected>Días laborables (Lun-Vie)</option>
+                            <option value="weekend">Fines de semana (Sáb-Dom)</option>
                         </select>
                         <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                             <i class="fa-regular fa-calendar"></i>
@@ -289,7 +271,7 @@
                 </div>
 
                 <button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-extrabold py-4 rounded-2xl shadow-xl shadow-red-500/20 transform transition-all active:scale-95 flex items-center justify-center gap-2 text-lg pulse-btn">
-                    <i class="fa-solid fa-magnifying-glass"></i> Find Trains
+                    <i class="fa-solid fa-magnifying-glass"></i> Buscar Trenes
                 </button>
             </form>
         </section>
@@ -301,7 +283,7 @@
         <!-- Info Grid -->
         <section class="mb-12">
             <h2 class="text-xl font-extrabold text-gray-800 mb-5 flex items-center px-1">
-                <i class="fa-solid fa-circle-info text-red-600 mr-3"></i> Commuter Info
+                <i class="fa-solid fa-circle-info text-red-600 mr-3"></i> Info. del Viajero
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="glass-panel p-6 rounded-2xl group hover:bg-white/80 transition-all border border-white/60 relative overflow-hidden">
@@ -309,8 +291,8 @@
                         <div class="bg-red-100 text-red-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
                             <i class="fa-solid fa-bolt-lightning text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1">Electric Fleet</h3>
-                        <p class="text-sm text-gray-500 mb-0">Learn about new high-speed rail amenities and electrification.</p>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1">Flota Eléctrica</h3>
+                        <p class="text-sm text-gray-500 mb-0">Conoce los nuevos servicios y electrificación de alta velocidad.</p>
                     </div>
                 </div>
                 <div class="glass-panel p-6 rounded-2xl group hover:bg-white/80 transition-all border border-white/60 relative overflow-hidden">
@@ -318,8 +300,8 @@
                         <div class="bg-green-100 text-green-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
                             <i class="fa-solid fa-map-location-dot text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1">System Map</h3>
-                        <p class="text-sm text-gray-500 mb-0">Full Caltrain network and zone guide for commuters.</p>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1">Mapa del Sistema</h3>
+                        <p class="text-sm text-gray-500 mb-0">Red completa de Caltrain y guía de zonas.</p>
                     </div>
                 </div>
             </div>
@@ -327,51 +309,51 @@
 
         <!-- Popular Routes -->
         <section class="glass-panel p-6 rounded-3xl mb-12 border border-white/40">
-            <h3 class="font-extrabold text-gray-800 text-lg mb-4">Popular Caltrain Routes</h3>
+            <h3 class="font-extrabold text-gray-800 text-lg mb-4">Rutas Populares de Caltrain</h3>
             <div class="grid grid-cols-2 gap-3 text-sm">
-                <a href="?from=san_francisco&to=sj_diridon" class="text-red-600 hover:underline font-bold">SF to San Jose</a>
-                <a href="?from=san_francisco&to=palo_alto" class="text-red-600 hover:underline font-bold">SF to Palo Alto</a>
-                <a href="?from=sj_diridon&to=san_francisco" class="text-red-600 hover:underline font-bold">San Jose to SF</a>
-                <a href="?from=millbrae&to=san_francisco" class="text-red-600 hover:underline font-bold">Millbrae to SF</a>
+                <a href="?from=san_francisco&to=sj_diridon" class="text-red-600 hover:underline font-bold">SF a San Jose</a>
+                <a href="?from=san_francisco&to=palo_alto" class="text-red-600 hover:underline font-bold">SF a Palo Alto</a>
+                <a href="?from=sj_diridon&to=san_francisco" class="text-red-600 hover:underline font-bold">San Jose a SF</a>
+                <a href="?from=millbrae&to=san_francisco" class="text-red-600 hover:underline font-bold">Millbrae a SF</a>
             </div>
         </section>
 
         <!-- Commuter Blog -->
         <section class="mb-12">
             <h2 class="text-xl font-extrabold text-gray-800 mb-5 flex items-center px-1">
-                <i class="fa-solid fa-newspaper text-red-600 mr-3"></i> Commuter Guides
+                <i class="fa-solid fa-newspaper text-red-600 mr-3"></i> Guías del Viajero
             </h2>
             <div class="space-y-4">
-                <a href="/blog/palo-alto-day-trip.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
+                <a href="/es/blog/palo-alto-day-trip.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
                     <div class="sm:w-1/3 h-32 sm:h-auto bg-gray-200">
                         <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Palo Alto" class="w-full h-full object-cover">
                     </div>
                     <div class="p-5 sm:w-2/3">
-                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">Travel</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">A Perfect Car-Free Weekend Day-Trip to Palo Alto</h3>
-                        <p class="text-xs text-gray-500 line-clamp-2">Looking for a relaxing weekend day-trip in the Bay Area without the stress of driving and parking? Palo Alto is...</p>
+                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">Viajes</div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">Un Viaje Perfecto sin Auto a Palo Alto</h3>
+                        <p class="text-xs text-gray-500 line-clamp-2">¿Buscas un viaje relajante de fin de semana en el Área de la Bahía sin estrés por conducir? Palo Alto es...</p>
                     </div>
                 </a>
 
-                <a href="/blog/levis-stadium-concert.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
+                <a href="/es/blog/levis-stadium-concert.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
                     <div class="sm:w-1/3 h-32 sm:h-auto bg-gray-200">
                         <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Levi's Stadium" class="w-full h-full object-cover">
                     </div>
                     <div class="p-5 sm:w-2/3">
-                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">Events</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">How to take Caltrain to Levi's Stadium Concerts</h3>
-                        <p class="text-xs text-gray-500 line-clamp-2">Levi’s Stadium hosts some of the biggest summer concerts in the world. However, the traffic on Highway 101...</p>
+                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">Eventos</div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">Cómo ir en Caltrain a los Conciertos de Levi's Stadium</h3>
+                        <p class="text-xs text-gray-500 line-clamp-2">El Estadio Levi’s alberga algunos de los conciertos más grandes del mundo. Sin embargo, el tráfico...</p>
                     </div>
                 </a>
 
-                <a href="/blog/oracle-park-guide.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
+                <a href="/es/blog/oracle-park-guide.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
                     <div class="sm:w-1/3 h-32 sm:h-auto bg-gray-200">
                         <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Oracle Park" class="w-full h-full object-cover">
                     </div>
                     <div class="p-5 sm:w-2/3">
-                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">Sports</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">The Ultimate Commuter Guide to Oracle Park for Giants Games</h3>
-                        <p class="text-xs text-gray-500 line-clamp-2">Summer in the Bay Area means one thing: baseball season is in full swing. If you are heading to Oracle Park...</p>
+                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">Deportes</div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">La Guía Definitiva de Viaje a Oracle Park para los Juegos</h3>
+                        <p class="text-xs text-gray-500 line-clamp-2">El verano en el Área de la Bahía significa que la temporada de béisbol está en apogeo. Si te diriges a...</p>
                     </div>
                 </a>
             </div>
@@ -379,12 +361,12 @@
 
         <!-- Footer -->
         <footer class="text-center pb-10">
-            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-4">© 2026 Commuter Live Board</p>
+            <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-4">© 2026 Tablero en Vivo</p>
             <div class="flex flex-wrap justify-center gap-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                <a href="/about.html" class="hover:text-red-600">About</a>
-                <a href="/contact.html" class="hover:text-red-600">Contact</a>
-                <a href="/privacy.html" class="hover:text-red-600">Privacy</a>
-                <a href="/terms.html" class="hover:text-red-600">Terms</a>
+                <a href="/es/about.html" class="hover:text-red-600">Acerca de</a>
+                <a href="/es/contact.html" class="hover:text-red-600">Contacto</a>
+                <a href="/es/privacy.html" class="hover:text-red-600">Privacidad</a>
+                <a href="/es/terms.html" class="hover:text-red-600">Términos</a>
             </div>
         </footer>
 
@@ -392,14 +374,14 @@
         <div id="cookie-banner" class="cookie-banner hidden">
             <div class="flex flex-col gap-4">
                 <div>
-                    <h4 class="text-sm font-extrabold text-gray-800">Privacy Notice</h4>
+                    <h4 class="text-sm font-extrabold text-gray-800">Aviso de Privacidad</h4>
                     <p class="text-xs text-gray-500 mt-1 leading-relaxed">
-                        We use cookies to ensure the site works fast. By continuing, you agree to our use of essential cookies.
+                        Usamos cookies para asegurar que el sitio funcione rápido. Al continuar, aceptas su uso.
                     </p>
                 </div>
                 <div class="flex gap-2 justify-end">
-                    <button id="btn-essential" class="px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 text-gray-600 hover:bg-gray-50">Essential</button>
-                    <button id="btn-accept" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-700">Accept All</button>
+                    <button id="btn-essential" class="px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 text-gray-600 hover:bg-gray-50">Esenciales</button>
+                    <button id="btn-accept" class="px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-700">Aceptar Todas</button>
                 </div>
             </div>
         </div>
@@ -484,7 +466,7 @@
         const selectedDep = depSelect.value;
         const selectedArr = arrSelect.value;
 
-        // Filter Departure options based on selected Arrival
+        // Filter Salida options based on selected Llegada
         Array.from(depSelect.options).forEach(opt => {
             if (opt.value === '') return; // Skip placeholder
             if (selectedArr && opt.value === selectedArr) {
@@ -496,7 +478,7 @@
             }
         });
 
-        // Filter Arrival options based on selected Departure
+        // Filter Llegada options based on selected Salida
         Array.from(arrSelect.options).forEach(opt => {
             if (opt.value === '') return; // Skip placeholder
             if (selectedDep && opt.value === selectedDep) {
@@ -680,7 +662,7 @@
                     <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mb-4">
                         <i class="fa-solid fa-triangle-exclamation text-red-500 text-2xl"></i>
                     </div>
-                    <p class="text-gray-800 font-extrabold text-base text-center"><span class="text-red-600">${stName}</span> is selected as both your departure and arrival station.</p>
+                    <p class="text-gray-800 font-extrabold text-base text-center"><span class="text-red-600">${stName}</span> está seleccionada como estación de salida y llegada.</p>
                     <p class="text-gray-500 text-sm mt-1 text-center">Please choose <strong>two different stations</strong>.</p>
                 </div>`;
             return;
@@ -767,7 +749,7 @@
                         <div class="w-14 h-14 rounded-2xl bg-amber-100 dark:bg-amber-950/40 flex items-center justify-center mx-auto mb-4 text-amber-600 border border-amber-200/30">
                             <i class="fa-solid fa-circle-info text-2xl animate-pulse"></i>
                         </div>
-                        <h4 class="font-extrabold text-gray-800 text-xl tracking-tight">Transfer Required at San Jose</h4>
+                        <h4 class="font-extrabold text-gray-800 text-xl tracking-tight">Transbordo Necesario en San Jose</h4>
                         <p class="text-xs text-gray-500 mt-2.5 leading-relaxed max-w-sm mx-auto font-medium">
                             Due to Caltrain's full electrification, direct trains do not run between these stations. 
                             You must transfer between the <strong class="text-red-600 font-bold">Electric Train</strong> and the <strong class="text-amber-600 font-bold">Diesel Train</strong> at San Jose Diridon.
@@ -775,10 +757,10 @@
                         
                         <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
                             <a href="?from=${from}&to=sj_diridon" class="w-full sm:w-auto px-5 py-3 bg-white hover:bg-red-50/50 border border-gray-200 hover:border-red-200 rounded-2xl text-xs font-extrabold text-gray-700 hover:text-red-600 transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
-                                <i class="fa-solid fa-bolt-lightning text-red-500"></i> 1st Leg: To San Jose Diridon
+                                <i class="fa-solid fa-bolt-lightning text-red-500"></i> 1er Tramo: A San Jose Diridon
                             </a>
                             <a href="?from=sj_diridon&to=${to}" class="w-full sm:w-auto px-5 py-3 bg-white hover:bg-amber-50/50 border border-gray-200 hover:border-amber-200 rounded-2xl text-xs font-extrabold text-gray-700 hover:text-amber-600 transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
-                                <i class="fa-solid fa-train text-amber-500"></i> 2nd Leg: From San Jose Diridon
+                                <i class="fa-solid fa-train text-amber-500"></i> 2do Tramo: Desde San Jose Diridon
                             </a>
                         </div>
                     </div>
@@ -787,7 +769,7 @@
             }
 
             // Replace content without blanking the screen first
-            resultsArea.innerHTML = '<div class="text-center py-10 opacity-50 font-bold">No trains found for this route.</div>';
+            resultsArea.innerHTML = '<div class="text-center py-10 opacity-50 font-bold">No se encontraron trenes para esta ruta.</div>';
             return;
         } else if (robotsMeta) {
             robotsMeta.content = 'index, follow';
@@ -811,13 +793,13 @@
             const highlightClass = isNext ? 'ring-2 ring-red-500 ring-offset-2' : '';
 
             let badge = '';
-            if (isNext) badge = `<span class="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg animate-pulse">NEXT TRAIN</span>`;
-            else if (m.passed) badge = `<span class="absolute top-0 right-0 bg-gray-200 text-gray-500 text-[10px] font-bold px-2 py-1 rounded-bl-lg">PASSED</span>`;
+            if (isNext) badge = `<span class="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg animate-pulse">PRÓXIMO TREN</span>`;
+            else if (m.passed) badge = `<span class="absolute top-0 right-0 bg-gray-200 text-gray-500 text-[10px] font-bold px-2 py-1 rounded-bl-lg">PASADO</span>`;
 
             let typeLabel = 'Local', typeColor = 'bg-slate-400';
             const rShort = (m.route?.short || '').toLowerCase();
-            if (rShort.includes('express'))      { typeLabel = 'EXPRESS';      typeColor = 'bg-red-600'; }
-            else if (rShort.includes('limited')) { typeLabel = 'LIMITED';      typeColor = 'bg-blue-500'; }
+            if (rShort.includes('express'))      { typeLabel = 'EXPRÉS';      typeColor = 'bg-red-600'; }
+            else if (rShort.includes('limited')) { typeLabel = 'LIMITADO';      typeColor = 'bg-blue-500'; }
             else if (rShort.includes('south'))   { typeLabel = 'SOUTH COUNTY'; typeColor = 'bg-amber-500'; }
 
             let timerHtml = '';
@@ -827,7 +809,7 @@
                 timerHtml = `
                     <div class="mt-3 flex justify-center">
                         <span class="${isNext ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-blue-50 text-blue-600 border-blue-100'} border px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5">
-                            <i class="fa-regular fa-clock ${isNext ? 'animate-pulse' : ''}"></i> Departs in ${h > 0 ? h + 'h ' : ''}${min}m
+                            <i class="fa-regular fa-clock ${isNext ? 'animate-pulse' : ''}"></i> Sale en ${h > 0 ? h + 'h ' : ''}${min}m
                         </span>
                     </div>`;
             }
@@ -925,8 +907,8 @@
         else { navigator.clipboard.writeText(text + '\n' + url); alert('Copied to clipboard!'); }
     }
 
-    function initPrivacyManager() {
-        const banner = document.getElementById('cookie-banner'), btnAccept = document.getElementById('btn-accept'), btnEssential = document.getElementById('btn-essential');
+    function initPrivacidadManager() {
+        const banner = document.getElementById('cookie-banner'), btnAccept = document.getElementById('btn-accept'), btnEsenciales = document.getElementById('btn-essential');
         let userConsent = null;
         try { userConsent = localStorage.getItem('caltrain_cookie_consent'); } catch (e) { userConsent = 'essential'; }
         if (!userConsent && banner) banner.classList.remove('hidden');
@@ -935,7 +917,7 @@
             if (typeof gtag === 'function') gtag('consent', 'update', { 'analytics_storage': 'granted', 'ad_storage': 'granted' });
             banner.classList.add('hidden');
         };
-        if(btnEssential) btnEssential.onclick = () => { localStorage.setItem('caltrain_cookie_consent', 'essential'); banner.classList.add('hidden'); };
+        if(btnEsenciales) btnEsenciales.onclick = () => { localStorage.setItem('caltrain_cookie_consent', 'essential'); banner.classList.add('hidden'); };
     }
 
     setInterval(() => {
@@ -946,7 +928,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         init();
-        initPrivacyManager();
+        initPrivacidadManager();
     });
 
     if ('serviceWorker' in navigator) {

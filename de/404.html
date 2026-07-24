@@ -1,26 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang="de" translate="no">
 <head>
     <meta name="google" content="notranslate">
     <meta name="robots" content="notranslate">
-
-    <script>
-        (function() {
-            const path = window.location.pathname;
-            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
-            if (!isLangDir) {
-                const preferred = localStorage.getItem('preferred_lang');
-                if (preferred && preferred !== 'en') {
-                    const search = window.location.search;
-                    let newPath = path;
-                    if (newPath === '/') newPath = '/' + preferred + '/';
-                    else newPath = '/' + preferred + newPath;
-                    window.location.replace(newPath + search);
-                }
-            }
-        })();
-    </script>
-    
     <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
     <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
     <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
@@ -78,7 +60,7 @@
     
     <h1>404</h1>
     <p>Oops! The page you're looking for doesn't exist.</p>
-    <a href="/index.html">Return to Home</a>
+    <a href="/de/index.html">Return to Home</a>
     <p style="margin-top: 40px; font-size: 0.8rem; opacity: 0.5;">© 2026 Caltrain Live</p>
 </body>
 </html>
