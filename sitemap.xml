@@ -26,6 +26,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sf-sanjosetrain.com/blog.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://sf-sanjosetrain.com/?from=san_francisco&amp;to=22nd_street</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

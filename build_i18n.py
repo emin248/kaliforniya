@@ -13,9 +13,7 @@ HTML_FILES = [
     "privacy.html",
     "terms.html",
     "404.html",
-    "blog/palo-alto-day-trip.html",
-    "blog/levis-stadium-concert.html",
-    "blog/oracle-park-guide.html"
+    "blog.html"
 ]
 
 with open(os.path.join(BASE_DIR, "i18n_dict.json"), "r", encoding="utf-8") as f:
@@ -91,13 +89,8 @@ def rewrite_paths(html, lang_code):
     
     # Prefix internal links
     prefix = "/" if lang_code == "en" else f"/{lang_code}/"
-    for page in ["index.html", "about.html", "contact.html", "privacy.html", "terms.html"]:
+    for page in ["index.html", "about.html", "contact.html", "privacy.html", "terms.html", "blog.html"]:
         html = re.sub(r'href="' + page + r'"', f'href="{prefix}{page}"', html)
-    
-    # Internal blog links
-    def replace_blog_link(match):
-        return f'href="{prefix}{match.group(1)}"'
-    html = re.sub(r'href="(blog/[^"]+)"', replace_blog_link, html)
     
     # Update hreflang tags for SEO
     hreflangs = []
@@ -169,7 +162,6 @@ def main():
         print(f"Building {lang} translation...")
         lang_dir = os.path.join(BASE_DIR, lang)
         os.makedirs(lang_dir, exist_ok=True)
-        os.makedirs(os.path.join(lang_dir, "blog"), exist_ok=True)
         
         for f in HTML_FILES:
             processed = process_content(original_contents[f], f, lang)
