@@ -8,6 +8,24 @@
     <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
     <link rel="alternate" hreflang="ja" href="https://sf-sanjosetrain.com/ja/" />
     <link rel="alternate" hreflang="de" href="https://sf-sanjosetrain.com/de/" />
+    <meta name="monetag" content="3edd18666bae38d36d8ae54f5be990a1">
+    <script>
+        (function() {
+            const path = window.location.pathname;
+            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
+            if (!isLangDir) {
+                const preferred = localStorage.getItem('preferred_lang');
+                if (preferred && preferred !== 'en') {
+                    const search = window.location.search;
+                    let newPath = path;
+                    if (newPath === '/') newPath = '/' + preferred + '/';
+                    else newPath = '/' + preferred + newPath;
+                    window.location.replace(newPath + search);
+                }
+            }
+        })();
+    </script>
+    
     <script>
         (function() {
             const path = window.location.pathname;
