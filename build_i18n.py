@@ -106,6 +106,13 @@ def rewrite_paths(html, lang_code):
     return html
 
 def process_content(html, filepath, lang_code):
+    # 0. Clean up any existing injected blocks to prevent duplication
+    html = re.sub(r'<!-- Language Switcher -->.*?<\/script>\s*', '', html, flags=re.DOTALL)
+    html = re.sub(r'<script>\s*\(\s*function\(\)\s*\{[\s\S]*?isLangDir[\s\S]*?replace\(newPath \+ search\);\s*\}\s*\}\)\(\);\s*<\/script>\s*', '', html)
+    html = re.sub(r'<link rel="alternate" hreflang="[a-z]{2}" href="[^"]+" />\s*', '', html)
+    html = re.sub(r'<meta name="google" content="notranslate">\s*<meta name="robots" content="notranslate">\s*', '', html)
+    html = re.sub(r' translate="no"', '', html)
+
     # 1. Rewrite paths
     html = rewrite_paths(html, lang_code)
     

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" class="scroll-smooth" translate="no" translate="no" translate="no">
+<html lang="zh" class="scroll-smooth" translate="no">
 <head>
     <meta name="google" content="notranslate">
     <meta name="robots" content="notranslate">
@@ -8,9 +8,6 @@
     <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
     <link rel="alternate" hreflang="ja" href="https://sf-sanjosetrain.com/ja/" />
     <link rel="alternate" hreflang="de" href="https://sf-sanjosetrain.com/de/" />
-    <meta name="google" content="notranslate">
-    <meta name="robots" content="notranslate">
-
     <script>
         (function() {
             const path = window.location.pathname;
@@ -28,14 +25,6 @@
         })();
     </script>
     
-    <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
-    <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
-    <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
-    <link rel="alternate" hreflang="ja" href="https://sf-sanjosetrain.com/ja/" />
-    <link rel="alternate" hreflang="de" href="https://sf-sanjosetrain.com/de/" />
-    <meta name="google" content="notranslate">
-    <meta name="robots" content="notranslate">
-
     <script>
         (function() {
             const path = window.location.pathname;
@@ -53,11 +42,57 @@
         })();
     </script>
     
-    <link rel="alternate" hreflang="en" href="https://sf-sanjosetrain.com/" />
-    <link rel="alternate" hreflang="es" href="https://sf-sanjosetrain.com/es/" />
-    <link rel="alternate" hreflang="zh" href="https://sf-sanjosetrain.com/zh/" />
-    <link rel="alternate" hreflang="ja" href="https://sf-sanjosetrain.com/ja/" />
-    <link rel="alternate" hreflang="de" href="https://sf-sanjosetrain.com/de/" />
+    <script>
+        (function() {
+            const path = window.location.pathname;
+            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
+            if (!isLangDir) {
+                const preferred = localStorage.getItem('preferred_lang');
+                if (preferred && preferred !== 'en') {
+                    const search = window.location.search;
+                    let newPath = path;
+                    if (newPath === '/') newPath = '/' + preferred + '/';
+                    else newPath = '/' + preferred + newPath;
+                    window.location.replace(newPath + search);
+                }
+            }
+        })();
+    </script>
+    
+    <script>
+        (function() {
+            const path = window.location.pathname;
+            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
+            if (!isLangDir) {
+                const preferred = localStorage.getItem('preferred_lang');
+                if (preferred && preferred !== 'en') {
+                    const search = window.location.search;
+                    let newPath = path;
+                    if (newPath === '/') newPath = '/' + preferred + '/';
+                    else newPath = '/' + preferred + newPath;
+                    window.location.replace(newPath + search);
+                }
+            }
+        })();
+    </script>
+    
+    <script>
+        (function() {
+            const path = window.location.pathname;
+            const isLangDir = /^\/(es|zh|ja|de)(\/|$)/.test(path);
+            if (!isLangDir) {
+                const preferred = localStorage.getItem('preferred_lang');
+                if (preferred && preferred !== 'en') {
+                    const search = window.location.search;
+                    let newPath = path;
+                    if (newPath === '/') newPath = '/' + preferred + '/';
+                    else newPath = '/' + preferred + newPath;
+                    window.location.replace(newPath + search);
+                }
+            }
+        })();
+    </script>
+    
     <!-- Google Analytics Consent Mode v2 -->
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -258,83 +293,6 @@
     </script>
     
 
-    <!-- Language Switcher -->
-    <div class="fixed top-4 right-4 z-50">
-        <select id="lang-switcher" onchange="changeLanguage(this.value)" class="glass-input p-1.5 rounded-lg text-xs font-bold text-gray-700 outline-none cursor-pointer bg-white/90 shadow-sm border border-gray-200 hover:border-red-400 transition-colors">
-            <option value="en">🇺🇸 EN</option>
-            <option value="es">🇪🇸 ES</option>
-            <option value="zh">🇨🇳 ZH</option>
-            <option value="ja">🇯🇵 JA</option>
-            <option value="de">🇩🇪 DE</option>
-        </select>
-    </div>
-    <script>
-        function changeLanguage(lang) {
-            localStorage.setItem('preferred_lang', lang);
-            const path = window.location.pathname;
-            const search = window.location.search;
-            let newPath = path;
-            
-            // Remove current language prefix if exists
-            newPath = newPath.replace(/^\/(es|zh|ja|de)\//, '/');
-            if (newPath === '/es' || newPath === '/zh' || newPath === '/ja' || newPath === '/de') newPath = '/';
-            
-            if (lang !== 'en') {
-                if (newPath === '/') newPath = '/' + lang + '/';
-                else newPath = '/' + lang + newPath;
-            }
-            window.location.href = newPath + search;
-        }
-        
-        document.addEventListener("DOMContentLoaded", () => {
-            const path = window.location.pathname;
-            let currentLang = 'en';
-            const match = path.match(/^\/(es|zh|ja|de)(\/|$)/);
-            if (match) currentLang = match[1];
-            const select = document.getElementById('lang-switcher');
-            if (select) select.value = currentLang;
-        });
-    </script>
-    
-
-    <!-- Language Switcher -->
-    <div class="fixed top-4 right-4 z-50">
-        <select id="lang-switcher" onchange="changeLanguage(this.value)" class="glass-input p-1.5 rounded-lg text-xs font-bold text-gray-700 outline-none cursor-pointer bg-white/90 shadow-sm border border-gray-200 hover:border-red-400 transition-colors">
-            <option value="en">🇺🇸 EN</option>
-            <option value="es">🇪🇸 ES</option>
-            <option value="zh">🇨🇳 ZH</option>
-            <option value="ja">🇯🇵 JA</option>
-            <option value="de">🇩🇪 DE</option>
-        </select>
-    </div>
-    <script>
-        function changeLanguage(lang) {
-            localStorage.setItem('preferred_lang', lang);
-            const path = window.location.pathname;
-            const search = window.location.search;
-            let newPath = path;
-            
-            // Remove current language prefix if exists
-            newPath = newPath.replace(/^\/(es|zh|ja|de)\//, '/');
-            if (newPath === '/es' || newPath === '/zh' || newPath === '/ja' || newPath === '/de') newPath = '/';
-            
-            if (lang !== 'en') {
-                if (newPath === '/') newPath = '/' + lang + '/';
-                else newPath = '/' + lang + newPath;
-            }
-            window.location.href = newPath + search;
-        }
-        
-        document.addEventListener("DOMContentLoaded", () => {
-            const path = window.location.pathname;
-            let currentLang = 'en';
-            const match = path.match(/^\/(es|zh|ja|de)(\/|$)/);
-            if (match) currentLang = match[1];
-            const select = document.getElementById('lang-switcher');
-            if (select) select.value = currentLang;
-        });
-    </script>
-    
     <main class="max-w-lg md:max-w-2xl mx-auto px-4 pt-8">
         <!-- Header -->
         <header class="text-center mb-8">
@@ -451,40 +409,23 @@
             <h2 class="text-xl font-extrabold text-gray-800 mb-5 flex items-center px-1">
                 <i class="fa-solid fa-newspaper text-red-600 mr-3"></i> 通勤指南
             </h2>
-            <div class="space-y-4">
-                <a href="/blog/palo-alto-day-trip.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
-                    <div class="sm:w-1/3 h-32 sm:h-auto bg-gray-200">
-                        <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Palo Alto" class="w-full h-full object-cover">
+            <a href="/blog.html" class="glass-panel rounded-3xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col relative shadow-sm hover:shadow-xl">
+                <div class="h-48 bg-gray-200 w-full relative">
+                    <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Event Guides" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    <div class="absolute bottom-5 left-5 right-5">
+                        <div class="inline-block bg-red-600 text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full mb-2">New Feature</div>
+                        <h3 class="text-2xl font-extrabold text-white mb-1">Transit Event Guides</h3>
+                        <p class="text-sm text-gray-200 font-medium line-clamp-2">The ultimate Caltrain & VTA transit guides to concerts, sports, and weekend day-trips.</p>
                     </div>
-                    <div class="p-5 sm:w-2/3">
-                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">旅行</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">完美无车周末帕洛阿尔托一日游</h3>
-                        <p class="text-xs text-gray-500 line-clamp-2">想要在湾区度过一个轻松的周末一日游，又不想面对开车和停车的压力吗？帕洛阿尔托是...</p>
+                </div>
+                <div class="p-5 flex justify-between items-center bg-white/60 backdrop-blur-md">
+                    <span class="text-gray-800 font-extrabold text-sm group-hover:text-red-600 transition-colors">Read all guides</span>
+                    <div class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-600 rounded-full group-hover:bg-red-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fa-solid fa-arrow-right"></i>
                     </div>
-                </a>
-
-                <a href="/blog/levis-stadium-concert.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
-                    <div class="sm:w-1/3 h-32 sm:h-auto bg-gray-200">
-                        <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Levi's Stadium" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-5 sm:w-2/3">
-                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">活动</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">如何乘坐 Caltrain 前往李维斯体育场音乐会</h3>
-                        <p class="text-xs text-gray-500 line-clamp-2">李维斯体育场举办了世界上最盛大的一些夏季音乐会。然而，101号公路上的交通...</p>
-                    </div>
-                </a>
-
-                <a href="/blog/oracle-park-guide.html" class="glass-panel rounded-2xl group hover:bg-white/80 transition-all border border-white/60 overflow-hidden flex flex-col sm:flex-row relative">
-                    <div class="sm:w-1/3 h-32 sm:h-auto bg-gray-200">
-                        <img src="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Oracle Park" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-5 sm:w-2/3">
-                        <div class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">体育</div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-red-600 transition-colors">前往甲骨文公园观看巨人队比赛的终极通勤指南</h3>
-                        <p class="text-xs text-gray-500 line-clamp-2">湾区的夏天只意味着一件事：棒球赛季正全面展开。如果您要前往甲骨文公园...</p>
-                    </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </section>
 
         <!-- Footer -->
